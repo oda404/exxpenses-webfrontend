@@ -191,16 +191,15 @@ function AddNewExpenseCard({ default_category, focusCategory, categories }: AddN
                                 {({ field }: FieldProps) => (
                                     <Box>
                                         <Autocomplete
-                                            sx={{ marginTop: "12px" }}
+                                            sx={{
+                                                marginTop: "12px",
+                                            }}
                                             id="combo-box-demo"
                                             options={allCategories as (string | undefined)[]}
                                             PaperComponent={({ children }) => (
-                                                <Paper style={{
-                                                    background: "var(--exxpenses-main-bg-color)",
-                                                    border: "1px gray solid",
-                                                    borderRadius: "8px",
-                                                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
-                                                }}>{children}</Paper>
+                                                <Paper className={styles.categoryAutocompleteDropdown}>
+                                                    {children}
+                                                </Paper>
                                             )}
                                             value={default_category === "" ? null : default_category}
                                             defaultChecked={false}
