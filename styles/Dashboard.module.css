@@ -15,6 +15,7 @@
 
 .categoryDeleteConfirmButton {
     margin-top: 10px;
+    height: 35px;
     background-color: #1a1e24;
     color: var(--exxpenses-main-error-color);
     text-transform: none;

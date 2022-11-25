@@ -83,7 +83,7 @@ function CategoryBox({ focusCategory, totalCost, name, newTab }: CategoryBoxProp
                         marginLeft="30px"
                         sx={{ backgroundColor: "var(--exxpenses-main-bg-color)" }}
                     >
-                        <Tooltip title="New expense" arrow>
+                        <Tooltip title="New expense" placement="top" arrow>
                             <Button
                                 className={stylesNew.categoryActionButton}
                                 onClick={() => {
@@ -93,7 +93,7 @@ function CategoryBox({ focusCategory, totalCost, name, newTab }: CategoryBoxProp
                                 <AddIcon sx={{ padding: "0", width: "26px", height: "26px" }} />
                             </Button>
                         </Tooltip>
-                        <Tooltip title="Expenses" arrow>
+                        <Tooltip title="Details" arrow>
                             <Button
                                 onClick={() => {
                                     newTab(name);
@@ -117,9 +117,13 @@ function CategoryBox({ focusCategory, totalCost, name, newTab }: CategoryBoxProp
                             open={open}
                             anchorEl={anchorEl}
                             onClose={handleClose}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "center"
+                            }}
                             anchorOrigin={{
                                 vertical: 'bottom',
-                                horizontal: "left"
+                                horizontal: "center"
                             }}
                             PaperProps={{ style: { background: "none" } }}
                         >
