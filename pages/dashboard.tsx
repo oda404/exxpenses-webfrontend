@@ -136,7 +136,7 @@ function AddNewExpenseCard({ default_category, focusCategory, categories }: AddN
             </Box>
             <Formik
                 enableReinitialize
-                initialValues={{ category: default_category, price: 0, description: "", currency: currency, date: date }}
+                initialValues={{ category: default_category, price: "", description: "", currency: currency, date: date }}
                 onSubmit={async (values, actions) => {
 
                     if (!values.category || values.category.length === 0) {
@@ -148,7 +148,9 @@ function AddNewExpenseCard({ default_category, focusCategory, categories }: AddN
                         actions.setFieldError("price", "The price is required!")
                         return;
                     }
-                    else if (values.price <= 0) {
+
+                    let number_price = Number(values.price);
+                    if (number_price <= 0) {
                         actions.setFieldError("price", "Price needs to be bigger than 0!");
                         return;
                     }
@@ -167,7 +169,7 @@ function AddNewExpenseCard({ default_category, focusCategory, categories }: AddN
                         variables: {
                             addData: {
                                 category_name: values.category,
-                                price: values.price,
+                                price: number_price,
                                 description: values.description,
                                 currency: values.currency,
                                 date: values.date
