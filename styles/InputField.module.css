@@ -1,0 +1,74 @@
+/* mt="2px"
+fontSize="17px"
+border="none"
+_focus={{ border: "none", boxShadow: "none" }}
+_invalid={{ border: "none" }}
+onFocus={() => setLabel(false)}
+onLostPointerCapture={() => setLabel(true)}
+onBlur={() => setLabel(true)}
+name={name}
+type={type}
+autoComplete="off"
+className={styles.inputField} */
+
+.inputField {
+    font-size: 16px;
+    background-color: var(--exxpenses-main-bg-color);
+    color: var(--exxpenses-main-color);
+    border: none;
+    height: 26px;
+    width: 100%;
+    padding: 8px;
+    padding-left: 16px;
+    padding-top: 10px;
+}
+
+.inputField:focus {
+    outline: none;
+}
+
+.inputField:invalid {
+    border: none
+}
+
+.inputField::-webkit-outer-spin-button,
+.inputField::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.inputField[type=number] {
+    -moz-appearance: textfield;
+}
+
+.inputField[type="date"]::-webkit-calendar-picker-indicator {
+    color: white;
+    display: block;
+    background: white;
+    width: 20px;
+    height: 20px;
+    border-width: thin;
+}
+
+.inputField:-webkit-autofill,
+.inputField:-webkit-autofill:hover,
+.inputField:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--exxpenses-main-color);
+    box-shadow: 0 0 0px 1000px var(--exxpenses-main-bg-color) inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.inputFieldLabel {
+    position: absolute;
+    z-index: 2;
+    margin-left: 12px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: var(--exxpenses-main-bg-color);
+    pointer-events: none;
+    transition: 0.2s ease-in-out;
+    font-size: 16px;
+    color: #797272;
+    transform: none;
+}

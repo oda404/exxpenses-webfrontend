@@ -1,0 +1,15 @@
+
+query CategoriesGet
+{
+    categoriesGet
+    {
+        categories {
+            name
+            default_currency
+        }
+
+        error { 
+            name
+        }
+    }
+}

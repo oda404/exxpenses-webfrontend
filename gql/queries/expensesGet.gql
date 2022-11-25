@@ -1,0 +1,17 @@
+query ExpensesGet($getData: ExpensesGetInput!)
+{
+    expensesGet(expenseGetData: $getData)
+    {
+        expenses {
+            id
+            date 
+            price
+            currency
+        }
+
+        error {
+            name
+            field
+        }
+    }
+}

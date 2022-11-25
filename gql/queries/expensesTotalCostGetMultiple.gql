@@ -1,0 +1,18 @@
+query ExpensesTotalCostGetMultiple($getData: ExpensesGetInputMultiple!)
+{
+    expensesTotalCostGetMultiple(expenseGetData: $getData)
+    {
+        costs {
+            category_name
+            total {
+                price
+                currency
+            }
+        }
+
+        error { 
+            name
+            field
+        }
+    }
+}

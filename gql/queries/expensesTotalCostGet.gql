@@ -1,0 +1,15 @@
+query ExpensesTotalCostGet($getData: ExpensesGetInput!)
+{
+    expensesTotalCostGet(expenseGetData: $getData)
+    {
+        costs {
+            price
+            currency
+        }
+
+        error { 
+            name
+            field
+        }
+    }
+}

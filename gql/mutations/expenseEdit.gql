@@ -1,0 +1,15 @@
+mutation ExpenseEdit($editData: ExpenseEditInput!)
+{
+    expenseEdit(expenseEditData: $editData) {
+        expenses {
+            price
+            currency
+            date
+        }
+
+        error {
+            name
+            field
+        }
+    }
+}

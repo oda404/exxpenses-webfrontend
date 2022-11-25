@@ -1,0 +1,9 @@
+.categoryBoxSection {
+    padding: 4px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border: 1px white solid;
+    border-radius: 6px;
+}

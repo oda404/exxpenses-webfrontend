@@ -1,0 +1,14 @@
+
+query UserGet
+{
+    userGet
+    {
+        user {
+            name
+        }
+
+        error {
+            name
+        }
+    }
+}

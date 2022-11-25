@@ -1,0 +1,16 @@
+mutation ExpenseAdd(
+    $addData: ExpenseAddInput!
+)
+{
+    expenseAdd(expenseAddData: $addData) {
+        expenses { 
+            price
+            currency
+        }
+
+        error { 
+            name
+            field
+        }
+    }
+}

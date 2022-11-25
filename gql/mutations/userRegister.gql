@@ -1,0 +1,15 @@
+mutation UserRegister(
+    $registerData: UserRegisterInput!
+)
+{
+    userRegister(registerUserData: $registerData) {
+        user {
+            name
+        }
+
+        error {
+            name
+            field
+        }
+    }
+}

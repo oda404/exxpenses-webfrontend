@@ -1,0 +1,49 @@
+.drawerContent {
+    background-color: var(--exxpenses-main-bg-color);
+    padding: 10px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 240px;
+}
+
+.drawerButton {
+    color: var(--exxpenses-main-color);
+    justify-content: flex-start;
+    width: 100%;
+    display: flex;
+    padding: 6px;
+}
+
+.drawerButton:hover {
+    background-color: var(--exxpenses-main-button-hover-bg-color);
+}
+
+.drawerButtonIcon {
+    width: 24px;
+    height: 24px;
+}
+
+.drawerButtonText {
+    margin-left: 18px
+}
+
+.drawerLink {
+    color: var(--exxpenses-main-color);
+    text-decoration: none;
+}
+
+.drawerLink:hover {
+    text-decoration: underline;
+}
+
+.drawerLogoutButton {
+    padding: 0;
+    color: var(--exxpenses-main-color);
+    text-transform: none;
+}
+
+.drawerLogoutButton:hover {
+    text-decoration: underline;
+}

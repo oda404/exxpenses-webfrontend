@@ -1,0 +1,77 @@
+.navbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 20px;
+    padding-left: 20px;
+
+    height: 14px;
+    position: sticky;
+    top: 0px;
+
+    z-index: 999;
+
+    background-color: var(--exxpenses-main-bg-color);
+    color: var(--exxpenses-main-color);
+}
+
+.navlist {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.navitem {
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+}
+
+.navLink {
+    color: var(--exxpenses-main-color);
+    text-decoration: none;
+}
+
+.navLink:hover {
+    text-decoration: underline;
+}
+
+.signInButton {
+    margin-top: 4px;
+    padding: 6px;
+    padding-left: 14px;
+    padding-right: 14px;
+    display: flex;
+    border: 1px var(--exxpenses-main-border-color) solid;
+    border-radius: 25px;
+    text-decoration: none;
+}
+
+.signInButton:hover {
+    background: var(--exxpenses-main-button-hover-bg-color);
+}
+
+.drawerButtonIcon {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    margin: 0;
+}
+
+.drawerButton {
+    padding: 6px;
+    margin: 0;
+    min-height: 0;
+    min-width: 0;
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border-radius: 25px;
+}
+
+.drawerButton:hover {
+    background: var(--exxpenses-main-button-hover-bg-color);
+}

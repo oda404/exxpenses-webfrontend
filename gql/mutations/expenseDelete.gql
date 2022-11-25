@@ -1,0 +1,4 @@
+mutation ExpenseDelete($deleteData: ExpenseDeleteInput!)
+{
+    expenseDelete(expenseDeleteData: $deleteData)
+}

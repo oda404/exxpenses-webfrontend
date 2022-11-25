@@ -1,0 +1,15 @@
+mutation CategoryAdd(
+    $addData: CategoryAddInput!
+)
+{
+    categoryAdd(categoryAddData: $addData) {
+        categories { 
+            name
+        }
+
+        error { 
+            name
+            field
+        }
+    }
+}

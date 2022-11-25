@@ -1,0 +1,5 @@
+
+mutation CategoryDelete($category_name: String!)
+{
+    categoryDelete(category_name: $category_name)
+}

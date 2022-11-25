@@ -1,26 +1,29 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap');
 
 * {
-  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  line-height: 1.6;
+  font-family: 'Noto Sans', sans-serif;
+
+  --exxpenses-main-bg-color: #111111;
+  --exxpenses-main-color: #D3D5D4;
+  --exxpenses-main-button-hover-bg-color: #24262b;
+  --exxpenses-main-divider-bg: var(--exxpenses-main-color);
+  --exxpenses-main-error-color: #A50104;
+  --exxpenses-main-border-color: #444444;
+  --exxpenses-main-error-color: #f8564e;
+
+  --exxpenses-dark-green: #558564;
+  --exxpenses-light-green: #839073;
+
+  color: var(--exxpenses-main-color);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+body {
+  background-color: var(--exxpenses-main-bg-color);
+}
+
+.MuiAutocomplete-popper {
+  background: #000
 }

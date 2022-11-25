@@ -1,0 +1,29 @@
+.wave {
+  aspect-ratio: 900/675;
+  height: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-image: url("../public/wave.svg");
+  left: 0;
+  top: 0;
+}
+
+.loginButton {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  background: var(--exxpenses-dark-green);
+  /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
+  color: var(--exxpenses-main-color);
+  text-transform: none;
+  height: 40px;
+}
+
+.loginButton:hover {
+  background: var(--exxpenses-light-green);
+}
+
+.loginForgot {
+  text-decoration: none;
+}
