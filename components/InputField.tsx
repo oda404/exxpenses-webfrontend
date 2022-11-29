@@ -45,7 +45,7 @@ export default function InputField({ label, type, name, field, is_error, params,
                 padding: "1px"
             }}
         >
-            <Typography
+            <Box
                 sx={{
                     color: show ? "#797272 !important" : "#c3b2b2 !important",
                     transform: show ? "none !important" : "translate(-5px, -90%) !important"
@@ -53,7 +53,7 @@ export default function InputField({ label, type, name, field, is_error, params,
                 className={styles.inputFieldLabel}
             >
                 {label}
-            </Typography>
+            </Box>
             <input
                 onFocus={() => setLabel(false)}
                 onLostPointerCapture={() => setLabel(true)}
