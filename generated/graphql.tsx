@@ -22,6 +22,8 @@ export type Category = {
   /** The category's default curreny */
   default_currency: Scalars['String'];
   id: Scalars['ID'];
+  /** Last update for this category */
+  last_update: Scalars['DateTime'];
   /** The category's name */
   name: Scalars['String'];
 };
@@ -200,10 +202,18 @@ export type User = {
   categories: Array<Category>;
   /** The user's email */
   email: Scalars['String'];
+  /** The user's firstname */
+  firstname: Scalars['String'];
   id: Scalars['ID'];
-  /** The user's name */
-  name: Scalars['String'];
+  /** The user's lastname */
+  lastname: Scalars['String'];
+  /** The user's phone number */
+  phone_number: Scalars['String'];
+  /** The user's preferred currency */
+  preferred_currency: Scalars['String'];
   signup_date: Scalars['DateTime'];
+  /** True if the user has verified their email address */
+  verified_email: Scalars['Boolean'];
 };
 
 export type UserLoginInput = {
@@ -213,7 +223,8 @@ export type UserLoginInput = {
 
 export type UserRegisterInput = {
   email: Scalars['String'];
-  name: Scalars['String'];
+  firstname: Scalars['String'];
+  lastname: Scalars['String'];
   password: Scalars['String'];
 };
 
@@ -263,7 +274,7 @@ export type UserLoginMutationVariables = Exact<{
 }>;
 
 
-export type UserLoginMutation = { __typename?: 'Mutation', userLogin: { __typename?: 'UserResponse', user?: { __typename?: 'User', name: string } | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
+export type UserLoginMutation = { __typename?: 'Mutation', userLogin: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string } | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
 
 export type UserLogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -275,7 +286,7 @@ export type UserRegisterMutationVariables = Exact<{
 }>;
 
 
-export type UserRegisterMutation = { __typename?: 'Mutation', userRegister: { __typename?: 'UserResponse', user?: { __typename?: 'User', name: string } | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
+export type UserRegisterMutation = { __typename?: 'Mutation', userRegister: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string } | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
 
 export type CategoriesGetQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -306,7 +317,7 @@ export type ExpensesTotalCostGetMultipleQuery = { __typename?: 'Query', expenses
 export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', name: string } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
+export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
 
 
 export const CategoryAddDocument = gql`
@@ -495,7 +506,7 @@ export const UserLoginDocument = gql`
     mutation UserLogin($loginData: UserLoginInput!) {
   userLogin(loginUserData: $loginData) {
     user {
-      name
+      lastname
     }
     error {
       name
@@ -564,7 +575,7 @@ export const UserRegisterDocument = gql`
     mutation UserRegister($registerData: UserRegisterInput!) {
   userRegister(registerUserData: $registerData) {
     user {
-      name
+      lastname
     }
     error {
       name
@@ -774,7 +785,7 @@ export const UserGetDocument = gql`
     query UserGet {
   userGet {
     user {
-      name
+      lastname
     }
     error {
       name

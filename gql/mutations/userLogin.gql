@@ -4,7 +4,7 @@ mutation UserLogin(
 {
     userLogin(loginUserData: $loginData) {
         user {
-            name
+            lastname
         }
 
         error {

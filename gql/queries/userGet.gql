@@ -4,7 +4,7 @@ query UserGet
     userGet
     {
         user {
-            name
+            lastname
         }
 
         error {

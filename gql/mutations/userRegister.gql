@@ -4,7 +4,7 @@ mutation UserRegister(
 {
     userRegister(registerUserData: $registerData) {
         user {
-            name
+            lastname
         }
 
         error {
