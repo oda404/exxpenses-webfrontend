@@ -25,7 +25,6 @@ interface CustomDrawerProps {
 export default function CustomDrawer({ isOpen, setState, username }: CustomDrawerProps) {
 
     const [userLogout] = useMutation(UserLogoutDocument);
-    const router = useRouter();
 
     let userInfo: React.ReactNode;
     if (username === undefined) {
@@ -53,7 +52,8 @@ export default function CustomDrawer({ isOpen, setState, username }: CustomDrawe
                 <Button
                     onClick={async () => {
                         await userLogout();
-                        router.push("/");
+                        window.location.assign("/");
+                        window.location.reload();
                     }}
                     variant="text"
                     className={styles.drawerLogoutButton}
@@ -93,7 +93,10 @@ export default function CustomDrawer({ isOpen, setState, username }: CustomDrawe
                             <MenuIcon className={styles.drawerButtonIcon} />
                         </Button>
                         <Button
-                            onClick={() => router.push("/")}
+                            onClick={() => {
+                                window.location.assign("/");
+                                window.location.reload();
+                            }}
                         >
                             <Box fontSize="18px" className={styles.drawerButtonText}>Exxpenses</Box>
                         </Button>
@@ -103,7 +106,8 @@ export default function CustomDrawer({ isOpen, setState, username }: CustomDrawe
                         <Button
                             className={styles.drawerButton}
                             onClick={() => {
-                                router.push("/dashboard")
+                                window.location.assign("/");
+                                window.location.reload();
                             }}
                         >
                             <DashboardIcon className={styles.drawerButtonIcon} />

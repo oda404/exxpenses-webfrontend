@@ -140,8 +140,12 @@ export async function getServerSideProps({ req, res }: any) {
     });
 
     if (userGet.user !== undefined && userGet.user !== null) {
-        res.writeHead(302, { Location: "/" })
-        res.end();
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/dashboard"
+            }
+        }
     }
 
     return {

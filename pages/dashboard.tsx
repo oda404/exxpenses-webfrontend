@@ -381,19 +381,24 @@ export default function Dashboard({ ssr }: DashboardProps) {
     );
 }
 
-export async function getServerSideProps({ req, res }: any) {
-    const { data: { userGet } }: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
+export async function getServerSideProps({ req }: any) {
+    const user_resp: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
         query: UserGetDocument,
         context: { cookie: req.headers.cookie },
         fetchPolicy: "no-cache"
     });
 
-    if (userGet.user === undefined || userGet.user === null) {
-        res.writeHead(302, { Location: "/" })
-        res.end();
+    if (user_resp.data.userGet.user === undefined || user_resp.data.userGet.user === null) {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/login"
+            },
+            props: {}
+        }
     }
 
-    const { data: { categoriesGet } }: ApolloQueryResult<CategoriesGetQuery> = await apolloClient.query({
+    const category_resp: ApolloQueryResult<CategoriesGetQuery> = await apolloClient.query({
         query: CategoriesGetDocument,
         context: { cookie: req.headers.cookie },
         fetchPolicy: "no-cache"
@@ -402,12 +407,12 @@ export async function getServerSideProps({ req, res }: any) {
     const now = new Date();
     const since = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const { data: { expensesTotalCostGetMultiple } }: ApolloQueryResult<ExpensesTotalCostGetMultipleQuery
+    const expenses_total_cost_resp: ApolloQueryResult<ExpensesTotalCostGetMultipleQuery
     > = await apolloClient.query({
         query: ExpensesTotalCostGetMultipleDocument,
         variables: {
             getData: {
-                category_names: categoriesGet?.categories?.map(c => c.name),
+                category_names: category_resp.data.categoriesGet?.categories?.map(c => c.name),
                 since: since,
             }
         },
@@ -418,9 +423,9 @@ export async function getServerSideProps({ req, res }: any) {
     return {
         props: {
             ssr: {
-                userGet: userGet,
-                categoriesGet: categoriesGet,
-                expensesTotalCost: expensesTotalCostGetMultiple
+                userGet: user_resp.data.userGet,
+                categoriesGet: category_resp.data.categoriesGet,
+                expensesTotalCost: expenses_total_cost_resp.data.expensesTotalCostGetMultiple
             }
         }
     }

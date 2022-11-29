@@ -19,13 +19,19 @@ export default function Home({ ssr }: HomeProps) {
 export async function getServerSideProps({ req, res }: any) {
   const { data: { userGet } }: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
     query: UserGetDocument,
-    context: { cookie: req.headers.cookie }
+    context: { cookie: req.headers.cookie },
+    fetchPolicy: "no-cache"
   });
 
-  if (userGet.user !== undefined && userGet.user !== null) {
-    res.writeHead(302, { Location: "/dashboard" })
-    res.end();
+  if (userGet.user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/dashboard"
+      }
+    }
   }
+
   return {
     props: {
       ssr: {
