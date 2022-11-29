@@ -8,6 +8,8 @@ import { CacheProvider } from '@emotion/react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../utils/theme';
+import { useEffect, useState } from 'react';
+import { Router } from 'next/router';
 
 const isBrowser = typeof document !== 'undefined';
 
@@ -29,15 +31,42 @@ function createEmotionCache() {
 const clientSideEmotionCache = createEmotionCache();
 
 export default function App({ Component, pageProps }: AppProps) {
+
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const start = () => {
+      console.log("start");
+      setLoading(true);
+    };
+    const end = () => {
+      console.log("finished");
+      setLoading(false);
+    };
+    Router.events.on("routeChangeStart", start);
+    Router.events.on("routeChangeComplete", end);
+    Router.events.on("routeChangeError", end);
+    return () => {
+      Router.events.off("routeChangeStart", start);
+      Router.events.off("routeChangeComplete", end);
+      Router.events.off("routeChangeError", end);
+    };
+  }, []);
+
   return (
-    <CacheProvider value={clientSideEmotionCache}>
-      <ThemeProvider theme={theme}>
-        <ApolloProvider client={apolloClient} >
-          <Component {...pageProps} />
-        </ApolloProvider>
-      </ThemeProvider>
-    </CacheProvider>
-  );
+    <>
+      {
+        loading ? (
+          <h1> Loading...</h1 >
+        ) : (
+          <CacheProvider value={clientSideEmotionCache}>
+            <ThemeProvider theme={theme}>
+              <ApolloProvider client={apolloClient} >
+                <Component {...pageProps} />
+              </ApolloProvider>
+            </ThemeProvider>
+          </CacheProvider>)}
+    </>
+  )
 }
 
 App.propTypes = {
