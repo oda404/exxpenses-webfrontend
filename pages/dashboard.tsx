@@ -345,7 +345,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
 
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)">
-            <Navbar username={user.name} />
+            <Navbar username={user.lastname} />
 
             <Box marginTop="30px" display="flex" flexDirection="row" sx={{ paddingX: "40px" }}>
                 <Box display="flex" flexDirection="column" width="fit-content">

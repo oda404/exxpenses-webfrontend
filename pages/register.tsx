@@ -42,16 +42,25 @@ export default function Register({ }: RegisterProps) {
                                 Sign up for exxpenses!
                             </Box>
                         </Stack>
-                        <Box width="320px">
+                        <Box width="390px">
                             <Formik
-                                initialValues={{ username: "", email: "", password: "" }}
-                                onSubmit={async ({ username, email, password }, actions) => {
-                                    if (!username || username.length === 0) {
-                                        actions.setFieldError("username", "The username is required!");
+                                initialValues={{ firstname: "", lastname: "", email: "", password: "" }}
+                                onSubmit={async ({ firstname, lastname, email, password }, actions) => {
+                                    if (!firstname || firstname.length === 0) {
+                                        actions.setFieldError("firstname", "The firstname is required!");
                                         return;
                                     }
-                                    else if (username.length > 30) {
-                                        actions.setFieldError("username", "The username can't be longer than 30 characters.");
+                                    else if (firstname.length > 30) {
+                                        actions.setFieldError("firstname", "The firstname can't be longer than 30 characters.");
+                                        return;
+                                    }
+
+                                    if (!lastname || lastname.length === 0) {
+                                        actions.setFieldError("lastname", "The lastname is required!");
+                                        return;
+                                    }
+                                    else if (lastname.length > 30) {
+                                        actions.setFieldError("lastname", "The lastname can't be longer than 30 characters.");
                                         return;
                                     }
 
@@ -72,7 +81,8 @@ export default function Register({ }: RegisterProps) {
                                     let res = await userRegister({
                                         variables: {
                                             registerData: {
-                                                name: username,
+                                                firstname: firstname,
+                                                lastname: lastname,
                                                 email: email,
                                                 password: password
                                             }
@@ -93,14 +103,26 @@ export default function Register({ }: RegisterProps) {
                             >
                                 {({ handleSubmit, isSubmitting, errors }) => (
                                     <form onSubmit={handleSubmit}>
-                                        <Field name="username">
-                                            {({ field }: FieldProps) => (
-                                                <Stack spacing="5px">
-                                                    <InputField field={field} name="username" label="Username" />
-                                                    <ErrorMessage name="username" component="div" />
-                                                </Stack>
-                                            )}
-                                        </Field>
+                                        <Box display="flex">
+                                            <Field name="firstname">
+                                                {({ field }: FieldProps) => (
+                                                    <Stack spacing="5px">
+                                                        <InputField is_error={errors.firstname !== undefined} field={field} name="firstname" label="Firstname" />
+                                                        <ErrorMessage name="firstname" component="div" />
+                                                    </Stack>
+                                                )}
+                                            </Field>
+                                            <Box marginLeft="5px" marginRight="5px" />
+                                            <Field name="lastname">
+                                                {({ field }: FieldProps) => (
+                                                    <Stack spacing="5px">
+                                                        <InputField is_error={errors.lastname !== undefined} field={field} name="lastname" label="Lastname" />
+                                                        <ErrorMessage name="lastname" component="div" />
+                                                    </Stack>
+                                                )}
+                                            </Field>
+                                        </Box>
+
                                         <Field name="email">
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="14px">
