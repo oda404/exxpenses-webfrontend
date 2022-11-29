@@ -7,21 +7,22 @@
   font-family: 'Noto Sans', sans-serif;
 
   --exxpenses-main-bg-color: #111111;
-  --exxpenses-main-color: #D3D5D4;
+  --exxpenses-main-color: #c7c9c8;
   --exxpenses-main-button-hover-bg-color: #24262b;
   --exxpenses-main-divider-bg: var(--exxpenses-main-color);
   --exxpenses-main-error-color: #A50104;
   --exxpenses-main-border-color: #444444;
   --exxpenses-main-error-color: #f8564e;
 
-  --exxpenses-dark-green: #558564;
-  --exxpenses-light-green: #839073;
+  --exxpenses-dark-green: #446a50;
+  --exxpenses-light-green: #487958;
 
   color: var(--exxpenses-main-color);
 }
 
-body {
-  background-color: var(--exxpenses-main-bg-color);
+html {
+  background-color: var(--exxpenses-main-bg-color) !important;
+  color: var(--exxpenses-main-color) !important;
 }
 
 .MuiAutocomplete-popper {

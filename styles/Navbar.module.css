@@ -13,7 +13,7 @@
 
     z-index: 999;
 
-    background-color: var(--exxpenses-main-bg-color);
+    background-color: var(--exxpenses-main-bg-color) !important;
     color: var(--exxpenses-main-color);
 }
 

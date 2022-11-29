@@ -15,4 +15,10 @@
 
 .loginForgot {
   text-decoration: none;
+  color: #5f5fe0;
+}
+
+.loginForgot:hover {
+  text-decoration: underline;
+  color: #7070db;
 }
