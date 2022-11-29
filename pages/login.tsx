@@ -18,94 +18,96 @@ type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Login({ }: LoginProps) {
 
-    const router = useRouter();
     const [userLogin] = useMutation(UserLoginDocument);
 
     return (
-        <>
+        <Box bgcolor="var(--exxpenses-main-bg-color)">
             <Navbar />
 
-            <Box
-                marginTop="200px"
-                display="flex"
-                justifyContent="center"
-                marginX="auto"
-                padding="26px"
-                border="1px var(--exxpenses-main-border-color) solid"
-                width="fit-content"
-                borderRadius="8px"
-                boxShadow="rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
-            >
-                <Box display="flex" flexDirection="column" alignItems="center">
-                    <Stack spacing={20}>
-                        <Box
-                            color={'gray.100'}
-                            lineHeight={1.1}
-                            fontSize="24px"
-                            sx={{ marginBottom: "8px" }}
-                        >
-                            Sign in
+            <Box height="70vh" display="flex" alignItems="center">
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    marginX="auto"
+                    padding="26px"
+                    border="1px var(--exxpenses-main-border-color) solid"
+                    width="fit-content"
+                    borderRadius="8px"
+                    boxShadow="rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+                >
+                    <Box display="flex" flexDirection="column" alignItems="center">
+                        <Stack spacing={20}>
+                            <Box
+                                color={'gray.100'}
+                                lineHeight={1.1}
+                                fontSize="24px"
+                                sx={{ marginBottom: "8px" }}
+                            >
+                                Sign in
+                            </Box>
+                        </Stack>
+                        <Box width="320px">
+                            <Formik
+                                initialValues={{ email: "", password: "" }}
+                                onSubmit={async (values, actions) => {
+
+                                    if (!values.email || values.email.length === 0) {
+                                        actions.setFieldError("email", "The email address is required!")
+                                        return;
+                                    }
+                                    else if (values.email.match(/^[a-zA-Z0-9.!#$&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === null) {
+                                        actions.setFieldError("email", "Invalid email address!");
+                                        return;
+                                    }
+
+                                    if (!values.password || values.password.length === 0) {
+                                        actions.setFieldError("password", "The password is required!");
+                                        return;
+                                    }
+
+                                    let res = await userLogin({ variables: { loginData: { email: values.email, password: values.password } } });
+
+                                    if (res.data.userLogin.error) {
+                                        actions.setFieldError("password", res.data.userLogin.error.name);
+                                        return;
+                                    }
+
+                                    window.location.assign("/dashboard");
+                                    window.location.reload();
+                                }}
+                            >
+                                {({ handleSubmit, isSubmitting, errors }) => (
+                                    <form onSubmit={handleSubmit}>
+                                        <Field name="email">
+                                            {({ field }: FieldProps) => (
+                                                <Box marginTop="14px">
+                                                    <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
+                                                    <ErrorMessage name="email" />
+                                                </Box>
+                                            )}
+                                        </Field>
+                                        <Field name="password">
+                                            {({ field }: FieldProps) => (
+                                                <Box marginTop="18px">
+                                                    <InputField is_error={errors.password !== undefined} field={field} type="password" label="Password" name="password" />
+                                                    <ErrorMessage name="password" />
+                                                </Box>
+                                            )}
+                                        </Field>
+                                        <Button className={styles.loginButton} type="submit">
+                                            {isSubmitting ? <CircularProgress style={{ width: "26px", height: "26px" }} /> : "Sign in"}
+                                        </Button>
+                                        <Link href="/forgotpass" className={styles.loginForgot}>Forgot your password?</Link>
+                                    </form>
+                                )}
+                            </Formik>
                         </Box>
-                    </Stack>
-                    <Box width="320px">
-                        <Formik
-                            initialValues={{ email: "", password: "" }}
-                            onSubmit={async (values, actions) => {
 
-                                if (!values.email || values.email.length === 0) {
-                                    actions.setFieldError("email", "The email address is required!")
-                                    return;
-                                }
-                                else if (values.email.match(/^[a-zA-Z0-9.!#$&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === null) {
-                                    actions.setFieldError("email", "Invalid email address!");
-                                    return;
-                                }
-
-                                if (!values.password || values.password.length === 0) {
-                                    actions.setFieldError("password", "The password is required!");
-                                    return;
-                                }
-
-                                let res = await userLogin({ variables: { loginData: { email: values.email, password: values.password } } });
-
-                                if (res.data.userLogin.error) {
-                                    actions.setFieldError("password", res.data.userLogin.error.name);
-                                    return;
-                                }
-
-                                router.push("/dashboard");
-                            }}
-                        >
-                            {({ handleSubmit, isSubmitting, errors }) => (
-                                <form onSubmit={handleSubmit}>
-                                    <Field name="email">
-                                        {({ field }: FieldProps) => (
-                                            <Box marginTop="14px">
-                                                <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
-                                                <ErrorMessage name="email" />
-                                            </Box>
-                                        )}
-                                    </Field>
-                                    <Field name="password">
-                                        {({ field }: FieldProps) => (
-                                            <Box marginTop="18px">
-                                                <InputField is_error={errors.password !== undefined} field={field} type="password" label="Password" name="password" />
-                                                <ErrorMessage name="password" />
-                                            </Box>
-                                        )}
-                                    </Field>
-                                    <Button className={styles.loginButton} type="submit">
-                                        {isSubmitting ? <CircularProgress style={{ width: "26px", height: "26px" }} /> : "Sign in"}
-                                    </Button>
-                                    <Link href="/forgotpass" className={styles.loginForgot}>Forgot your password?</Link>
-                                </form>
-                            )}
-                        </Formik>
                     </Box>
-
                 </Box>
             </Box>
-        </>
+
+        </Box>
     )
 }
 

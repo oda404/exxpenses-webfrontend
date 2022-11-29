@@ -1,4 +1,5 @@
 import { ApolloQueryResult } from '@apollo/client'
+import { Box } from '@mui/material'
 import type { InferGetServerSidePropsType } from 'next'
 import Navbar from '../components/navbar'
 import { UserGetDocument, UserGetQuery } from '../generated/graphql'
@@ -9,7 +10,9 @@ type HomeProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 export default function Home({ ssr }: HomeProps) {
 
   return (
-    <Navbar />
+    <Box width="100vw" height="100vh" bgcolor="var(--exxpenses-main-bg-color)">
+      <Navbar />
+    </Box>
   )
 }
 

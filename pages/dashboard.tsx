@@ -344,7 +344,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
     const user = ssr.userGet.user!;
 
     return (
-        <>
+        <Box bgcolor="var(--exxpenses-main-bg-color)">
             <Navbar username={user.name} />
 
             <Box marginTop="30px" display="flex" flexDirection="row" sx={{ paddingX: "40px" }}>
@@ -377,7 +377,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
                     {activeTab}
                 </Box>
             </Box>
-        </>
+        </Box>
     );
 }
 
