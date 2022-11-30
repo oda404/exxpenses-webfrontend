@@ -134,6 +134,7 @@ export type Mutation = {
   userLogout: Scalars['Boolean'];
   /** Register a new user. */
   userRegister: UserResponse;
+  userUpdatePreferredCurrency: Scalars['Boolean'];
 };
 
 
@@ -169,6 +170,11 @@ export type MutationUserLoginArgs = {
 
 export type MutationUserRegisterArgs = {
   registerUserData: UserRegisterInput;
+};
+
+
+export type MutationUserUpdatePreferredCurrencyArgs = {
+  preferred_currency: Scalars['String'];
 };
 
 export type Query = {
@@ -210,7 +216,7 @@ export type User = {
   /** The user's phone number */
   phone_number: Scalars['String'];
   /** The user's preferred currency */
-  preferred_currency: Scalars['String'];
+  preferred_currency?: Maybe<Scalars['String']>;
   signup_date: Scalars['DateTime'];
   /** True if the user has verified their email address */
   verified_email: Scalars['Boolean'];
@@ -288,6 +294,13 @@ export type UserRegisterMutationVariables = Exact<{
 
 export type UserRegisterMutation = { __typename?: 'Mutation', userRegister: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string } | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
 
+export type UserUpdatePreferredCurrencyMutationVariables = Exact<{
+  preferred_currency: Scalars['String'];
+}>;
+
+
+export type UserUpdatePreferredCurrencyMutation = { __typename?: 'Mutation', userUpdatePreferredCurrency: boolean };
+
 export type CategoriesGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -317,7 +330,7 @@ export type ExpensesTotalCostGetMultipleQuery = { __typename?: 'Query', expenses
 export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
+export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string, preferred_currency?: string | null } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
 
 
 export const CategoryAddDocument = gql`
@@ -610,6 +623,37 @@ export function useUserRegisterMutation(baseOptions?: Apollo.MutationHookOptions
 export type UserRegisterMutationHookResult = ReturnType<typeof useUserRegisterMutation>;
 export type UserRegisterMutationResult = Apollo.MutationResult<UserRegisterMutation>;
 export type UserRegisterMutationOptions = Apollo.BaseMutationOptions<UserRegisterMutation, UserRegisterMutationVariables>;
+export const UserUpdatePreferredCurrencyDocument = gql`
+    mutation UserUpdatePreferredCurrency($preferred_currency: String!) {
+  userUpdatePreferredCurrency(preferred_currency: $preferred_currency)
+}
+    `;
+export type UserUpdatePreferredCurrencyMutationFn = Apollo.MutationFunction<UserUpdatePreferredCurrencyMutation, UserUpdatePreferredCurrencyMutationVariables>;
+
+/**
+ * __useUserUpdatePreferredCurrencyMutation__
+ *
+ * To run a mutation, you first call `useUserUpdatePreferredCurrencyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserUpdatePreferredCurrencyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userUpdatePreferredCurrencyMutation, { data, loading, error }] = useUserUpdatePreferredCurrencyMutation({
+ *   variables: {
+ *      preferred_currency: // value for 'preferred_currency'
+ *   },
+ * });
+ */
+export function useUserUpdatePreferredCurrencyMutation(baseOptions?: Apollo.MutationHookOptions<UserUpdatePreferredCurrencyMutation, UserUpdatePreferredCurrencyMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserUpdatePreferredCurrencyMutation, UserUpdatePreferredCurrencyMutationVariables>(UserUpdatePreferredCurrencyDocument, options);
+      }
+export type UserUpdatePreferredCurrencyMutationHookResult = ReturnType<typeof useUserUpdatePreferredCurrencyMutation>;
+export type UserUpdatePreferredCurrencyMutationResult = Apollo.MutationResult<UserUpdatePreferredCurrencyMutation>;
+export type UserUpdatePreferredCurrencyMutationOptions = Apollo.BaseMutationOptions<UserUpdatePreferredCurrencyMutation, UserUpdatePreferredCurrencyMutationVariables>;
 export const CategoriesGetDocument = gql`
     query CategoriesGet {
   categoriesGet {
@@ -786,6 +830,7 @@ export const UserGetDocument = gql`
   userGet {
     user {
       lastname
+      preferred_currency
     }
     error {
       name
