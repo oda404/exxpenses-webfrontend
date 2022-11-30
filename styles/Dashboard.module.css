@@ -33,7 +33,6 @@
 }
 
 .categoriesBox {
-    padding: 8px;
     overflow-y: scroll;
 }
 
@@ -62,7 +61,7 @@
     border: 1px var(--exxpenses-main-border-color) solid;
     border-radius: 6px;
     width: fit-content;
-    height: 96px;
+    height: fit-content;
 }
 
 .categoryTotalCostBox {
@@ -70,6 +69,7 @@
     height: 30%;
     padding-left: 6px;
     padding-left: 6px;
+    font-size: 14px;
 }
 
 /* width */

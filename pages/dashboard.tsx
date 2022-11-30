@@ -24,7 +24,7 @@ function AddNewCategoryCard() {
     const router = useRouter();
 
     return (
-        <Box width="200px" display="flex" flexDirection="column" padding="12px" border="1px #444444 solid" sx={{ borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
+        <Box width="160px" display="flex" flexDirection="column" padding="12px" border="1px #444444 solid" sx={{ borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
             <Typography marginBottom="5px" marginLeft="6px">
                 New category
             </Typography>
@@ -70,7 +70,7 @@ function AddNewCategoryCard() {
                             <Field name="default_curr">
                                 {({ field }: FieldProps) => (
                                     <Box marginTop="10px">
-                                        <InputField field={field} name="default_curr" label="Default currency" />
+                                        <InputField field={field} name="default_curr" label="Currency" />
                                         <ErrorMessage name="default_curr" component="div" />
                                     </Box>
                                 )}
@@ -115,7 +115,7 @@ function AddNewExpenseCard({ default_category, focusCategory, categories }: AddN
 
     return (
         <Box
-            width="200px"
+            width="160px"
             display="flex"
             flexDirection="column"
             padding="12px"
@@ -241,7 +241,7 @@ function AddNewExpenseCard({ default_category, focusCategory, categories }: AddN
                             <Field name="description">
                                 {({ field }: FieldProps) => (
                                     <Box marginTop="10px">
-                                        <InputField field={field} name="description" label="Description (optional)" />
+                                        <InputField field={field} name="description" label="Description" />
                                         <ErrorMessage name="description" component="div" />
                                     </Box>
                                 )}
@@ -328,8 +328,17 @@ export default function Dashboard({ ssr }: DashboardProps) {
             case "Overview":
                 activeTab = (
                     <Box>
-                        <Stats totalCosts={ssr.expensesTotalCost.costs} categories={ssr.categoriesGet.categories as Category[]} />
-                        <DashboardCategoriesTab focusCategory={setFocusedCategory} totalCosts={ssr.expensesTotalCost.costs} categories={ssr.categoriesGet.categories as Category[]} newTab={n} />
+                        {ssr.categoriesGet.categories?.length > 0 ?
+                            <Stats totalCosts={ssr.expensesTotalCost.costs} categories={ssr.categoriesGet.categories as Category[]} /> :
+                            null
+                        }
+                        <DashboardCategoriesTab
+                            preferred_currency={ssr?.userGet.user?.preferred_currency}
+                            focusCategory={setFocusedCategory}
+                            totalCosts={ssr.expensesTotalCost.costs}
+                            categories={ssr.categoriesGet.categories as Category[]}
+                            newTab={n}
+                        />
                     </Box>
                 );
                 break;
@@ -348,20 +357,25 @@ export default function Dashboard({ ssr }: DashboardProps) {
             <Navbar username={user.lastname} />
 
             <Box marginTop="30px" display="flex" flexDirection="row" sx={{ paddingX: "40px" }}>
-                <Box display="flex" flexDirection="column" width="fit-content">
-                    <Typography variant="h5">
-                        Add a new entry
-                    </Typography>
-                    <Divider sx={{ width: "100%", background: "#444444", marginBottom: "12px", marginTop: "4px", color: "white" }} />
-                    <AddNewCategoryCard />
-                    <Box mb="20px" />
-                    <AddNewExpenseCard
-                        default_category={focusedCategory}
-                        focusCategory={setFocusedCategory}
-                        categories={ssr.categoriesGet.categories}
-                    />
-                </Box>
-                <Box display="flex" flexDirection="column" width="100%" marginLeft="40px">
+                {
+                    ssr?.categoriesGet.categories.length > 0 ?
+                        <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
+                            <Typography variant="h5">
+                                Add a new entry
+                            </Typography>
+                            <Divider sx={{ width: "100%", background: "#444444", marginBottom: "12px", marginTop: "4px", color: "white" }} />
+                            <AddNewCategoryCard />
+                            <Box mb="20px" />
+                            <AddNewExpenseCard
+                                default_category={focusedCategory}
+                                focusCategory={setFocusedCategory}
+                                categories={ssr.categoriesGet.categories}
+                            />
+                        </Box> :
+                        null
+                }
+
+                <Box display="flex" flexDirection="column" height="100%" width="100%">
                     <Box display="flex">
                         <TabHeaderButton active={dashboardActiveTab === "Overview"} name="Overview" setActive={setDashboardTab} />
                         <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />

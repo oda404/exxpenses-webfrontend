@@ -42,7 +42,7 @@ export default function Register({ }: RegisterProps) {
                                 Sign up for exxpenses!
                             </Box>
                         </Stack>
-                        <Box width="390px">
+                        <Box width="370px">
                             <Formik
                                 initialValues={{ firstname: "", lastname: "", email: "", password: "" }}
                                 onSubmit={async ({ firstname, lastname, email, password }, actions) => {

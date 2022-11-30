@@ -11,13 +11,13 @@ interface StatCardProps {
 function StatCard({ text, content }: StatCardProps) {
     return (
         <Grid sx={{ overflow: "hidden" }} item>
-            <Paper className={styles.categoryBox} sx={{ height: "50px !important", padding: "12px !important" }}>
-                <Typography sx={{ textTransform: "uppercase", fontSize: "13px" }}>
+            <Paper className={styles.categoryBox} sx={{ height: "fit-content !important", padding: "12px !important" }}>
+                <Typography sx={{ textTransform: "uppercase", fontSize: "12px" }}>
                     <b>{text}</b>
                 </Typography>
-                <Typography variant="h6">
+                <Box sx={{ marginLeft: "2px", textTransform: "uppercase", fontSize: "14px" }}>
                     {content}
-                </Typography>
+                </Box>
             </Paper>
         </Grid>
     )
@@ -151,7 +151,7 @@ export default function Stats({ totalCosts, categories }: StatsProps) {
         <Box sx={{ overflowY: "auto" }} padding="10px" paddingTop="20px" display="flex" flexDirection="column">
             <Grid container spacing={3}>
                 <StatCard text="Total this month" content={totalThisMonth} />
-                <StatCard text="Costly this month" content={costlyThisMonth} />
+                <StatCard text="Most expensive this month" content={costlyThisMonth} />
             </Grid>
         </Box >
     )
