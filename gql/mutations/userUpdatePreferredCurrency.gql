@@ -1,0 +1,6 @@
+mutation UserUpdatePreferredCurrency(
+    $preferred_currency: String!
+)
+{
+    userUpdatePreferredCurrency(preferred_currency: $preferred_currency)
+}
