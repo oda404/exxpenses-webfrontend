@@ -418,8 +418,7 @@ export async function getServerSideProps({ req }: any) {
         fetchPolicy: "no-cache"
     });
 
-    const now = new Date();
-    const since = new Date(now.getFullYear(), now.getMonth(), 1);
+    const since = new Date().toISOString().slice(0, 10);
 
     const expenses_total_cost_resp: ApolloQueryResult<ExpensesTotalCostGetMultipleQuery
     > = await apolloClient.query({
