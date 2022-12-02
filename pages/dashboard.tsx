@@ -417,8 +417,9 @@ export async function getServerSideProps({ req }: any) {
         context: { cookie: req.headers.cookie },
         fetchPolicy: "no-cache"
     });
-
-    const since = new Date().toISOString().slice(0, 10);
+    
+    const now = new Date();
+    const since = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const expenses_total_cost_resp: ApolloQueryResult<ExpensesTotalCostGetMultipleQuery
     > = await apolloClient.query({
