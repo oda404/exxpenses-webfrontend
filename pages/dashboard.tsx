@@ -16,6 +16,7 @@ import styles from "../styles/Dashboard.module.css"
 import { Category } from "../generated/graphql";
 import { useRouter } from "next/router";
 import Stats from "../components/Stats";
+import useShowMobileView from "../utils/useShowMobileView";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -25,6 +26,8 @@ export default function Dashboard({ ssr }: DashboardProps) {
 
     const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>("Overview");
     const [categoryActiveTab, setCategoryActiveTab] = useState<string | null>(null);
+
+    const isMobileView = useShowMobileView();
 
     const setDashboardTab = (name: string | null) => {
         setCategoryActiveTab(null);
@@ -88,7 +91,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
         <Box bgcolor="var(--exxpenses-main-bg-color)">
             <Navbar username={user.lastname} />
 
-            <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: "40px" }}>
+            <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: isMobileView ? "10px" : "40px" }}>
 
                 <Box display="flex" flexDirection="column" height="100%" width="100%">
                     <Box display="flex">
