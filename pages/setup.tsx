@@ -240,7 +240,7 @@ export default function Setup({ ssr }: DashboardProps) {
                     <Box textAlign="center" fontSize="18px" marginBottom="20px">
                         <b>Setup your Exxpenses account</b>
                         <Box fontSize="16px">
-                            Let's get the basic stuff out of the way!
+                            Let&apos;s get the basic stuff out of the way!
                         </Box>
                     </Box>
                     <Box>
