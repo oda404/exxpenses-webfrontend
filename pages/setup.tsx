@@ -232,12 +232,12 @@ export default function Setup({ ssr }: DashboardProps) {
 
                 <Box
                     width="100vw"
-                    marginTop="80px"
+                    marginTop="60px"
                     alignItems="center"
                     display="flex"
                     flexDirection="column"
                 >
-                    <Box textAlign="center" fontSize="18px" marginBottom="20px">
+                    <Box textAlign="center" fontSize="18px" marginBottom="15px">
                         <b>Setup your Exxpenses account</b>
                         <Box fontSize="16px">
                             Let&apos;s get the basic stuff out of the way!

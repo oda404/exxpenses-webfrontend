@@ -148,7 +148,7 @@ export default function Stats({ totalCosts, categories }: StatsProps) {
     let mostRecent = (categories === undefined || categories === null) ? "None" : categoriesToMostRecent(categories);
 
     return (
-        <Box sx={{ overflowY: "auto" }} padding="10px" paddingTop="20px" display="flex" flexDirection="column">
+        <Box sx={{ overflowY: "auto" }} paddingTop="20px" display="flex" flexDirection="column">
             <Grid container spacing={3}>
                 <StatCard text="Total this month" content={totalThisMonth} />
                 <StatCard text="Most expensive this month" content={costlyThisMonth} />
