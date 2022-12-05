@@ -4,8 +4,9 @@
     align-items: center;
     justify-content: space-between;
 
-    padding: 20px;
-    padding-left: 20px;
+    width: 100%;
+
+    padding-top: 22px;
 
     height: 14px;
     position: sticky;
@@ -41,7 +42,7 @@
 
 .signInButton {
     margin-top: 4px;
-    padding: 6px;
+    padding: 4px;
     padding-left: 14px;
     padding-right: 14px;
     display: flex;

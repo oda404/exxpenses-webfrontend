@@ -328,10 +328,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
             case "Overview":
                 activeTab = (
                     <Box>
-                        {ssr.categoriesGet.categories?.length > 0 ?
-                            <Stats totalCosts={ssr.expensesTotalCost.costs} categories={ssr.categoriesGet.categories as Category[]} /> :
-                            null
-                        }
+                        <Stats totalCosts={ssr.expensesTotalCost.costs} categories={ssr.categoriesGet.categories as Category[]} />
                         <DashboardCategoriesTab
                             preferred_currency={ssr?.userGet.user?.preferred_currency}
                             focusCategory={setFocusedCategory}
@@ -347,7 +344,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
         }
     }
     else {
-        activeTab = <CategoryTab name={categoryActiveTab} default_currency={ssr.categoriesGet.categories?.find(c => c.name === categoryActiveTab)!.default_currency!} />;
+        activeTab = <CategoryTab name={categoryActiveTab} default_currency={ssr.categoriesGet.categories?.find((c: any) => c.name === categoryActiveTab)!.default_currency!} />;
     }
 
     const user = ssr.userGet.user!;
@@ -357,23 +354,19 @@ export default function Dashboard({ ssr }: DashboardProps) {
             <Navbar username={user.lastname} />
 
             <Box marginTop="30px" display="flex" flexDirection="row" sx={{ paddingX: "40px" }}>
-                {
-                    ssr?.categoriesGet.categories.length > 0 ?
-                        <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
-                            <Typography variant="h5">
-                                Add a new entry
-                            </Typography>
-                            <Divider sx={{ width: "100%", background: "#444444", marginBottom: "12px", marginTop: "4px", color: "white" }} />
-                            <AddNewCategoryCard />
-                            <Box mb="20px" />
-                            <AddNewExpenseCard
-                                default_category={focusedCategory}
-                                focusCategory={setFocusedCategory}
-                                categories={ssr.categoriesGet.categories}
-                            />
-                        </Box> :
-                        null
-                }
+                <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
+                    <Typography variant="h5">
+                        Add a new entry
+                    </Typography>
+                    <Divider sx={{ width: "100%", background: "#444444", marginBottom: "12px", marginTop: "4px", color: "white" }} />
+                    <AddNewCategoryCard />
+                    <Box mb="20px" />
+                    <AddNewExpenseCard
+                        default_category={focusedCategory}
+                        focusCategory={setFocusedCategory}
+                        categories={ssr.categoriesGet.categories}
+                    />
+                </Box>
 
                 <Box display="flex" flexDirection="column" height="100%" width="100%">
                     <Box display="flex">
@@ -417,7 +410,16 @@ export async function getServerSideProps({ req }: any) {
         context: { cookie: req.headers.cookie },
         fetchPolicy: "no-cache"
     });
-    
+
+    if (category_resp.data.categoriesGet?.categories?.length === 0) {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/setup"
+            }
+        }
+    }
+
     const now = new Date();
     const since = new Date(now.getFullYear(), now.getMonth(), 1);
 

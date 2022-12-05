@@ -1,0 +1,21 @@
+.submitButton {
+    width: 100%;
+    height: 34px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    background: var(--exxpenses-dark-green);
+    /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
+    color: var(--exxpenses-main-color);
+    text-transform: none;
+}
+
+.submitButton:hover {
+    background: var(--exxpenses-light-green);
+}
+
+.cardBox {
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 6px;
+    width: fit-content;
+    height: fit-content;
+}

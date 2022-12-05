@@ -42,10 +42,10 @@ export default function Navbar({ username }: NavbarProps) {
     if (username !== undefined) {
         /* If we are logged in */
         buttonContent = (
-            <Link className={styles.signInButton} href="/login">
-                <AccountCircleIcon sx={{ marginRight: "8px" }} />
+            <Link display="flex" alignItems="center" className={styles.signInButton} href="/login" >
+                <AccountCircleIcon sx={{ width: "24px", height: "24px", marginRight: "8px" }} />
                 <Box>{username}</Box>
-            </Link>
+            </Link >
         );
     }
     else if (router.pathname == "/register") {
@@ -92,7 +92,7 @@ export default function Navbar({ username }: NavbarProps) {
     }
 
     return (
-        <>
+        <Box sx={{ paddingLeft: "20px", paddingRight: "20px" }}>
             <CustomDrawer username={username} isOpen={drawerOpen} setState={setDrawerOpen} />
             <Box className={styles.navbar} >
                 <Button
@@ -105,6 +105,6 @@ export default function Navbar({ username }: NavbarProps) {
                     {buttonContent}
                 </ul>
             </Box>
-        </>
+        </Box>
     );
 }
