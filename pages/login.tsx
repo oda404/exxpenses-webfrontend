@@ -13,12 +13,14 @@ import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import styles from "../styles/Login.module.css";
 import { CircularProgress } from "@mui/material";
+import useShowMobileView from "../utils/useShowMobileView";
 
 type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Login({ }: LoginProps) {
 
     const [userLogin] = useMutation(UserLoginDocument);
+    const showMobileView = useShowMobileView();
 
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)">
@@ -30,10 +32,10 @@ export default function Login({ }: LoginProps) {
                     justifyContent="center"
                     marginX="auto"
                     padding="26px"
-                    border="1px var(--exxpenses-main-border-color) solid"
+                    border={showMobileView ? "none" : "1px var(--exxpenses-main-border-color) solid"}
                     width="fit-content"
                     borderRadius="8px"
-                    boxShadow="rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+                    boxShadow={showMobileView ? "none" : "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"}
                 >
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Stack spacing={20}>

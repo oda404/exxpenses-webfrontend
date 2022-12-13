@@ -9,12 +9,14 @@ import apolloClient from "../utils/apollo-client";
 import { InferGetServerSidePropsType } from "next";
 import { Box, Button, CircularProgress, Link, Stack } from "@mui/material";
 import styles from "../styles/Register.module.css";
+import useShowMobileView from "../utils/useShowMobileView";
 
 type RegisterProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Register({ }: RegisterProps) {
 
     const [userRegister] = useMutation(UserRegisterDocument);
+    const showMobileView = useShowMobileView();
 
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)">
@@ -26,10 +28,10 @@ export default function Register({ }: RegisterProps) {
                     justifyContent="center"
                     marginX="auto"
                     padding="22px"
-                    border="1px var(--exxpenses-main-border-color) solid"
+                    border={showMobileView ? "none" : "1px var(--exxpenses-main-border-color) solid"}
                     width="fit-content"
                     borderRadius="8px"
-                    boxShadow="rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+                    boxShadow={showMobileView ? "none" : "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"}
                 >
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Stack spacing={20}>
@@ -42,7 +44,7 @@ export default function Register({ }: RegisterProps) {
                                 Sign up for exxpenses!
                             </Box>
                         </Stack>
-                        <Box width="370px">
+                        <Box width="320px">
                             <Formik
                                 initialValues={{ firstname: "", lastname: "", email: "", password: "" }}
                                 onSubmit={async ({ firstname, lastname, email, password }, actions) => {
