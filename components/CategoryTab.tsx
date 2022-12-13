@@ -43,6 +43,8 @@ function CategoryTabExpense({ category_name, expense: { id, price, currency, dat
             display="flex"
             width="fit-content"
             marginLeft="5px"
+            fontSize="14px"
+            alignItems="center"
         >
             <Box marginRight="10px">
                 <RemoveCircleIcon />
@@ -104,7 +106,7 @@ export default function CategoryTab({ name, default_currency }: CategoryTabProps
 
                     return (
                         <Box key={idx}>
-                            <Typography sx={{ color: "#9f9f9f" }}>{d.getDate()}.{d.getMonth() + 1}.{d.getFullYear()}</Typography>
+                            <Typography sx={{ fontSize: "15px", color: "#9f9f9f" }}>{d.getDate()}.{d.getMonth() + 1}.{d.getFullYear()}</Typography>
                             {data.expensesGet.expenses.map((e: any, idx2: number) => {
                                 if (new Date(e.date).toDateString() == datestr)
                                     return <CategoryTabExpense key={idx2} category_name={name} expense={{ id: e.id, price: e.price, currency: e.currency, date: e.date }} />
@@ -121,12 +123,12 @@ export default function CategoryTab({ name, default_currency }: CategoryTabProps
     return (
         <Box p="14px">
             <Box display="flex">
-                <Typography variant="h4" marginBottom="10px">{name}</Typography>
-                <Box marginTop="15px" marginLeft="10px">{default_currency}</Box>
+                <Typography variant="h5" marginBottom="10px">{name}</Typography>
+                <Box marginTop="8px" marginLeft="10px">{default_currency}</Box>
                 <Button
                     sx={{ padding: "0px", margin: "0px", display: "inline-block", minHeight: "0", minWidth: "0" }}
                 >
-                    <ModeEditIcon sx={{ marginTop: "8px", marginLeft: "20px" }} />
+                    <ModeEditIcon sx={{ width: "20px", height: "20px", marginTop: "8px", marginLeft: "20px" }} />
                 </Button>
             </Box>
 
