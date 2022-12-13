@@ -52,7 +52,7 @@ function costsToTotal(costs: ExpenseTotalCostMultiple[]) {
     if (totals.length === 0) {
         content = (
             <Box>
-                0
+                ---
             </Box>
         )
     }
@@ -102,7 +102,7 @@ function costsToCostly(costs: ExpenseTotalCostMultiple[]) {
     if (totals.length === 0) {
         content = (
             <Box>
-                Nothing yet...
+                ---
             </Box>
         )
     }
@@ -151,7 +151,7 @@ export default function Stats({ totalCosts, categories }: StatsProps) {
         <Box sx={{ overflowY: "auto" }} paddingTop="20px" display="flex" flexDirection="column">
             <Grid container spacing={3}>
                 <StatCard text="Total this month" content={totalThisMonth} />
-                <StatCard text="Most expensive this month" content={costlyThisMonth} />
+                <StatCard text="Costly this month" content={costlyThisMonth} />
             </Grid>
         </Box >
     )
