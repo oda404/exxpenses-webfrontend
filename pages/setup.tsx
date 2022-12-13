@@ -10,6 +10,8 @@ import apolloClient from "../utils/apollo-client";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import styles from "../styles/Setup.module.css";
 import Navbar from "../components/navbar";
+import { useEffect } from "react";
+import Footer from "../components/Footer";
 
 interface NumberBubbleProps {
     number: string;
@@ -135,7 +137,7 @@ function AddFirstCategoryCard({ preferred_currency, grayed_out }: AddFirstCatego
     const [categoryAdd] = useMutation(CategoryAddDocument);
 
     return (
-        <Grid item>
+        <Grid item id="addFirstCategoryBox">
             <Paper className={styles.cardBox}>
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <NumberBubble number="2" />
@@ -224,41 +226,59 @@ export default function Setup({ ssr }: DashboardProps) {
 
     const preferred_currency = ssr.userGet.user.preferred_currency;
     const lastname = ssr.userGet.user.lastname;
+    const router = useRouter();
+
+    const scrollToTop = (pos: number) => {
+        window.scrollTo({
+            top: pos,
+            behavior: 'smooth',
+        });
+    };
+
+    useEffect(() => {
+        if (preferred_currency && router.asPath !== "/setup#addFirstCategoryBox") {
+            const pos = document.getElementById("addFirstCategoryBox").offsetTop;
+            scrollToTop(pos);
+        }
+    })
 
     return (
-        <Box sx={{ overflowY: "auto" }}>
-            <Navbar username={lastname} />
-            <Box>
+        <>
+            <Box display="flex" flexDirection="column" sx={{ height: "100vh", overflowY: "auto" }}>
+                <Navbar username={lastname} />
+                <Box>
 
-                <Box
-                    width="100vw"
-                    marginTop="60px"
-                    alignItems="center"
-                    display="flex"
-                    flexDirection="column"
-                >
-                    <Box textAlign="center" fontSize="18px" marginBottom="15px">
-                        <b>Setup your Exxpenses account</b>
-                        <Box fontSize="16px">
-                            Let&apos;s get the basic stuff out of the way!
+                    <Box
+                        marginTop="60px"
+                        alignItems="center"
+                        display="flex"
+                        flexDirection="column"
+                    >
+                        <Box textAlign="center" fontSize="18px" marginBottom="15px">
+                            <b>Setup your Exxpenses account</b>
+                            <Box fontSize="16px">
+                                Let&apos;s get the basic stuff out of the way
+                            </Box>
+                        </Box>
+                        <Box>
+                            <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
+                                <ConfigurePreferredCurrencyCard
+                                    preferred_currency={preferred_currency ? preferred_currency : ""}
+                                    grayed_out={preferred_currency !== null}
+                                />
+                                <AddFirstCategoryCard
+                                    id="addFirstCategoryBox"
+                                    preferred_currency={preferred_currency ? preferred_currency : ""}
+                                    grayed_out={preferred_currency === null}
+                                />
+                            </Grid>
                         </Box>
                     </Box>
-                    <Box>
-                        <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
-                            <ConfigurePreferredCurrencyCard
-                                preferred_currency={preferred_currency ? preferred_currency : ""}
-                                grayed_out={preferred_currency !== null}
-                            />
-                            <AddFirstCategoryCard
-                                preferred_currency={preferred_currency ? preferred_currency : ""}
-                                grayed_out={preferred_currency === null}
-                            />
-                        </Grid>
-                    </Box>
                 </Box>
-            </Box>
+            </Box >
+            <Footer />
+        </>
 
-        </Box >
 
     )
 }

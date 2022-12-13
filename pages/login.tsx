@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import styles from "../styles/Login.module.css";
 import { CircularProgress } from "@mui/material";
 import useShowMobileView from "../utils/useShowMobileView";
+import Footer from "../components/Footer";
 
 type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -108,7 +109,7 @@ export default function Login({ }: LoginProps) {
                     </Box>
                 </Box>
             </Box>
-
+            <Footer />
         </Box>
     )
 }

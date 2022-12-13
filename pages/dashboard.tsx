@@ -17,6 +17,7 @@ import { Category } from "../generated/graphql";
 import { useRouter } from "next/router";
 import Stats from "../components/Stats";
 import useShowMobileView from "../utils/useShowMobileView";
+import Footer from "../components/Footer";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -88,28 +89,30 @@ export default function Dashboard({ ssr }: DashboardProps) {
     const user = ssr.userGet.user!;
 
     return (
-        <Box bgcolor="var(--exxpenses-main-bg-color)">
-            <Navbar username={user.lastname} />
+        <>
+            <Box height="100vh" bgcolor="var(--exxpenses-main-bg-color)">
+                <Navbar username={user.lastname} />
 
-            <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: isMobileView ? "10px" : "40px" }}>
-
-                <Box display="flex" flexDirection="column" height="100%" width="100%">
-                    <Box display="flex">
-                        <TabHeaderButton active={dashboardActiveTab === "Overview"} name="Overview" setActive={setDashboardTab} />
-                        <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
-                        <Box ml="auto" />
-                        {tabs.map((m, idx) =>
-                            <Box display="flex" key={idx}>
-                                <Divider orientation="vertical" sx={{ background: "var(--exxpenses-main-border-color)" }} />
-                                <CategoryHeaderButton active={categoryActiveTab === m} name={m} setActive={setCategoryTab} remove={d} />
-                            </Box>
-                        )}
+                <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: isMobileView ? "10px" : "40px" }}>
+                    <Box display="flex" flexDirection="column" height="100%" width="100%">
+                        <Box display="flex">
+                            <TabHeaderButton active={dashboardActiveTab === "Overview"} name="Overview" setActive={setDashboardTab} />
+                            <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
+                            <Box ml="auto" />
+                            {tabs.map((m, idx) =>
+                                <Box display="flex" key={idx}>
+                                    <Divider orientation="vertical" sx={{ background: "var(--exxpenses-main-border-color)" }} />
+                                    <CategoryHeaderButton active={categoryActiveTab === m} name={m} setActive={setCategoryTab} remove={d} />
+                                </Box>
+                            )}
+                        </Box>
+                        <Divider sx={{ width: "100%", backgroundColor: "var(--exxpenses-main-border-color)" }} />
+                        {activeTab}
                     </Box>
-                    <Divider sx={{ width: "100%", backgroundColor: "var(--exxpenses-main-border-color)" }} />
-                    {activeTab}
                 </Box>
             </Box>
-        </Box>
+            <Footer />
+        </>
     );
 }
 

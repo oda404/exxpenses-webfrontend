@@ -10,6 +10,7 @@ import { InferGetServerSidePropsType } from "next";
 import { Box, Button, CircularProgress, Link, Stack } from "@mui/material";
 import styles from "../styles/Register.module.css";
 import useShowMobileView from "../utils/useShowMobileView";
+import Footer from "../components/Footer";
 
 type RegisterProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -151,7 +152,7 @@ export default function Register({ }: RegisterProps) {
                     </Box>
                 </Box>
             </Box>
-
+            <Footer />
         </Box>
     )
 }
