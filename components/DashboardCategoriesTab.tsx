@@ -365,7 +365,7 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: C
                                     focusCategory(name);
                                 }}
                             >
-                                <AddIcon sx={{ padding: "0", width: "22px", height: "22px" }} />
+                                <AddIcon sx={{ padding: "0", width: "20px", height: "20px" }} />
                             </Button>
                         </Tooltip>
                         <Tooltip title="Details" arrow>
@@ -375,7 +375,7 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: C
                                 }}
                                 className={stylesNew.categoryActionButton}
                             >
-                                <ShowChartIcon sx={{ fill: "var(--exxpenses-light-green)", padding: "0", width: "22px", height: "22px" }} />
+                                <ShowChartIcon sx={{ fill: "var(--exxpenses-light-green)", padding: "0", width: "20px", height: "20px" }} />
                             </Button>
                         </Tooltip>
                         <Tooltip title="Delete" arrow>
@@ -384,7 +384,7 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: C
                                 onClick={(e) => handleClick(e)}
                                 className={stylesNew.categoryActionButton}
                             >
-                                <DeleteIcon className={styles.categoryDeleteIcon} sx={{ padding: "0", width: "22px", height: "22px" }} />
+                                <DeleteIcon className={styles.categoryDeleteIcon} sx={{ padding: "0", width: "20px", height: "20px" }} />
                             </Button>
                         </Tooltip>
                         <Popover
@@ -452,7 +452,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                 />
 
                 <Box marginTop="20px">
-                    <Typography variant="h6" style={{ marginBottom: "10px" }}>
+                    <Typography style={{ fontSize: "18px", marginBottom: "10px" }}>
                         Your categories
                     </Typography>
                     <Grid container spacing={3}>
@@ -498,7 +498,7 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
 
             <Box marginTop="20px">
                 <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
-                    <AddNewCategoryCard />
+                    <AddNewCategoryCard isMobileView={false} />
                     <Box mb="20px" />
                     <AddNewExpenseCard
                         default_category={focusedCategory}
