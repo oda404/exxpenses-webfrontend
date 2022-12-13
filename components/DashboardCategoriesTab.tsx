@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Backdrop, Autocomplete } from "@mui/material";
+import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Backdrop, Autocomplete, Modal } from "@mui/material";
 import { useRouter } from "next/router";
 import { Category, CategoryAddDocument, CategoryDeleteDocument, ExpenseAddDocument, ExpenseTotalCostMultiple, UserUpdatePreferredCurrencyDocument } from "../generated/graphql";
 import { NewTabCallback } from "../utils/types";
@@ -100,11 +100,13 @@ interface AddNewExpenseCardProps {
     default_category?: string | null;
     focusCategory: (category: string | undefined) => void;
     isMobileView?: boolean;
+    width?: string;
 }
 
-function AddNewExpenseCard({ isMobileView, default_category, focusCategory, categories }: AddNewExpenseCardProps) {
+function AddNewExpenseCard({ width, isMobileView, default_category, focusCategory, categories }: AddNewExpenseCardProps) {
 
     const [expenseAdd] = useMutation(ExpenseAddDocument);
+    const router = useRouter();
 
     const date = new Date().toISOString().slice(0, 10);
 
@@ -120,7 +122,7 @@ function AddNewExpenseCard({ isMobileView, default_category, focusCategory, cate
 
     return (
         <Box
-            width={isMobileView ? "auto" : "160px"}
+            width={width !== undefined ? width : isMobileView ? "auto" : "160px"}
             display="flex"
             flexDirection="column"
             padding="12px"
@@ -187,7 +189,8 @@ function AddNewExpenseCard({ isMobileView, default_category, focusCategory, cate
                         actions.setFieldError(field, data.expenseAdd.error.name)
                     }
                     else {
-                        actions.resetForm();
+                        // actions.resetForm();
+                        router.reload();
                     }
                 }}
             >
@@ -257,6 +260,160 @@ function AddNewExpenseCard({ isMobileView, default_category, focusCategory, cate
                                     <Box marginTop="10px">
                                         <InputField field={field} name="currency" label="Currency" />
                                         <ErrorMessage name="currency" component="div" />
+                                    </Box>
+                                )}
+                            </Field>
+
+                            <Field name="date">
+                                {({ field }: FieldProps) => (
+                                    <Box marginTop="10px">
+                                        <InputField field={field} type="date" name="date" label="Date" />
+                                        <ErrorMessage name="date" component="div" />
+                                    </Box>
+                                )}
+                            </Field>
+                        </Stack>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            fullWidth={true}
+                            className={styles.dashboardSubmitButton}
+                        >
+                            Add
+                        </Button>
+                    </Form>
+                )}
+            </Formik>
+        </Box >
+    )
+}
+
+interface MobileViewAddNewExpenseCardProps {
+    categories?: Partial<Category>[] | null;
+    default_category?: string | null;
+    close: () => void;
+}
+
+function MobileViewAddNewExpenseCard({ close, categories, default_category }: MobileViewAddNewExpenseCardProps) {
+    const [expenseAdd] = useMutation(ExpenseAddDocument);
+    const router = useRouter();
+
+    const date = new Date().toISOString().slice(0, 10);
+
+    let found = categories?.find(e => e.name === default_category);
+    const currency = found === undefined ? "" : found.default_currency;
+
+    let allCategories = categories?.map(c => {
+        return c.name
+    });
+
+    if (allCategories === undefined)
+        allCategories = [];
+
+    return (
+        <Box
+            width={"auto"}
+            display="flex"
+            flexDirection="column"
+            border="1px #444444 solid"
+            height="fit-content"
+            padding="12px"
+            key={default_category}
+            sx={{
+                background: "var(--exxpenses-main-bg-color)", borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+            }}>
+            <Box marginBottom="5px" display="flex">
+                <Typography fontSize="17px" marginLeft="6px">
+                    New {default_category}
+                </Typography>
+                <Tooltip title="Close">
+                    <Button onClick={close} sx={{ width: "24px", height: "24px", marginLeft: "auto" }}>
+                        <ClearIcon />
+                    </Button>
+                </Tooltip>
+            </Box>
+            <Formik
+                enableReinitialize
+                initialValues={{ category: default_category, price: "", description: "", currency: currency, date: date }}
+                onSubmit={async (values, actions) => {
+
+                    if (!values.category || values.category.length === 0) {
+                        actions.setFieldError("category", "The category name is required!")
+                        return;
+                    }
+
+                    if (!values.price) {
+                        actions.setFieldError("price", "The price is required!")
+                        return;
+                    }
+
+                    let number_price = Number(values.price);
+                    if (number_price <= 0) {
+                        actions.setFieldError("price", "Price needs to be bigger than 0!");
+                        return;
+                    }
+
+                    if (!values.currency || values.currency.length === 0) {
+                        actions.setFieldError("currency", "The currency name is required!")
+                        return;
+                    }
+
+                    if (!values.date || values.date.length === 0) {
+                        actions.setFieldError("date", "The date is required!")
+                        return;
+                    }
+
+                    let { data } = await expenseAdd({
+                        variables: {
+                            addData: {
+                                category_name: values.category,
+                                price: number_price,
+                                description: values.description,
+                                currency: values.currency,
+                                date: values.date
+                            }
+                        }
+                    });
+
+                    if (data.expenseAdd.error) {
+                        const field = data.expenseAdd.error.field === "category_name" ? "category" : data.expenseAdd.error.field;
+                        actions.setFieldError(field, data.expenseAdd.error.name)
+                    }
+                    else {
+                        // actions.resetForm();
+                        router.reload();
+                    }
+                }}
+            >
+                {({ setFieldValue, isSubmitting, errors }) => (
+                    <Form>
+                        <Stack>
+                            <Box width="250px" display="flex">
+                                <Field name="price">
+                                    {({ field }: FieldProps) => (
+                                        <Box marginTop="10px">
+                                            <InputField type="number" field={field} name="price" label="Price" />
+                                            <ErrorMessage name="price" component="div" />
+                                        </Box>
+                                    )}
+                                </Field>
+                                <Box marginLeft="5px" marginRight="5px" />
+                                <Field name="currency">
+                                    {({ field }: FieldProps) => (
+                                        <Box marginTop="10px">
+                                            <InputField field={field} name="currency" label="Currency" />
+                                            <ErrorMessage name="currency" component="div" />
+                                        </Box>
+                                    )}
+                                </Field>
+                            </Box>
+
+
+                            <Field name="description">
+                                {({ field }: FieldProps) => (
+                                    <Box marginTop="10px">
+                                        <InputField field={field} name="description" label="Description" />
+                                        <ErrorMessage name="description" component="div" />
                                     </Box>
                                 )}
                             </Field>
@@ -442,9 +599,50 @@ interface DashboardCategoriesTabProps {
     preferred_currency: string | null;
 }
 
+interface MobileDashboardNewCategoryProps {
+    isOpen: boolean;
+    category?: string;
+};
+
 function DashboardMobileView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories, newTab }: DashboardCategoriesTabProps) {
+
+    const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
+
+    const focusCategoryActual = (name: string) => {
+        const tmp: MobileDashboardNewCategoryProps = {
+            isOpen: true,
+            category: name
+        }
+
+        setNewCategory(tmp);
+    }
+
     return (
         <Grid container display="flex">
+            <Modal
+                // sx={{ position: "absolute !important", zIndex: "998", background: "rgba(0, 0, 0, 0.3)" }}
+                open={newCategory.isOpen}
+                onClose={() => {
+                    const tmp: MobileDashboardNewCategoryProps = {
+                        isOpen: false,
+                    }
+
+                    setNewCategory(tmp);
+                }}
+                sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center" }}
+            >
+                <MobileViewAddNewExpenseCard
+                    close={() => {
+                        const tmp: MobileDashboardNewCategoryProps = {
+                            isOpen: false,
+                        }
+
+                        setNewCategory(tmp);
+                    }}
+                    default_category={newCategory.category}
+                    categories={categories}
+                />
+            </Modal>
             <Grid width="100%" item>
                 <Stats
                     totalCosts={totalCosts}
@@ -459,7 +657,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                         {categories.map((cat, idx) =>
                             <CategoryBox
                                 isMobileView={true}
-                                focusCategory={focusCategory}
+                                focusCategory={focusCategoryActual}
                                 key={idx}
                                 newTab={newTab}
                                 default_currency={cat.default_currency}
@@ -470,7 +668,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                     </Grid>
                 </Box>
             </Grid>
-            <Box width="100%" marginTop="30px">
+            {/* <Box width="100%" marginTop="30px">
                 <Typography variant="h6">
                     Add a new entry
                 </Typography>
@@ -487,7 +685,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                     <Box mr="10px" ml="10px" />
                     <AddNewCategoryCard isMobileView={true} />
                 </Box>
-            </Grid>
+            </Grid> */}
         </Grid >
     )
 }
