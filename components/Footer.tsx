@@ -4,15 +4,15 @@ import { Box, Link } from "@mui/material";
 export default function Footer() {
     return (
         <Box
-            paddingLeft="40px"
             justifyContent="center"
+            alignItems="center"
             display="flex"
-            height="20px"
-            marginTop="100px"
-            paddingTop="20px"
-            paddingBottom="20px"
+            height="80px"
+            bottom="-200px"
             fontSize="14px"
             sx={{ background: "var(--exxpenses-second-bg-color)" }}
+            position="absolute"
+            width="100%"
         >
             <Box>
                 &copy; 2022 Exxpenses

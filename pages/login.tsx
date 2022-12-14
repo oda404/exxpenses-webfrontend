@@ -24,7 +24,7 @@ export default function Login({ }: LoginProps) {
     const showMobileView = useShowMobileView();
 
     return (
-        <Box bgcolor="var(--exxpenses-main-bg-color)">
+        <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Navbar />
 
             <Box height="70vh" display="flex" alignItems="center" justifyContent="center">

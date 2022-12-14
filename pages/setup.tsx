@@ -243,43 +243,39 @@ export default function Setup({ ssr }: DashboardProps) {
     })
 
     return (
-        <>
-            <Box display="flex" flexDirection="column" sx={{ height: "100vh", overflowY: "auto" }}>
-                <Navbar username={lastname} />
-                <Box>
+        <Box position="relative" minHeight="100vh" display="flex" flexDirection="column" sx={{ height: "100vh", overflowY: "auto" }}>
+            <Navbar username={lastname} />
+            <Box>
 
-                    <Box
-                        marginTop="60px"
-                        alignItems="center"
-                        display="flex"
-                        flexDirection="column"
-                    >
-                        <Box textAlign="center" fontSize="18px" marginBottom="15px">
-                            <b>Setup your Exxpenses account</b>
-                            <Box fontSize="16px">
-                                Let&apos;s get the basic stuff out of the way
-                            </Box>
-                        </Box>
-                        <Box>
-                            <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
-                                <ConfigurePreferredCurrencyCard
-                                    preferred_currency={preferred_currency ? preferred_currency : ""}
-                                    grayed_out={preferred_currency !== null}
-                                />
-                                <AddFirstCategoryCard
-                                    id="addFirstCategoryBox"
-                                    preferred_currency={preferred_currency ? preferred_currency : ""}
-                                    grayed_out={preferred_currency === null}
-                                />
-                            </Grid>
+                <Box
+                    marginTop="60px"
+                    alignItems="center"
+                    display="flex"
+                    flexDirection="column"
+                >
+                    <Box textAlign="center" fontSize="18px" marginBottom="15px">
+                        <b>Setup your Exxpenses account</b>
+                        <Box fontSize="16px">
+                            Let&apos;s get the basic stuff out of the way
                         </Box>
                     </Box>
+                    <Box>
+                        <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
+                            <ConfigurePreferredCurrencyCard
+                                preferred_currency={preferred_currency ? preferred_currency : ""}
+                                grayed_out={preferred_currency !== null}
+                            />
+                            <AddFirstCategoryCard
+                                id="addFirstCategoryBox"
+                                preferred_currency={preferred_currency ? preferred_currency : ""}
+                                grayed_out={preferred_currency === null}
+                            />
+                        </Grid>
+                    </Box>
                 </Box>
-                <Footer />
-
-            </Box >
-        </>
-
+            </Box>
+            <Footer />
+        </Box >
 
     )
 }

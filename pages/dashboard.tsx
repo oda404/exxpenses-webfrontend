@@ -123,11 +123,11 @@ export default function Dashboard({ ssr }: DashboardProps) {
     }
 
     return (
-        <>
+        <Box position="relative" minHeight="100vh">
             <Navbar username={user.lastname} />
             {content}
             <Footer />
-        </>
+        </Box>
     );
 }
 

@@ -42,7 +42,7 @@ export default function Navbar({ username }: NavbarProps) {
     if (username !== undefined) {
         /* If we are logged in */
         buttonContent = (
-            <Link alignItems="center" justifyContent="center" className={styles.signInButton} href="/login" >
+            <Link sx={{ textDecoration: "none !important" }} alignItems="center" justifyContent="center" className={styles.signInButton} href="/login" >
                 <AccountCircleIcon sx={{ width: "22px", height: "22px", marginRight: "8px" }} />
                 <Box fontSize="14px">{username}</Box>
             </Link >

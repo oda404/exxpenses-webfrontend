@@ -46,3 +46,7 @@ html {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+a:hover {
+  text-decoration: underline;
+}
