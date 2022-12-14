@@ -7,11 +7,12 @@ export default function Footer() {
             paddingLeft="40px"
             justifyContent="center"
             display="flex"
-            marginTop="auto"
             height="20px"
-            paddingTop="200px"
-            paddingBottom="40px"
+            marginTop="100px"
+            paddingTop="20px"
+            paddingBottom="20px"
             fontSize="14px"
+            sx={{ background: "var(--exxpenses-second-bg-color)" }}
         >
             <Box>
                 &copy; 2022 Exxpenses

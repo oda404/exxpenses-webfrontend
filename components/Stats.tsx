@@ -6,20 +6,45 @@ import { Decimal } from "decimal.js";
 interface StatCardProps {
     text: string;
     content: any;
+    isMobileView: boolean;
 }
 
-function StatCard({ text, content }: StatCardProps) {
+function StatCard({ isMobileView, text, content }: StatCardProps) {
+
+    let el: any;
+    if (isMobileView) {
+        el = (
+            <Grid sx={{ overflow: "hidden" }} item>
+                <Paper className={styles.statCardPaper} sx={{ height: "fit-content !important" }}>
+                    <Box display="flex">
+                        <Box sx={{ fontSize: "18px" }}>
+                            <b>{content}</b>
+                        </Box>
+                        <Typography sx={{ marginLeft: "6px", marginTop: "7px", fontSize: "12px" }}>
+                            <b>{text}</b>
+                        </Typography>
+                    </Box>
+                </Paper>
+            </Grid>
+        )
+    }
+    else {
+        el = (
+            <Grid sx={{ overflow: "hidden" }} item>
+                <Paper className={styles.categoryBox} sx={{ height: "fit-content !important", padding: "12px !important" }}>
+                    <Typography sx={{ textTransform: "uppercase", fontSize: "12px" }}>
+                        <b>{text}</b>
+                    </Typography>
+                    <Box sx={{ marginLeft: "2px", textTransform: "uppercase", fontSize: "14px" }}>
+                        {content}
+                    </Box>
+                </Paper>
+            </Grid>
+        );
+    }
+
     return (
-        <Grid sx={{ overflow: "hidden" }} item>
-            <Paper className={styles.categoryBox} sx={{ height: "fit-content !important", padding: "12px !important" }}>
-                <Typography sx={{ textTransform: "uppercase", fontSize: "12px" }}>
-                    <b>{text}</b>
-                </Typography>
-                <Box sx={{ marginLeft: "2px", textTransform: "uppercase", fontSize: "14px" }}>
-                    {content}
-                </Box>
-            </Paper>
-        </Grid>
+        <>{el}</>
     )
 }
 
@@ -52,7 +77,7 @@ function costsToTotal(costs: ExpenseTotalCostMultiple[]) {
     if (totals.length === 0) {
         content = (
             <Box>
-                ---
+                0
             </Box>
         )
     }
@@ -60,11 +85,11 @@ function costsToTotal(costs: ExpenseTotalCostMultiple[]) {
         content = (
             <Box>
                 <Box display="flex">
-                    <Box>{totals[0].total}</Box>
-                    &nbsp;
                     <Box>
                         <b>{totals[0].currency}</b>
                     </Box>
+                    &nbsp;
+                    <Box><b>{totals[0].total}</b></Box>
                 </Box>
             </Box>
         )
@@ -102,7 +127,7 @@ function costsToCostly(costs: ExpenseTotalCostMultiple[]) {
     if (totals.length === 0) {
         content = (
             <Box>
-                ---
+                0
             </Box>
         )
     }
@@ -114,11 +139,11 @@ function costsToCostly(costs: ExpenseTotalCostMultiple[]) {
                         {totals[0].category}:
                     </Box>
                     &nbsp;
-                    <Box>{totals[0].total}</Box>
-                    &nbsp;
                     <Box>
                         <b>{totals[0].currency}</b>
                     </Box>
+                    &nbsp;
+                    <Box><b>{totals[0].total}</b></Box>
                 </Box>
             </Box>
         );
@@ -134,9 +159,10 @@ function categoriesToMostRecent(categories: Category[]) {
 interface StatsProps {
     categories?: Category[] | null;
     totalCosts?: ExpenseTotalCostMultiple[] | null;
+    isMobileView: boolean;
 }
 
-export default function Stats({ totalCosts, categories }: StatsProps) {
+export default function Stats({ isMobileView, totalCosts, categories }: StatsProps) {
 
     let totalThisMonth;
     if (totalCosts === undefined || totalCosts === null || totalCosts.length === 0)
@@ -147,12 +173,28 @@ export default function Stats({ totalCosts, categories }: StatsProps) {
     let costlyThisMonth = (totalCosts === undefined || totalCosts === null) ? "None" : costsToCostly(totalCosts);
     let mostRecent = (categories === undefined || categories === null) ? "None" : categoriesToMostRecent(categories);
 
+    let content: any;
+    if (isMobileView) {
+        content = (
+            <Box sx={{ overflowY: "auto" }} display="flex" flexDirection="column">
+                <Grid container spacing={3}>
+                    <StatCard isMobileView={isMobileView} text="This month" content={totalThisMonth} />
+                </Grid>
+            </Box >
+        )
+    }
+    else {
+        content = (
+            <Box sx={{ overflowY: "auto" }} paddingTop="20px" display="flex" flexDirection="column">
+                <Grid container spacing={3}>
+                    <StatCard isMobileView={isMobileView} text="This month" content={totalThisMonth} />
+                    <StatCard isMobileView={isMobileView} text="Costly This month" content={costlyThisMonth} />
+                </Grid>
+            </Box >
+        )
+    }
+
     return (
-        <Box sx={{ overflowY: "auto" }} paddingTop="20px" display="flex" flexDirection="column">
-            <Grid container spacing={3}>
-                <StatCard text="Total this month" content={totalThisMonth} />
-                <StatCard text="Costly this month" content={costlyThisMonth} />
-            </Grid>
-        </Box >
+        <>{content}</>
     )
 }

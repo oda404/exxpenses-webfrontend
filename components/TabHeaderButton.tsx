@@ -15,11 +15,12 @@ export default function TabHeaderButton({ active, name, setActive }: TabHeaderBu
             className={styles.tabHeaderButton}
             onClick={() => setActive(name)}
             sx={{
-                background: active ? "var(--exxpenses-main-border-color)" : "none",
+                background: active ? "var(--exxpenses-second-bg-color)" : "none",
                 "&:hover": {
-                    background: active ? "var(--exxpenses-main-border-color)" : "#222222"
+                    background: active ? "var(--exxpenses-second-bg-color)" : "var(--exxpenses-second-bg-color)"
                 },
-                paddingX: "10px"
+                paddingX: "10px",
+                marginRight: "10px"
             }}
         >
             {name}
@@ -38,10 +39,10 @@ export function CategoryHeaderButton({ active, name, setActive, remove }: Catego
     return (
         <Box
             sx={{
-                background: active ? "var(--exxpenses-main-border-color)" : "none",
+                background: active ? "var(--exxpenses-second-bg-color)" : "none",
                 paddingX: "10px",
                 "&:hover": {
-                    background: active ? "var(--exxpenses-main-border-color)" : "#222222"
+                    background: active ? "var(--exxpenses-second-bg-color)" : "var(--exxpenses-second-bg-color)"
                 }
             }}
             className={styles.categoryHeaderButtonContainer}

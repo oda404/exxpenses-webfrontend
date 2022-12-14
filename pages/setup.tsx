@@ -275,8 +275,9 @@ export default function Setup({ ssr }: DashboardProps) {
                         </Box>
                     </Box>
                 </Box>
+                <Footer />
+
             </Box >
-            <Footer />
         </>
 
 

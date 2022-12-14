@@ -15,8 +15,8 @@ import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import InputField from "./InputField";
 import ClearIcon from '@mui/icons-material/Clear';
 import Stats from "./Stats";
-import useMobileDetect from "../utils/useMobileDetect";
 import useShowMobileView from "../utils/useShowMobileView";
+import Footer from "./Footer";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -27,70 +27,94 @@ function AddNewCategoryCard({ isMobileView }: AddNewCategoryCardProps) {
     const [categoryAdd] = useMutation(CategoryAddDocument);
     const router = useRouter();
 
+    let content: any;
+    if (isMobileView) {
+        content = (
+            <>
+
+            </>
+
+        )
+    }
+    else {
+        content = (
+            <>
+                <Typography marginBottom="5px" marginLeft="6px">
+                    New category
+                </Typography>
+                <Formik
+                    initialValues={{ name: "", default_curr: "" }}
+                    onSubmit={async ({ name, default_curr }, actions) => {
+
+                        if (!name || name.length === 0) {
+                            actions.setFieldError("name", "The category name is required!")
+                            return;
+                        }
+                        else if (name.length > 30) {
+                            actions.setFieldError("name", "The category name can't be longer than 30 characters!");
+                            return;
+                        }
+
+                        if (!default_curr || default_curr.length === 0) {
+                            actions.setFieldError("default_curr", "The category's default currency is required!");
+                            return;
+                        }
+
+                        const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: default_curr } } });
+                        if (data.categoryAdd.error !== null) {
+                            actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
+                            return;
+                        }
+
+                        router.reload();
+                    }}
+                >
+                    {({ isSubmitting, errors }) => (
+                        <Form>
+                            <Stack>
+                                <Field name="name">
+                                    {({ field, form }: FieldProps) => (
+                                        <Box marginTop="12px">
+                                            <InputField field={field} name="name" label="Name" />
+                                            <ErrorMessage name="name" component="div" />
+                                        </Box>
+                                    )}
+                                </Field>
+
+                                <Field name="default_curr">
+                                    {({ field }: FieldProps) => (
+                                        <Box marginTop="10px">
+                                            <InputField field={field} name="default_curr" label="Currency" />
+                                            <ErrorMessage name="default_curr" component="div" />
+                                        </Box>
+                                    )}
+                                </Field>
+                            </Stack>
+                            <Button
+                                type="submit"
+                                disabled={isSubmitting}
+                                fullWidth={true}
+                                className={styles.dashboardSubmitButton}
+                            >
+                                Add
+                            </Button>
+                        </Form>
+                    )}
+                </Formik>
+            </>
+        )
+    }
+
     return (
-        <Box width={isMobileView ? "auto" : "160px"} height="fit-content" display="flex" flexDirection="column" padding="12px" border="1px #444444 solid" sx={{ borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
-            <Typography marginBottom="5px" marginLeft="6px">
-                New category
-            </Typography>
-            <Formik
-                initialValues={{ name: "", default_curr: "" }}
-                onSubmit={async ({ name, default_curr }, actions) => {
-
-                    if (!name || name.length === 0) {
-                        actions.setFieldError("name", "The category name is required!")
-                        return;
-                    }
-                    else if (name.length > 30) {
-                        actions.setFieldError("name", "The category name can't be longer than 30 characters!");
-                        return;
-                    }
-
-                    if (!default_curr || default_curr.length === 0) {
-                        actions.setFieldError("default_curr", "The category's default currency is required!");
-                        return;
-                    }
-
-                    const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: default_curr } } });
-                    if (data.categoryAdd.error !== null) {
-                        actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
-                        return;
-                    }
-
-                    router.reload();
-                }}
-            >
-                {({ isSubmitting, errors }) => (
-                    <Form>
-                        <Stack>
-                            <Field name="name">
-                                {({ field, form }: FieldProps) => (
-                                    <Box marginTop="12px">
-                                        <InputField field={field} name="name" label="Name" />
-                                        <ErrorMessage name="name" component="div" />
-                                    </Box>
-                                )}
-                            </Field>
-
-                            <Field name="default_curr">
-                                {({ field }: FieldProps) => (
-                                    <Box marginTop="10px">
-                                        <InputField field={field} name="default_curr" label="Currency" />
-                                        <ErrorMessage name="default_curr" component="div" />
-                                    </Box>
-                                )}
-                            </Field>
-                        </Stack>
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            fullWidth={true}
-                            className={styles.dashboardSubmitButton}
-                        >
-                            Add
-                        </Button>
-                    </Form>
-                )}
-            </Formik>
+        <Box
+            width={isMobileView ? "auto" : "160px"}
+            height="fit-content"
+            display="flex"
+            flexDirection="column"
+            padding={isMobileView ? "6px" : "12px"}
+            border={isMobileView ? "none" : "1px #444444 solid"}
+            sx={{ borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}>
+            {content}
         </Box>
     )
 }
@@ -590,6 +614,121 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: C
     );
 }
 
+function MobileViewDashboardButtons() {
+
+    const [showAddCategory, setShowAddCategory] = useState(false);
+    const [categoryAdd] = useMutation(CategoryAddDocument);
+    const router = useRouter();
+
+    return (
+        <Box>
+            <Button
+                sx={{
+                    color: "var(--exxpenses-light-green)",
+                    fontSize: "14px",
+                    textTransform: "none",
+                    paddingX: "6px",
+                    paddingY: "2px",
+                    borderRadius: "8px",
+                    display: showAddCategory ? "none" : "initial",
+                    "&:hover": {
+                        background: "var(--exxpenses-main-button-hover-bg-color)"
+                    },
+                }}
+                className={styles.categoryActionButton}
+                onClick={() => setShowAddCategory(true)}
+            >
+                New category
+            </Button>
+            <Box display={showAddCategory ? "initial" : "none"}>
+                <Box marginTop="10px" />
+
+                <Box
+                    width={"auto"}
+                    height="fit-content"
+                    display="flex"
+                    flexDirection="column"
+                    padding={"6px"}
+                    border={"none"}
+                    sx={{ borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px" }}
+                >
+                    <Box display="flex">
+                        <Box sx={{ fontSize: "14px", color: "var(--exxpenses-light-green)" }} marginLeft="6px">
+                            New category
+                        </Box>
+                        <Tooltip title="Close">
+                            <Button onClick={() => setShowAddCategory(false)} sx={{ width: "22px", height: "22px", marginLeft: "auto" }}>
+                                <ClearIcon sx={{ width: "22px", height: "22px" }} />
+                            </Button>
+                        </Tooltip>
+                    </Box>
+
+                    <Formik
+                        initialValues={{ name: "", default_curr: "" }}
+                        onSubmit={async ({ name, default_curr }, actions) => {
+
+                            if (!name || name.length === 0) {
+                                actions.setFieldError("name", "The category name is required!")
+                                return;
+                            }
+                            else if (name.length > 30) {
+                                actions.setFieldError("name", "The category name can't be longer than 30 characters!");
+                                return;
+                            }
+
+                            if (!default_curr || default_curr.length === 0) {
+                                actions.setFieldError("default_curr", "The category's default currency is required!");
+                                return;
+                            }
+
+                            const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: default_curr } } });
+                            if (data.categoryAdd.error !== null) {
+                                actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
+                                return;
+                            }
+
+                            router.reload();
+                        }}
+                    >
+                        {({ isSubmitting, errors }) => (
+                            <Form>
+                                <Box display="flex">
+                                    <Field name="name">
+                                        {({ field, form }: FieldProps) => (
+                                            <Box marginTop="12px">
+                                                <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="name" label="Name" />
+                                                <ErrorMessage name="name" component="div" />
+                                            </Box>
+                                        )}
+                                    </Field>
+                                    <Box marginX="10px" />
+                                    <Field name="default_curr">
+                                        {({ field }: FieldProps) => (
+                                            <Box marginTop="10px">
+                                                <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="default_curr" label="Currency" />
+                                                <ErrorMessage name="default_curr" component="div" />
+                                            </Box>
+                                        )}
+                                    </Field>
+                                </Box>
+                                <Button
+                                    type="submit"
+                                    disabled={isSubmitting}
+                                    fullWidth={true}
+                                    className={styles.dashboardSubmitButton}
+                                >
+                                    Add
+                                </Button>
+                            </Form>
+                        )}
+                    </Formik>
+                </Box>
+
+            </Box>
+        </Box>
+    )
+}
+
 interface DashboardCategoriesTabProps {
     categories: Category[];
     newTab: NewTabCallback;
@@ -618,7 +757,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
     }
 
     return (
-        <Grid container display="flex">
+        <Box display="flex">
             <Modal
                 // sx={{ position: "absolute !important", zIndex: "998", background: "rgba(0, 0, 0, 0.3)" }}
                 open={newCategory.isOpen}
@@ -643,17 +782,20 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                     categories={categories}
                 />
             </Modal>
-            <Grid width="100%" item>
+            <Box padding="4px" width="100%">
                 <Stats
                     totalCosts={totalCosts}
                     categories={categories}
+                    isMobileView={true}
                 />
 
-                <Box marginTop="20px">
-                    <Typography style={{ fontSize: "18px", marginBottom: "10px" }}>
-                        Your categories
-                    </Typography>
-                    <Grid container spacing={3}>
+                <MobileViewDashboardButtons />
+
+                <Box marginTop="15px">
+                    <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
+                        Categories
+                    </Box>
+                    <Grid container spacing={2}>
                         {categories.map((cat, idx) =>
                             <CategoryBox
                                 isMobileView={true}
@@ -667,7 +809,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                         )}
                     </Grid>
                 </Box>
-            </Grid>
+            </Box>
             {/* <Box width="100%" marginTop="30px">
                 <Typography variant="h6">
                     Add a new entry
@@ -686,7 +828,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                     <AddNewCategoryCard isMobileView={true} />
                 </Box>
             </Grid> */}
-        </Grid >
+        </Box >
     )
 }
 
@@ -710,6 +852,7 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
                 <Stats
                     totalCosts={totalCosts}
                     categories={categories}
+                    isMobileView={false}
                 />
 
                 <Box width="100%" marginTop="20px">
@@ -748,10 +891,17 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = <DashboardFullView {...props} />
 
     return (
-        <Box sx={{ overflowY: "auto" }} padding="10px" display="flex" flexDirection="column">
-            <Box className={styles.categoriesBox}>
-                {content}
-            </Box>
+        <Box
+            sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
+            padding="10px"
+            display="flex"
+            flexDirection="column"
+            marginTop="15px"
+            borderRadius="8px"
+            height="fit-content"
+            className={styles.categoriesBox}
+        >
+            {content}
         </Box >
     )
 }

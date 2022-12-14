@@ -13,7 +13,6 @@ className={styles.inputField} */
 
 .inputField {
     font-size: 15px;
-    background-color: var(--exxpenses-main-bg-color);
     color: var(--exxpenses-main-color);
     border: none;
     height: 22px;
@@ -65,7 +64,6 @@ className={styles.inputField} */
     margin-left: 12px;
     padding-left: 4px;
     padding-right: 4px;
-    background-color: var(--exxpenses-main-bg-color);
     pointer-events: none;
     transition: 0.2s ease-in-out;
     font-size: 15px;

@@ -1,21 +1,15 @@
-import { ApolloQueryResult, useMutation } from "@apollo/client";
-import { Formik, Form, Field, ErrorMessage, FieldProps } from "formik";
+import { ApolloQueryResult } from "@apollo/client";
 import { InferGetServerSidePropsType } from "next";
-import InputField from "../components/InputField";
 import Navbar from "../components/navbar";
 import { CategoriesGetDocument, CategoriesGetQuery, ExpensesTotalCostGetMultipleDocument, ExpensesTotalCostGetMultipleQuery, UserGetDocument, UserGetQuery } from "../generated/graphql";
 import apolloClient from "../utils/apollo-client";
-import { CategoryAddDocument, ExpenseAddDocument } from "../generated/graphql";
 import "../styles/Dashboard.module.css"
 import { useState } from "react";
 import TabHeaderButton, { CategoryHeaderButton } from "../components/TabHeaderButton";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
 import CategoryTab from "../components/CategoryTab";
-import { Box, Stack, Button, Divider, Autocomplete, Paper, Typography, Tooltip } from "@mui/material";
-import styles from "../styles/Dashboard.module.css"
+import { Box, Divider } from "@mui/material";
 import { Category } from "../generated/graphql";
-import { useRouter } from "next/router";
-import Stats from "../components/Stats";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 
@@ -25,7 +19,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
 
     const [tabs, setTabs] = useState<string[]>([]);
 
-    const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>("Overview");
+    const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>("Home");
     const [categoryActiveTab, setCategoryActiveTab] = useState<string | null>(null);
 
     const isMobileView = useShowMobileView();
@@ -56,7 +50,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
         if (tabIdx === -1)
             return;
 
-        setDashboardTab("Overview")
+        setDashboardTab("Home")
         tabs.splice(tabIdx, 1);
         setTabs((t) => [...tabs]);
     }
@@ -66,7 +60,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
     let activeTab: any;
     if (categoryActiveTab === null) {
         switch (dashboardActiveTab) {
-            case "Overview":
+            case "Home":
                 activeTab = (
                     <DashboardCategoriesTab
                         preferred_currency={ssr?.userGet.user?.preferred_currency}
@@ -91,21 +85,18 @@ export default function Dashboard({ ssr }: DashboardProps) {
     let content: any;
     if (isMobileView) {
         content = (
-            <Box padding="10px" height="100vh">
-                {activeTab}
-
-
-                {/* <Box>
-                    <TabHeaderButton active={dashboardActiveTab === "Overview"} name="Overview" setActive={setDashboardTab} />
+            <Box padding="10px">
+                <Box marginTop="25px" display="flex">
+                    <TabHeaderButton active={dashboardActiveTab === "Home"} name="Home" setActive={setDashboardTab} />
                     <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
                     <Box ml="auto" />
                     {tabs.map((m, idx) =>
                         <Box display="flex" key={idx}>
-                            <Divider orientation="vertical" sx={{ background: "var(--exxpenses-main-border-color)" }} />
                             <CategoryHeaderButton active={categoryActiveTab === m} name={m} setActive={setCategoryTab} remove={d} />
                         </Box>
                     )}
-                </Box> */}
+                </Box>
+                {activeTab}
             </Box>
         )
     }
@@ -114,7 +105,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
             <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: isMobileView ? "10px" : "40px" }}>
                 <Box display="flex" flexDirection="column" height="100%" width="100%">
                     <Box display="flex">
-                        <TabHeaderButton active={dashboardActiveTab === "Overview"} name="Overview" setActive={setDashboardTab} />
+                        <TabHeaderButton active={dashboardActiveTab === "Home"} name="Home" setActive={setDashboardTab} />
                         <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
                         <Box ml="auto" />
                         {tabs.map((m, idx) =>
@@ -133,10 +124,8 @@ export default function Dashboard({ ssr }: DashboardProps) {
 
     return (
         <>
-            <Box height="100vh" bgcolor="var(--exxpenses-main-bg-color)">
-                <Navbar username={user.lastname} />
-                {content}
-            </Box>
+            <Navbar username={user.lastname} />
+            {content}
             <Footer />
         </>
     );

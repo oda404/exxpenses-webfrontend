@@ -14,9 +14,10 @@ interface InputFieldProps {
     is_error?: boolean;
     params?: any;
     handleChange?: any;
+    bg?: string;
 }
 
-export default function InputField({ label, type, name, field, is_error, params, handleChange }: InputFieldProps) {
+export default function InputField({ bg, label, type, name, field, is_error, params, handleChange }: InputFieldProps) {
 
     const [isLabelShown, setLabel] = useState(true);
     const [passwordType, setPasswordType] = useState<"password" | "text">("password");
@@ -48,7 +49,8 @@ export default function InputField({ label, type, name, field, is_error, params,
             <Box
                 sx={{
                     color: show ? "#797272 !important" : "#c3b2b2 !important",
-                    transform: show ? "none !important" : "translate(-5px, -90%) !important"
+                    transform: show ? "none !important" : "translate(-5px, -90%) !important",
+                    background: bg ? bg : "var(--exxpenses-main-bg-color)"
                 }}
                 className={styles.inputFieldLabel}
             >
@@ -65,6 +67,7 @@ export default function InputField({ label, type, name, field, is_error, params,
                 {...params}
                 className={styles.inputField}
                 autoComplete="off"
+                style={{ background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
             />
             {type === "password" ?
                 <Button
