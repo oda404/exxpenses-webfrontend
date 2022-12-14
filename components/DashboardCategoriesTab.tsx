@@ -614,7 +614,11 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: C
     );
 }
 
-function MobileViewDashboardButtons() {
+interface MobileViewDashboardButtonsProps {
+    default_currency: string;
+}
+
+function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardButtonsProps) {
 
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [categoryAdd] = useMutation(CategoryAddDocument);
@@ -664,7 +668,7 @@ function MobileViewDashboardButtons() {
                     </Box>
 
                     <Formik
-                        initialValues={{ name: "", default_curr: "" }}
+                        initialValues={{ name: "", default_curr: default_currency }}
                         onSubmit={async ({ name, default_curr }, actions) => {
 
                             if (!name || name.length === 0) {
@@ -789,7 +793,7 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                     isMobileView={true}
                 />
 
-                <MobileViewDashboardButtons />
+                <MobileViewDashboardButtons default_currency={preferred_currency!} />
 
                 <Box marginTop="15px">
                     <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
