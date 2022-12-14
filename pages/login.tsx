@@ -27,7 +27,7 @@ export default function Login({ }: LoginProps) {
         <Box bgcolor="var(--exxpenses-main-bg-color)">
             <Navbar />
 
-            <Box height="70vh" display="flex" alignItems="center">
+            <Box height="70vh" display="flex" alignItems="center" justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
