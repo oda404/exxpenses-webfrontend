@@ -42,9 +42,9 @@
 
 .signInButton {
     margin-top: 4px;
-    padding: 4px;
-    padding-left: 14px;
-    padding-right: 14px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
     display: flex;
     border: 1px var(--exxpenses-main-border-color) solid;
     border-radius: 25px;
