@@ -73,7 +73,7 @@ export default function InputField({ label, type, name, field, is_error, params,
                         setPasswordType(passwordType === "password" ? "text" : "password")
                     }}
                 >
-                    {passwordType === "password" ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    {passwordType === "text" ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </Button> : null}
         </Box>
     );
