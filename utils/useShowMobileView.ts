@@ -26,7 +26,7 @@ const useShowMobileView = () => {
     const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent
     const device = getMobileDetect(userAgent);
 
-    if (device.isMobile() || device.isAndroid())
+    if (device.isMobile())
         return true;
 
     useEffect(() => {
