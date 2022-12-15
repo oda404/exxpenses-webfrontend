@@ -7,7 +7,6 @@ import "../styles/Dashboard.module.css"
 import { useState } from "react";
 import TabHeaderButton, { CategoryHeaderButton } from "../components/TabHeaderButton";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
-import CategoryTab from "../components/CategoryTab";
 import { Box, Divider } from "@mui/material";
 import { Category } from "../generated/graphql";
 import useShowMobileView from "../utils/useShowMobileView";
@@ -17,67 +16,31 @@ type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Dashboard({ ssr }: DashboardProps) {
 
-    const [tabs, setTabs] = useState<string[]>([]);
-
     const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>("Home");
-    const [categoryActiveTab, setCategoryActiveTab] = useState<string | null>(null);
 
     const isMobileView = useShowMobileView();
 
     const setDashboardTab = (name: string | null) => {
-        setCategoryActiveTab(null);
         setDashboardActiveTab(name);
-    }
-
-    const setCategoryTab = (name: string) => {
-        setDashboardTab(null);
-        setCategoryActiveTab(name);
-    }
-
-    const n = (tabname: string) => {
-        for (let i = 0; i < tabs.length; ++i) {
-            if (tabs[i] === tabname) {
-                setCategoryTab(tabname);
-                return;
-            }
-        }
-        setTabs([...tabs, tabname])
-        setCategoryTab(tabname)
-    }
-
-    const d = (tabname: string) => {
-        const tabIdx = tabs.findIndex(t => t === tabname);
-        if (tabIdx === -1)
-            return;
-
-        setDashboardTab("Home")
-        tabs.splice(tabIdx, 1);
-        setTabs((t) => [...tabs]);
     }
 
     const [focusedCategory, setFocusedCategory] = useState<string | undefined>("");
 
     let activeTab: any;
-    if (categoryActiveTab === null) {
-        switch (dashboardActiveTab) {
-            case "Home":
-                activeTab = (
-                    <DashboardCategoriesTab
-                        preferred_currency={ssr?.userGet.user?.preferred_currency}
-                        focusCategory={setFocusedCategory}
-                        focusedCategory={focusedCategory}
-                        totalCosts={ssr.expensesTotalCost.costs}
-                        categories={ssr.categoriesGet.categories as Category[]}
-                        newTab={n}
-                    />
-                );
-                break;
-            default:
-                activeTab = null;
-        }
-    }
-    else {
-        activeTab = <CategoryTab name={categoryActiveTab} default_currency={ssr.categoriesGet.categories?.find((c: any) => c.name === categoryActiveTab)!.default_currency!} />;
+    switch (dashboardActiveTab) {
+        case "Home":
+            activeTab = (
+                <DashboardCategoriesTab
+                    preferred_currency={ssr?.userGet.user?.preferred_currency}
+                    focusCategory={setFocusedCategory}
+                    focusedCategory={focusedCategory}
+                    totalCosts={ssr.expensesTotalCost.costs}
+                    categories={ssr.categoriesGet.categories as Category[]}
+                />
+            );
+            break;
+        default:
+            activeTab = null;
     }
 
     const user = ssr.userGet.user!;
@@ -90,11 +53,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
                     <TabHeaderButton active={dashboardActiveTab === "Home"} name="Home" setActive={setDashboardTab} />
                     <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
                     <Box ml="auto" />
-                    {tabs.map((m, idx) =>
-                        <Box display="flex" key={idx}>
-                            <CategoryHeaderButton active={categoryActiveTab === m} name={m} setActive={setCategoryTab} remove={d} />
-                        </Box>
-                    )}
                 </Box>
                 {activeTab}
             </Box>
@@ -108,12 +66,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
                         <TabHeaderButton active={dashboardActiveTab === "Home"} name="Home" setActive={setDashboardTab} />
                         <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
                         <Box ml="auto" />
-                        {tabs.map((m, idx) =>
-                            <Box display="flex" key={idx}>
-                                <Divider orientation="vertical" sx={{ background: "var(--exxpenses-main-border-color)" }} />
-                                <CategoryHeaderButton active={categoryActiveTab === m} name={m} setActive={setCategoryTab} remove={d} />
-                            </Box>
-                        )}
                     </Box>
                     <Divider sx={{ width: "100%", backgroundColor: "var(--exxpenses-main-border-color)" }} />
                     {activeTab}

@@ -1,0 +1,6 @@
+mutation CategoryEdit(
+    $editData: CategoryEditInput!
+)
+{
+    categoryEdit(categoryEditData: $editData)
+}

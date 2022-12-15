@@ -33,6 +33,12 @@ export type CategoryAddInput = {
   name: Scalars['String'];
 };
 
+export type CategoryEditInput = {
+  default_currency: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type CategoryResposne = {
   __typename?: 'CategoryResposne';
   categories?: Maybe<Array<Category>>;
@@ -126,6 +132,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   categoryAdd: CategoryResposne;
   categoryDelete: Scalars['Boolean'];
+  categoryEdit: Scalars['Boolean'];
   expenseAdd: ExpenseResponse;
   expenseDelete: Scalars['Boolean'];
   expenseEdit: ExpenseResponse;
@@ -145,6 +152,11 @@ export type MutationCategoryAddArgs = {
 
 export type MutationCategoryDeleteArgs = {
   category_name: Scalars['String'];
+};
+
+
+export type MutationCategoryEditArgs = {
+  categoryEditData: CategoryEditInput;
 };
 
 
@@ -180,11 +192,17 @@ export type MutationUserUpdatePreferredCurrencyArgs = {
 export type Query = {
   __typename?: 'Query';
   categoriesGet: CategoryResposne;
+  categoryGet: CategoryResposne;
   expensesGet: ExpenseResponse;
   expensesTotalCostGet: ExpensesCostResponse;
   expensesTotalCostGetMultiple: ExpensesCostResponseMultiple;
   /** Get the currently logged in user. */
   userGet: UserResponse;
+};
+
+
+export type QueryCategoryGetArgs = {
+  categoryName: Scalars['String'];
 };
 
 
@@ -254,6 +272,13 @@ export type CategoryDeleteMutationVariables = Exact<{
 
 export type CategoryDeleteMutation = { __typename?: 'Mutation', categoryDelete: boolean };
 
+export type CategoryEditMutationVariables = Exact<{
+  editData: CategoryEditInput;
+}>;
+
+
+export type CategoryEditMutation = { __typename?: 'Mutation', categoryEdit: boolean };
+
 export type ExpenseAddMutationVariables = Exact<{
   addData: ExpenseAddInput;
 }>;
@@ -306,12 +331,19 @@ export type CategoriesGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CategoriesGetQuery = { __typename?: 'Query', categoriesGet: { __typename?: 'CategoryResposne', categories?: Array<{ __typename?: 'Category', name: string, default_currency: string }> | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
 
+export type CategoryGetQueryVariables = Exact<{
+  categoryName: Scalars['String'];
+}>;
+
+
+export type CategoryGetQuery = { __typename?: 'Query', categoryGet: { __typename?: 'CategoryResposne', categories?: Array<{ __typename?: 'Category', id: string, name: string, default_currency: string, last_update: any }> | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
+
 export type ExpensesGetQueryVariables = Exact<{
   getData: ExpensesGetInput;
 }>;
 
 
-export type ExpensesGetQuery = { __typename?: 'Query', expensesGet: { __typename?: 'ExpenseResponse', expenses?: Array<{ __typename?: 'Expense', id: string, date: any, price: number, currency: string }> | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
+export type ExpensesGetQuery = { __typename?: 'Query', expensesGet: { __typename?: 'ExpenseResponse', expenses?: Array<{ __typename?: 'Expense', id: string, date: any, price: number, currency: string, description?: string | null }> | null, error?: { __typename?: 'GenericFieldError', name: string, field?: string | null } | null } };
 
 export type ExpensesTotalCostGetQueryVariables = Exact<{
   getData: ExpensesGetInput;
@@ -403,6 +435,37 @@ export function useCategoryDeleteMutation(baseOptions?: Apollo.MutationHookOptio
 export type CategoryDeleteMutationHookResult = ReturnType<typeof useCategoryDeleteMutation>;
 export type CategoryDeleteMutationResult = Apollo.MutationResult<CategoryDeleteMutation>;
 export type CategoryDeleteMutationOptions = Apollo.BaseMutationOptions<CategoryDeleteMutation, CategoryDeleteMutationVariables>;
+export const CategoryEditDocument = gql`
+    mutation CategoryEdit($editData: CategoryEditInput!) {
+  categoryEdit(categoryEditData: $editData)
+}
+    `;
+export type CategoryEditMutationFn = Apollo.MutationFunction<CategoryEditMutation, CategoryEditMutationVariables>;
+
+/**
+ * __useCategoryEditMutation__
+ *
+ * To run a mutation, you first call `useCategoryEditMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCategoryEditMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [categoryEditMutation, { data, loading, error }] = useCategoryEditMutation({
+ *   variables: {
+ *      editData: // value for 'editData'
+ *   },
+ * });
+ */
+export function useCategoryEditMutation(baseOptions?: Apollo.MutationHookOptions<CategoryEditMutation, CategoryEditMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CategoryEditMutation, CategoryEditMutationVariables>(CategoryEditDocument, options);
+      }
+export type CategoryEditMutationHookResult = ReturnType<typeof useCategoryEditMutation>;
+export type CategoryEditMutationResult = Apollo.MutationResult<CategoryEditMutation>;
+export type CategoryEditMutationOptions = Apollo.BaseMutationOptions<CategoryEditMutation, CategoryEditMutationVariables>;
 export const ExpenseAddDocument = gql`
     mutation ExpenseAdd($addData: ExpenseAddInput!) {
   expenseAdd(expenseAddData: $addData) {
@@ -694,6 +757,50 @@ export function useCategoriesGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type CategoriesGetQueryHookResult = ReturnType<typeof useCategoriesGetQuery>;
 export type CategoriesGetLazyQueryHookResult = ReturnType<typeof useCategoriesGetLazyQuery>;
 export type CategoriesGetQueryResult = Apollo.QueryResult<CategoriesGetQuery, CategoriesGetQueryVariables>;
+export const CategoryGetDocument = gql`
+    query CategoryGet($categoryName: String!) {
+  categoryGet(categoryName: $categoryName) {
+    categories {
+      id
+      name
+      default_currency
+      last_update
+    }
+    error {
+      name
+      field
+    }
+  }
+}
+    `;
+
+/**
+ * __useCategoryGetQuery__
+ *
+ * To run a query within a React component, call `useCategoryGetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCategoryGetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCategoryGetQuery({
+ *   variables: {
+ *      categoryName: // value for 'categoryName'
+ *   },
+ * });
+ */
+export function useCategoryGetQuery(baseOptions: Apollo.QueryHookOptions<CategoryGetQuery, CategoryGetQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CategoryGetQuery, CategoryGetQueryVariables>(CategoryGetDocument, options);
+      }
+export function useCategoryGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CategoryGetQuery, CategoryGetQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CategoryGetQuery, CategoryGetQueryVariables>(CategoryGetDocument, options);
+        }
+export type CategoryGetQueryHookResult = ReturnType<typeof useCategoryGetQuery>;
+export type CategoryGetLazyQueryHookResult = ReturnType<typeof useCategoryGetLazyQuery>;
+export type CategoryGetQueryResult = Apollo.QueryResult<CategoryGetQuery, CategoryGetQueryVariables>;
 export const ExpensesGetDocument = gql`
     query ExpensesGet($getData: ExpensesGetInput!) {
   expensesGet(expenseGetData: $getData) {
@@ -702,6 +809,7 @@ export const ExpensesGetDocument = gql`
       date
       price
       currency
+      description
     }
     error {
       name

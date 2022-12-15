@@ -1,0 +1,17 @@
+query CategoryGet($categoryName: String!)
+{
+    categoryGet(categoryName: $categoryName)
+    {
+        categories {
+            id
+            name
+            default_currency
+            last_update
+        }
+
+        error {
+            name
+            field
+        }
+    }
+}

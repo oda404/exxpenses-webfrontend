@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Backdrop, Autocomplete, Modal } from "@mui/material";
+import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Backdrop, Autocomplete, Modal, Link } from "@mui/material";
 import { useRouter } from "next/router";
 import { Category, CategoryAddDocument, CategoryDeleteDocument, ExpenseAddDocument, ExpenseTotalCostMultiple, UserUpdatePreferredCurrencyDocument } from "../generated/graphql";
 import { NewTabCallback } from "../utils/types";
@@ -469,14 +469,13 @@ function MobileViewAddNewExpenseCard({ close, categories, default_category }: Mo
 interface CategoryBoxProps {
     name: string;
     default_currency: string;
-    newTab: NewTabCallback;
     key: number;
     totalCost?: ExpenseTotalCostMultiple;
     focusCategory: (category: string) => void;
     isMobileView: boolean;
 }
 
-function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: CategoryBoxProps) {
+function CategoryBox({ isMobileView, focusCategory, totalCost, name }: CategoryBoxProps) {
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -550,14 +549,12 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name, newTab }: C
                             </Button>
                         </Tooltip>
                         <Tooltip title="Details" arrow>
-                            <Button
-                                onClick={() => {
-                                    newTab(name);
-                                }}
+                            <Link
+                                href={`/category/${name}`}
                                 className={stylesNew.categoryActionButton}
                             >
                                 <ShowChartIcon sx={{ fill: "var(--exxpenses-light-green)", padding: "0", width: "20px", height: "20px" }} />
-                            </Button>
+                            </Link>
                         </Tooltip>
                         <Tooltip title="Delete" arrow>
                             <Button
@@ -642,7 +639,7 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                 className={styles.categoryActionButton}
                 onClick={() => setShowAddCategory(true)}
             >
-                New category
+                + New category
             </Button>
             <Box display={showAddCategory ? "initial" : "none"}>
                 <Box marginTop="10px" />
@@ -733,21 +730,12 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
     )
 }
 
-interface DashboardCategoriesTabProps {
-    categories: Category[];
-    newTab: NewTabCallback;
-    totalCosts?: ExpenseTotalCostMultiple[] | null;
-    focusCategory: (cat: string | undefined) => void;
-    focusedCategory: string | undefined;
-    preferred_currency: string | null;
-}
-
 interface MobileDashboardNewCategoryProps {
     isOpen: boolean;
     category?: string;
 };
 
-function DashboardMobileView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories, newTab }: DashboardCategoriesTabProps) {
+function DashboardMobileView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories }: DashboardCategoriesTabProps) {
 
     const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
 
@@ -805,7 +793,6 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                                 isMobileView={true}
                                 focusCategory={focusCategoryActual}
                                 key={idx}
-                                newTab={newTab}
                                 default_currency={cat.default_currency}
                                 name={cat.name}
                                 totalCost={totalCosts?.find(c => c.category_name === cat.name)}
@@ -836,7 +823,15 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
     )
 }
 
-function DashboardFullView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories, newTab }: DashboardCategoriesTabProps) {
+interface DashboardCategoriesTabProps {
+    categories: Category[];
+    totalCosts?: ExpenseTotalCostMultiple[] | null;
+    focusCategory: (cat: string | undefined) => void;
+    focusedCategory: string | undefined;
+    preferred_currency: string | null;
+}
+
+function DashboardFullView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories }: DashboardCategoriesTabProps) {
     return (
         <Box display="flex">
 
@@ -869,7 +864,6 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
                                 isMobileView={false}
                                 focusCategory={focusCategory}
                                 key={idx}
-                                newTab={newTab}
                                 default_currency={cat.default_currency}
                                 name={cat.name}
                                 totalCost={totalCosts?.find(c => c.category_name === cat.name)}

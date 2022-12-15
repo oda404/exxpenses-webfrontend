@@ -1,0 +1,30 @@
+.datePickerInput {
+    background: var(--exxpenses-second-bg-color);
+    border: none;
+    width: 80px;
+    margin-top: 3px;
+    font-size: 14px;
+}
+
+.datePickerInput:focus {
+    border: none;
+}
+
+.datePickerInput::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
+.dashboardSubmitButton {
+    width: 100%;
+    height: 34px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    background: var(--exxpenses-dark-green);
+    /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
+    color: var(--exxpenses-main-color);
+}
+
+.dashboardSubmitButton:hover {
+    background: var(--exxpenses-light-green);
+}
