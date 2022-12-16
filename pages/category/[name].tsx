@@ -1,5 +1,5 @@
 import { ApolloQueryResult, useMutation } from "@apollo/client";
-import { Box, Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Button, IconButton, Link, Stack, Tooltip, Typography } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { CategoryEditDocument, CategoryGetDocument, CategoryGetQuery, ExpenseAddDocument, ExpenseDeleteDocument, ExpensesGetDocument, ExpensesGetQuery, UserGetDocument, UserGetQuery } from "../../generated/graphql";
@@ -19,6 +19,9 @@ import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import InputField from "../../components/InputField";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import Decimal from "decimal.js";
+import expensesToTotal from "../../utils/expensesToTotal";
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import HelpIcon from '@mui/icons-material/Help';
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -103,47 +106,45 @@ function AddNewExpenseCard({ width, isMobileView, default_category, default_curr
             >
                 {({ setFieldValue, isSubmitting, errors }) => (
                     <Form>
-                        <Stack>
 
-                            <Box display="flex">
-                                <Field name="price">
-                                    {({ field }: FieldProps) => (
-                                        <Box marginTop="10px">
-                                            <InputField is_error={errors.price !== undefined} bg="var(--exxpenses-second-bg-color)" type="number" field={field} name="price" label="Price" />
-                                            <ErrorMessage name="price" component="div" />
-                                        </Box>
-                                    )}
-                                </Field>
-                                <Box marginX="5px" />
-                                <Field name="currency">
-                                    {({ field }: FieldProps) => (
-                                        <Box marginTop="10px">
-                                            <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
-                                            <ErrorMessage name="currency" component="div" />
-                                        </Box>
-                                    )}
-                                </Field>
-                                <Box marginX="5px" />
-                                <Field name="date">
-                                    {({ field }: FieldProps) => (
-                                        <Box marginTop="10px">
-                                            <InputField is_error={errors.date !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} type="date" name="date" label="Date" />
-                                            <ErrorMessage name="date" component="div" />
-                                        </Box>
-                                    )}
-                                </Field>
-                            </Box>
-
-                            <Field name="description">
+                        <Box display="flex">
+                            <Field name="price">
                                 {({ field }: FieldProps) => (
                                     <Box marginTop="10px">
-                                        <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="description" label="Description" />
-                                        <ErrorMessage name="description" component="div" />
+                                        <InputField is_error={errors.price !== undefined} bg="var(--exxpenses-second-bg-color)" type="number" field={field} name="price" label="Price" />
+                                        <ErrorMessage name="price" component="div" />
                                     </Box>
                                 )}
                             </Field>
+                            <Box marginX="5px" />
+                            <Field name="currency">
+                                {({ field }: FieldProps) => (
+                                    <Box marginTop="10px">
+                                        <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                        <ErrorMessage name="currency" component="div" />
+                                    </Box>
+                                )}
+                            </Field>
+                            <Box marginX="5px" />
+                            <Field name="date">
+                                {({ field }: FieldProps) => (
+                                    <Box width="145px" marginTop="10px">
+                                        <InputField is_error={errors.date !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} type="date" name="date" label="Date" />
+                                        <ErrorMessage name="date" component="div" />
+                                    </Box>
+                                )}
+                            </Field>
+                        </Box>
 
-                        </Stack>
+                        <Field name="description">
+                            {({ field }: FieldProps) => (
+                                <Box marginTop="10px">
+                                    <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="description" label="Description" />
+                                    <ErrorMessage name="description" component="div" />
+                                </Box>
+                            )}
+                        </Field>
+
                         <Button
                             type="submit"
                             disabled={isSubmitting}
@@ -152,15 +153,17 @@ function AddNewExpenseCard({ width, isMobileView, default_category, default_curr
                         >
                             Add
                         </Button>
-                    </Form>
-                )}
-            </Formik>
+                    </Form >
+                )
+                }
+            </Formik >
         </Box >
     )
 }
 
 interface CategoryTabExpenseProps {
     category_name: string;
+    category_currency: string;
     expense: {
         id: string,
         price: number,
@@ -170,7 +173,7 @@ interface CategoryTabExpenseProps {
     }
 }
 
-function CategoryTabExpense({ category_name, expense: { id, price, currency, date, description } }: CategoryTabExpenseProps) {
+function CategoryTabExpense({ category_name, category_currency, expense: { id, price, currency, date, description } }: CategoryTabExpenseProps) {
 
     const [expenseDelete] = useMutation(ExpenseDeleteDocument);
     const router = useRouter();
@@ -178,10 +181,34 @@ function CategoryTabExpense({ category_name, expense: { id, price, currency, dat
 
     const [detailsShown, setDetailsShown] = useState(false);
 
+    let leadingIcon: any;
+    if (true && currency !== category_currency) { // free account
+        leadingIcon = (
+            <Tooltip title="This expense is not counted in the total.">
+                <Link href="/free-account">
+                    <HelpIcon
+                        sx={{
+                            width: "22px",
+                            height: "22px",
+                            fill: "#e9e976",
+                            '&:hover': {
+                                cursor: "pointer"
+                            }
+                        }}
+                    />
+                </Link>
+            </Tooltip>
+        )
+    }
+    else {
+        leadingIcon = (
+            <RemoveCircleIcon sx={{ width: "22px", height: "22px", }} />
+        )
+    }
+
     return (
         <Box
             paddingX="6px"
-            paddingTop="6px"
             borderRadius="6px"
             marginLeft="5px"
             fontSize="14px"
@@ -192,7 +219,7 @@ function CategoryTabExpense({ category_name, expense: { id, price, currency, dat
                 alignItems="center"
             >
                 <Box marginRight="10px">
-                    <RemoveCircleIcon />
+                    {leadingIcon}
                 </Box>
                 <Box>
                     <b>{currency}&nbsp;{price}</b>
@@ -225,11 +252,6 @@ function CategoryTabExpense({ category_name, expense: { id, price, currency, dat
     )
 }
 
-interface TotalExpense {
-    currency: string;
-    price: number;
-}
-
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Category({ ssr }: CategoryProps) {
@@ -245,21 +267,8 @@ export default function Category({ ssr }: CategoryProps) {
     let until = new Date(now);
     let since = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    let totalExpenses: TotalExpense[] = [];
-
-    expenses.forEach(e => {
-        const idx = totalExpenses.findIndex(t => t.currency === e.currency);
-
-        if (idx === -1) {
-            totalExpenses.push({ currency: e.currency, price: e.price });
-        }
-        else {
-
-            let x = new Decimal(totalExpenses[idx].price);
-            let y = new Decimal(e.price);
-            totalExpenses[idx].price = x.add(y).toNumber();
-        }
-    })
+    /* If unpaid, we only count the expenses with the default currency towards the total */
+    let totalExpenses = expensesToTotal(expenses, category.default_currency);
 
     const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
@@ -403,7 +412,7 @@ export default function Category({ ssr }: CategoryProps) {
                             <Typography sx={{ fontSize: "14px", color: "#9f9f9f" }}>{d.getDate()}.{d.getMonth() + 1}.{d.getFullYear()}</Typography>
                             {expensesGet.expenses!.map((e: any, idx2: number) => {
                                 if (new Date(e.date).toDateString() == datestr)
-                                    return <CategoryTabExpense key={idx2} category_name={category.name} expense={{ id: e.id, price: e.price, currency: e.currency, date: e.date, description: e.description }} />
+                                    return <CategoryTabExpense key={idx2} category_name={category.name} category_currency={category.default_currency} expense={{ id: e.id, price: e.price, currency: e.currency, date: e.date, description: e.description }} />
 
                                 return <Box key={idx2}></Box>
                             })}
@@ -481,7 +490,11 @@ export default function Category({ ssr }: CategoryProps) {
                     {categoryHeader}
 
                     <Box fontSize="18px">
-                        <b>{totalExpenses[0].currency} {totalExpenses[0].price}</b>
+                        {totalExpenses.length > 0 ?
+                            (<b>{totalExpenses[0].currency} {totalExpenses[0].price}</b>) :
+                            (null)
+                        }
+
                     </Box>
 
                     <Box fontSize="16px" marginBottom="10px">

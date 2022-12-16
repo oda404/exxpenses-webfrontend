@@ -96,7 +96,6 @@ export async function getServerSideProps({ req }: any) {
                 permanent: false,
                 destination: "/login"
             },
-            props: {}
         }
     }
 
@@ -124,8 +123,8 @@ export async function getServerSideProps({ req }: any) {
         variables: {
             getData: {
                 category_names: category_resp.data.categoriesGet?.categories?.map(c => c.name),
-                since: since,
-                until: now
+                since: since.toDateString(),
+                until: now.toDateString()
             }
         },
         context: { cookie: req.headers.cookie },

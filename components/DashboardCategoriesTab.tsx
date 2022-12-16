@@ -17,6 +17,7 @@ import Stats from "./Stats";
 import useShowMobileView from "../utils/useShowMobileView";
 import expensesToDaily, { DailyExpenses, dailyTotalsKeepCurrency } from "../utils/expensesToDaily";
 import MinifiedExpenseChart from "./MinifiedExpenseChart";
+import totalCostsKeepCurrency from "../utils/totalCostsKeepCurrency";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -505,6 +506,7 @@ function CategoryBox({ default_currency, until, since, isMobileView, focusCatego
     const [categoryDelete] = useMutation(CategoryDeleteDocument);
     const router = useRouter();
 
+
     let monthly: any;
     if (totalCost?.total?.length > 0) {
         monthly = (
@@ -767,8 +769,8 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
         setNewCategory(tmp);
     }
 
-    const now = new Date();
-    const defaultSince = new Date(now.getFullYear(), now.getMonth(), 1);
+    let now = new Date();
+    let defaultSince = new Date(now.getFullYear(), now.getMonth(), 1);
 
     return (
         <Box display="flex">
@@ -800,6 +802,7 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
             </Modal>
             <Box padding="4px" width="100%">
                 <Stats
+                    preferred_currency={preferred_currency}
                     totalCosts={totalCosts}
                     categories={categories}
                     isMobileView={true}
@@ -827,24 +830,6 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
                     </Grid>
                 </Box>
             </Box>
-            {/* <Box width="100%" marginTop="30px">
-                <Typography variant="h6">
-                    Add a new entry
-                </Typography>
-            </Box>
-            <Grid item width="100%" marginTop="15px">
-                <Box display="flex" flexDirection="row">
-                    <AddNewExpenseCard
-                        default_category={focusedCategory}
-                        focusCategory={focusCategory}
-                        categories={categories}
-                        isMobileView={true}
-
-                    />
-                    <Box mr="10px" ml="10px" />
-                    <AddNewCategoryCard isMobileView={true} />
-                </Box>
-            </Grid> */}
         </Box >
     )
 }
@@ -908,11 +893,13 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
 
     const mobileView = useShowMobileView();
 
+    // totalCostsKeepCurrency(props.totalCosts, props.categories);
+
     // XSS vulnerability ? i dont think so....
     if (mobileView)
-        content = <DashboardMobileView {...props} />
+        content = <DashboardMobileView {...props} />;
     else
-        content = <DashboardFullView {...props} />
+        content = <DashboardFullView {...props} />;
 
     return (
         <Box

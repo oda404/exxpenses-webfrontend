@@ -48,7 +48,7 @@ function StatCard({ isMobileView, text, content }: StatCardProps) {
     )
 }
 
-function costsToTotal(costs: ExpenseTotalCostMultiple[]) {
+function costsToTotal(costs: ExpenseTotalCostMultiple[], currency: string) {
 
     interface Totals {
         currency: string;
@@ -71,6 +71,13 @@ function costsToTotal(costs: ExpenseTotalCostMultiple[]) {
             }
         })
     });
+
+    for (let i = 0; i < totals.length; ++i) {
+        if (totals[i].currency !== currency) {
+            totals.splice(i, 1);
+            --i;
+        }
+    }
 
 
     let content: any;
@@ -152,26 +159,22 @@ function costsToCostly(costs: ExpenseTotalCostMultiple[]) {
     return content;
 }
 
-function categoriesToMostRecent(categories: Category[]) {
-
-}
-
 interface StatsProps {
     categories?: Category[] | null;
     totalCosts?: ExpenseTotalCostMultiple[] | null;
     isMobileView: boolean;
+    preferred_currency: string;
 }
 
-export default function Stats({ isMobileView, totalCosts, categories }: StatsProps) {
+export default function Stats({ preferred_currency, isMobileView, totalCosts, categories }: StatsProps) {
 
     let totalThisMonth;
     if (totalCosts === undefined || totalCosts === null || totalCosts.length === 0)
         totalThisMonth = 0;
     else
-        totalThisMonth = costsToTotal(totalCosts);
+        totalThisMonth = costsToTotal(totalCosts, preferred_currency);
 
     let costlyThisMonth = (totalCosts === undefined || totalCosts === null) ? "None" : costsToCostly(totalCosts);
-    let mostRecent = (categories === undefined || categories === null) ? "None" : categoriesToMostRecent(categories);
 
     let content: any;
     if (isMobileView) {
