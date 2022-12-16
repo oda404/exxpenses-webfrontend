@@ -1,11 +1,10 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Backdrop, Autocomplete, Modal, Link } from "@mui/material";
+import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Autocomplete, Modal, Link } from "@mui/material";
 import { useRouter } from "next/router";
-import { Category, CategoryAddDocument, CategoryDeleteDocument, ExpenseAddDocument, ExpenseTotalCostMultiple, UserUpdatePreferredCurrencyDocument } from "../generated/graphql";
-import { NewTabCallback } from "../utils/types";
+import { Category, CategoryAddDocument, CategoryDeleteDocument, ExpenseAddDocument, ExpenseTotalCostMultiple, ExpensesGetDocument } from "../generated/graphql";
 import ClassIcon from '@mui/icons-material/Class';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "../styles/Dashboard.module.css";
 import stylesNew from "../styles/DashboardCategoriesTab.module.css";
 import ShowChartIcon from '@mui/icons-material/ShowChart';
@@ -16,7 +15,8 @@ import InputField from "./InputField";
 import ClearIcon from '@mui/icons-material/Clear';
 import Stats from "./Stats";
 import useShowMobileView from "../utils/useShowMobileView";
-import Footer from "./Footer";
+import expensesToDaily, { DailyExpenses, dailyTotalsKeepCurrency } from "../utils/expensesToDaily";
+import MinifiedExpenseChart from "./MinifiedExpenseChart";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -473,9 +473,21 @@ interface CategoryBoxProps {
     totalCost?: ExpenseTotalCostMultiple;
     focusCategory: (category: string) => void;
     isMobileView: boolean;
+    since: Date;
+    until: Date;
 }
 
-function CategoryBox({ isMobileView, focusCategory, totalCost, name }: CategoryBoxProps) {
+function CategoryBox({ default_currency, until, since, isMobileView, focusCategory, totalCost, name }: CategoryBoxProps) {
+
+    const { loading, error, data } = useQuery(ExpensesGetDocument, {
+        variables: {
+            getData: {
+                category_name: name,
+                since: since,
+                until: until
+            }
+        }
+    });
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -509,11 +521,17 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name }: CategoryB
         );
     }
 
+    let dailyExpenses: DailyExpenses[] = [];
+    if (!loading && !error) {
+        dailyExpenses = expensesToDaily(data.expensesGet.expenses);
+        dailyExpenses = dailyTotalsKeepCurrency(dailyExpenses, default_currency);
+    }
+
     return (
-        <Grid item width={isMobileView ? "100%" : "auto"}>
+        <Grid item maxWidth="100%" width={isMobileView ? "100%" : "auto"}>
             <Paper className={styles.categoryBox} sx={{ width: isMobileView ? "auto" : "150px" }}>
                 <Box display="flex">
-                    <Box>
+                    <Box minWidth="fit-content">
                         <Box sx={{ overflowX: "hidden" }} display="flex">
                             <ClassIcon sx={{ width: "22px", height: "22px" }} />
                             <Box sx={{ textTransform: "none", marginLeft: "10px", fontSize: "14px" }}><b>{name}</b></Box>
@@ -532,10 +550,13 @@ function CategoryBox({ isMobileView, focusCategory, totalCost, name }: CategoryB
                         </Box>
                     </Box>
 
+                    <Box style={{}} marginLeft="auto" marginRight="auto" width="90%">
+                        <MinifiedExpenseChart dailyTotals={dailyExpenses} />
+                    </Box>
+
                     <Box
                         display="flex"
                         flexDirection="column"
-                        marginLeft="auto"
                         sx={{ backgroundColor: "var(--exxpenses-main-bg-color)" }}
                     >
                         <Tooltip title="New expense" placement="top" arrow>
@@ -657,11 +678,9 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                         <Box sx={{ fontSize: "14px", color: "var(--exxpenses-light-green)" }} marginLeft="6px">
                             New category
                         </Box>
-                        <Tooltip title="Close">
-                            <Button onClick={() => setShowAddCategory(false)} sx={{ width: "22px", height: "22px", marginLeft: "auto" }}>
-                                <ClearIcon sx={{ width: "22px", height: "22px" }} />
-                            </Button>
-                        </Tooltip>
+                        <Button onClick={() => setShowAddCategory(false)} sx={{ width: "22px", height: "22px", marginLeft: "auto" }}>
+                            <ClearIcon sx={{ width: "22px", height: "22px" }} />
+                        </Button>
                     </Box>
 
                     <Formik
@@ -735,7 +754,7 @@ interface MobileDashboardNewCategoryProps {
     category?: string;
 };
 
-function DashboardMobileView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories }: DashboardCategoriesTabProps) {
+function DashboardMobileView({ preferred_currency, totalCosts, categories }: DashboardCategoriesTabProps) {
 
     const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
 
@@ -747,6 +766,9 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
 
         setNewCategory(tmp);
     }
+
+    const now = new Date();
+    const defaultSince = new Date(now.getFullYear(), now.getMonth(), 1);
 
     return (
         <Box display="flex">
@@ -762,17 +784,19 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                 }}
                 sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center" }}
             >
-                <MobileViewAddNewExpenseCard
-                    close={() => {
-                        const tmp: MobileDashboardNewCategoryProps = {
-                            isOpen: false,
-                        }
+                <Box>
+                    <MobileViewAddNewExpenseCard
+                        close={() => {
+                            const tmp: MobileDashboardNewCategoryProps = {
+                                isOpen: false,
+                            }
 
-                        setNewCategory(tmp);
-                    }}
-                    default_category={newCategory.category}
-                    categories={categories}
-                />
+                            setNewCategory(tmp);
+                        }}
+                        default_category={newCategory.category}
+                        categories={categories}
+                    />
+                </Box>
             </Modal>
             <Box padding="4px" width="100%">
                 <Stats
@@ -790,6 +814,8 @@ function DashboardMobileView({ preferred_currency, focusedCategory, focusCategor
                     <Grid container spacing={2}>
                         {categories.map((cat, idx) =>
                             <CategoryBox
+                                until={now}
+                                since={defaultSince}
                                 isMobileView={true}
                                 focusCategory={focusCategoryActual}
                                 key={idx}

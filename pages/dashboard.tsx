@@ -1,7 +1,7 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { InferGetServerSidePropsType } from "next";
 import Navbar from "../components/navbar";
-import { CategoriesGetDocument, CategoriesGetQuery, ExpensesTotalCostGetMultipleDocument, ExpensesTotalCostGetMultipleQuery, UserGetDocument, UserGetQuery } from "../generated/graphql";
+import { CategoriesGetDocument, CategoriesGetQuery, ExpensesGetDocument, ExpensesGetQuery, ExpensesTotalCostGetMultipleDocument, ExpensesTotalCostGetMultipleQuery, UserGetDocument, UserGetQuery } from "../generated/graphql";
 import apolloClient from "../utils/apollo-client";
 import "../styles/Dashboard.module.css"
 import { useState } from "react";
@@ -125,6 +125,7 @@ export async function getServerSideProps({ req }: any) {
             getData: {
                 category_names: category_resp.data.categoriesGet?.categories?.map(c => c.name),
                 since: since,
+                until: now
             }
         },
         context: { cookie: req.headers.cookie },

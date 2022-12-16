@@ -241,6 +241,10 @@ export default function Category({ ssr }: CategoryProps) {
     const expenses = expensesGet.expenses!;
     const user = userGet.user;
 
+    let now = new Date();
+    let until = new Date(now);
+    let since = new Date(now.getFullYear(), now.getMonth(), 1);
+
     let totalExpenses: TotalExpense[] = [];
 
     expenses.forEach(e => {
@@ -250,6 +254,7 @@ export default function Category({ ssr }: CategoryProps) {
             totalExpenses.push({ currency: e.currency, price: e.price });
         }
         else {
+
             let x = new Decimal(totalExpenses[idx].price);
             let y = new Decimal(e.price);
             totalExpenses[idx].price = x.add(y).toNumber();
@@ -259,9 +264,6 @@ export default function Category({ ssr }: CategoryProps) {
     const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
 
-    let now = new Date();
-    let until = new Date(now);
-    let since = new Date(now.getFullYear(), now.getMonth(), 1);
     let content: any;
 
     let categoryHeader: any;
@@ -548,7 +550,8 @@ export async function getServerSideProps({ req, params }: any) {
         variables: {
             getData: {
                 category_name: params.name,
-                since: since
+                since: since,
+                until: now
             }
         }
     });
