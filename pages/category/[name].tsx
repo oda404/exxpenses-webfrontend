@@ -18,6 +18,7 @@ import styles from "../../styles/Category.module.css"
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import InputField from "../../components/InputField";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import Decimal from "decimal.js";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -224,6 +225,11 @@ function CategoryTabExpense({ category_name, expense: { id, price, currency, dat
     )
 }
 
+interface TotalExpense {
+    currency: string;
+    price: number;
+}
+
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Category({ ssr }: CategoryProps) {
@@ -232,7 +238,23 @@ export default function Category({ ssr }: CategoryProps) {
 
     const { expensesGet, categoryGet, userGet } = ssr;
     const category = categoryGet?.categories![0]!;
+    const expenses = expensesGet.expenses!;
     const user = userGet.user;
+
+    let totalExpenses: TotalExpense[] = [];
+
+    expenses.forEach(e => {
+        const idx = totalExpenses.findIndex(t => t.currency === e.currency);
+
+        if (idx === -1) {
+            totalExpenses.push({ currency: e.currency, price: e.price });
+        }
+        else {
+            let x = new Decimal(totalExpenses[idx].price);
+            let y = new Decimal(e.price);
+            totalExpenses[idx].price = x.add(y).toNumber();
+        }
+    })
 
     const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
@@ -455,6 +477,11 @@ export default function Category({ ssr }: CategoryProps) {
                     marginTop="15px"
                 >
                     {categoryHeader}
+
+                    <Box fontSize="18px">
+                        <b>{totalExpenses[0].currency} {totalExpenses[0].price}</b>
+                    </Box>
+
                     <Box fontSize="16px" marginBottom="10px">
                         Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()}
                     </Box>
