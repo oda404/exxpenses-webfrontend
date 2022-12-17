@@ -1,16 +1,16 @@
-import { ApolloQueryResult } from "@apollo/client";
 import { InferGetServerSidePropsType } from "next";
 import Navbar from "../components/navbar";
-import { CategoriesGetDocument, CategoriesGetQuery, ExpensesGetDocument, ExpensesGetQuery, ExpensesTotalCostGetMultipleDocument, ExpensesTotalCostGetMultipleQuery, UserGetDocument, UserGetQuery } from "../generated/graphql";
-import apolloClient from "../utils/apollo-client";
 import "../styles/Dashboard.module.css"
 import { useState } from "react";
-import TabHeaderButton, { CategoryHeaderButton } from "../components/TabHeaderButton";
+import TabHeaderButton from "../components/TabHeaderButton";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
 import { Box, Divider } from "@mui/material";
 import { Category } from "../generated/graphql";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
+import userGet from "../gql/ssr/userGet";
+import categoriesGet from "../gql/ssr/categoriesGet";
+import expensesGetMultipleCategories from "../gql/ssr/expensesGetMultipleCategories";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -34,7 +34,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
                     preferred_currency={ssr?.userGet.user?.preferred_currency}
                     focusCategory={setFocusedCategory}
                     focusedCategory={focusedCategory}
-                    totalCosts={ssr.expensesTotalCost.costs}
+                    expensesMultipleCategories={ssr.expensesGetMultipleCategoriesGet}
                     categories={ssr.categoriesGet.categories as Category[]}
                 />
             );
@@ -84,13 +84,10 @@ export default function Dashboard({ ssr }: DashboardProps) {
 }
 
 export async function getServerSideProps({ req }: any) {
-    const user_resp: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
-        query: UserGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
 
-    if (user_resp.data.userGet.user === undefined || user_resp.data.userGet.user === null) {
+    /* Redirect if not logged in */
+    const userData = await userGet(req);
+    if (!userData.user) {
         return {
             redirect: {
                 permanent: false,
@@ -99,13 +96,9 @@ export async function getServerSideProps({ req }: any) {
         }
     }
 
-    const category_resp: ApolloQueryResult<CategoriesGetQuery> = await apolloClient.query({
-        query: CategoriesGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
-
-    if (category_resp.data.categoriesGet?.categories?.length === 0) {
+    /* If the user doesnt have any categories redirect to setup */
+    const categoriesData = await categoriesGet(req);
+    if (categoriesData.categories?.length === 0) {
         return {
             redirect: {
                 permanent: false,
@@ -117,26 +110,15 @@ export async function getServerSideProps({ req }: any) {
     const now = new Date();
     const since = new Date(now.getFullYear(), now.getMonth(), 1);
 
-    const expenses_total_cost_resp: ApolloQueryResult<ExpensesTotalCostGetMultipleQuery
-    > = await apolloClient.query({
-        query: ExpensesTotalCostGetMultipleDocument,
-        variables: {
-            getData: {
-                category_names: category_resp.data.categoriesGet?.categories?.map(c => c.name),
-                since: since.toDateString(),
-                until: now.toDateString()
-            }
-        },
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
+    const expensesGetMultipleCategoriesData =
+        await expensesGetMultipleCategories(req, categoriesData.categories!.map(c => c.name), since, now);
 
     return {
         props: {
             ssr: {
-                userGet: user_resp.data.userGet,
-                categoriesGet: category_resp.data.categoriesGet,
-                expensesTotalCost: expenses_total_cost_resp.data.expensesTotalCostGetMultiple
+                userGet: userData,
+                categoriesGet: categoriesData,
+                expensesGetMultipleCategoriesGet: expensesGetMultipleCategoriesData
             }
         }
     }

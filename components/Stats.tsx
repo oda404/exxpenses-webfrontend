@@ -1,7 +1,9 @@
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import styles from "../styles/Dashboard.module.css";
-import { Category, CategoryDeleteDocument, ExpenseTotalCostMultiple } from "../generated/graphql";
+import { Category, CategoryDeleteDocument, Expense, ExpenseTotalCostMultiple } from "../generated/graphql";
 import { Decimal } from "decimal.js";
+import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
+import expensesToTotal from "../utils/expensesToTotal";
 
 interface StatCardProps {
     text: string;
@@ -161,20 +163,44 @@ function costsToCostly(costs: ExpenseTotalCostMultiple[]) {
 
 interface StatsProps {
     categories?: Category[] | null;
-    totalCosts?: ExpenseTotalCostMultiple[] | null;
+    expensesMultipleCategories: MultiCategoryExpenses;
     isMobileView: boolean;
     preferred_currency: string;
 }
 
-export default function Stats({ preferred_currency, isMobileView, totalCosts, categories }: StatsProps) {
+export default function Stats({ preferred_currency, isMobileView, expensesMultipleCategories, categories }: StatsProps) {
 
     let totalThisMonth;
-    if (totalCosts === undefined || totalCosts === null || totalCosts.length === 0)
-        totalThisMonth = 0;
-    else
-        totalThisMonth = costsToTotal(totalCosts, preferred_currency);
 
-    let costlyThisMonth = (totalCosts === undefined || totalCosts === null) ? "None" : costsToCostly(totalCosts);
+    let workingExpenses: Expense[] = [];
+    expensesMultipleCategories.categories.forEach(category => {
+
+        const tmp = categories?.find(c => c.name === category.name);
+        if (!tmp || tmp.default_currency !== preferred_currency)
+            return;
+
+        workingExpenses.push(...category.expenses);
+    });
+
+    let total = expensesToTotal(workingExpenses, preferred_currency);
+
+    if (total.length === 0) {
+        totalThisMonth = 0;
+    }
+    else {
+        totalThisMonth = (
+            <Box>
+                <Box display="flex">
+                    <Box>
+                        <b>{total[0].currency}</b>
+                    </Box>
+                    &nbsp;
+                    <Box><b>{total[0].price}</b></Box>
+                </Box>
+            </Box>
+        )
+    }
+
 
     let content: any;
     if (isMobileView) {
@@ -191,7 +217,6 @@ export default function Stats({ preferred_currency, isMobileView, totalCosts, ca
             <Box sx={{ overflowY: "auto" }} paddingTop="20px" display="flex" flexDirection="column">
                 <Grid container spacing={3}>
                     <StatCard isMobileView={isMobileView} text="This month" content={totalThisMonth} />
-                    <StatCard isMobileView={isMobileView} text="Costly This month" content={costlyThisMonth} />
                 </Grid>
             </Box >
         )

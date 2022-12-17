@@ -22,6 +22,8 @@ import Decimal from "decimal.js";
 import expensesToTotal from "../../utils/expensesToTotal";
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import HelpIcon from '@mui/icons-material/Help';
+import userGet from "../../gql/ssr/userGet";
+import expensesGet from "../../gql/ssr/expensesGet";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -184,7 +186,7 @@ function CategoryTabExpense({ category_name, category_currency, expense: { id, p
     let leadingIcon: any;
     if (true && currency !== category_currency) { // free account
         leadingIcon = (
-            <Tooltip title="This expense is not counted in the total.">
+            <Tooltip title="This expense is not counted towards the total. Click to learn more.">
                 <Link href="/free-account">
                     <HelpIcon
                         sx={{
@@ -518,13 +520,9 @@ export default function Category({ ssr }: CategoryProps) {
 
 export async function getServerSideProps({ req, params }: any) {
 
-    const { data: { userGet } }: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
-        query: UserGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache",
-    });
-
-    if (!userGet.user) {
+    /* Redirect if not logged in */
+    const userData = await userGet(req);
+    if (!userData.user) {
         return {
             redirect: {
                 permanent: false,
@@ -556,36 +554,14 @@ export async function getServerSideProps({ req, params }: any) {
         }
     }
 
-    const { data: { expensesGet } }: ApolloQueryResult<ExpensesGetQuery> = await apolloClient.query({
-        query: ExpensesGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache",
-        variables: {
-            getData: {
-                category_name: params.name,
-                since: since,
-                until: now
-            }
-        }
-    });
-
-    if (expensesGet.expenses === null) {
-        return {
-            notFound: true,
-            props: {
-                ssr: {
-
-                }
-            }
-        };
-    }
+    const expensesData = await expensesGet(req, params.name, since, now);
 
     return {
         props: {
             ssr: {
-                userGet: userGet,
+                userGet: userData,
                 categoryGet: categoryGet,
-                expensesGet: expensesGet,
+                expensesGet: expensesData,
             }
         }
     }

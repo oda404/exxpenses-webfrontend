@@ -1,23 +1,17 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Box, Button, Divider, Popover, Stack, Grid, Paper, Typography, Autocomplete, Modal, Link } from "@mui/material";
+import { useMutation } from "@apollo/client";
+import { Box, Button, Stack, Grid, Paper, Typography, Autocomplete, Modal } from "@mui/material";
 import { useRouter } from "next/router";
-import { Category, CategoryAddDocument, CategoryDeleteDocument, ExpenseAddDocument, ExpenseTotalCostMultiple, ExpensesGetDocument } from "../generated/graphql";
-import ClassIcon from '@mui/icons-material/Class';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { Category, CategoryAddDocument, ExpenseAddDocument } from "../generated/graphql";
 import { useState } from "react";
 import styles from "../styles/Dashboard.module.css";
-import stylesNew from "../styles/DashboardCategoriesTab.module.css";
-import ShowChartIcon from '@mui/icons-material/ShowChart';
-import AddIcon from '@mui/icons-material/Add';
 import Tooltip from '@mui/material/Tooltip';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import InputField from "./InputField";
 import ClearIcon from '@mui/icons-material/Clear';
-import Stats from "./Stats";
 import useShowMobileView from "../utils/useShowMobileView";
-import expensesToDaily, { DailyExpenses, dailyTotalsKeepCurrency } from "../utils/expensesToDaily";
-import MinifiedExpenseChart from "./MinifiedExpenseChart";
-import totalCostsKeepCurrency from "../utils/totalCostsKeepCurrency";
+import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
+import CategoryBox from "./CategoryBox";
+import Stats from "./Stats";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -467,173 +461,6 @@ function MobileViewAddNewExpenseCard({ close, categories, default_category }: Mo
     )
 }
 
-interface CategoryBoxProps {
-    name: string;
-    default_currency: string;
-    key: number;
-    totalCost?: ExpenseTotalCostMultiple;
-    focusCategory: (category: string) => void;
-    isMobileView: boolean;
-    since: Date;
-    until: Date;
-}
-
-function CategoryBox({ default_currency, until, since, isMobileView, focusCategory, totalCost, name }: CategoryBoxProps) {
-
-    const { loading, error, data } = useQuery(ExpensesGetDocument, {
-        variables: {
-            getData: {
-                category_name: name,
-                since: since,
-                until: until
-            }
-        }
-    });
-
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-
-    const [categoryDelete] = useMutation(CategoryDeleteDocument);
-    const router = useRouter();
-
-
-    let monthly: any;
-    if (totalCost?.total?.length > 0) {
-        monthly = (
-            <Box>
-                {totalCost?.total[0].price} {totalCost?.total[0].currency}
-            </Box>
-        );
-    }
-    else {
-        monthly = (
-            <Box>
-                Nothing
-            </Box>
-        );
-    }
-
-    let dailyExpenses: DailyExpenses[] = [];
-    if (!loading && !error) {
-        dailyExpenses = expensesToDaily(data.expensesGet.expenses);
-        dailyExpenses = dailyTotalsKeepCurrency(dailyExpenses, default_currency);
-    }
-
-    return (
-        <Grid item maxWidth="100%" width={isMobileView ? "100%" : "auto"}>
-            <Paper className={styles.categoryBox} sx={{ width: isMobileView ? "auto" : "150px" }}>
-                <Box display="flex">
-                    <Box minWidth="fit-content">
-                        <Box sx={{ overflowX: "hidden" }} display="flex">
-                            <ClassIcon sx={{ width: "22px", height: "22px" }} />
-                            <Box sx={{ textTransform: "none", marginLeft: "10px", fontSize: "14px" }}><b>{name}</b></Box>
-                        </Box>
-
-                        <Box
-                            marginLeft="4px"
-                            marginTop="4px"
-                            maxHeight="70px"
-                            fontSize="14px"
-                        >
-                            <Box>This month:</Box>
-                        </Box>
-                        <Box className={styles.categoryTotalCostBox}>
-                            {monthly}
-                        </Box>
-                    </Box>
-
-                    <Box style={{}} marginLeft="auto" marginRight="auto" width="90%">
-                        <MinifiedExpenseChart dailyTotals={dailyExpenses} />
-                    </Box>
-
-                    <Box
-                        display="flex"
-                        flexDirection="column"
-                        sx={{ backgroundColor: "var(--exxpenses-main-bg-color)" }}
-                    >
-                        <Tooltip title="New expense" placement="top" arrow>
-                            <Button
-                                className={stylesNew.categoryActionButton}
-                                onClick={() => {
-                                    focusCategory(name);
-                                }}
-                            >
-                                <AddIcon sx={{ padding: "0", width: "20px", height: "20px" }} />
-                            </Button>
-                        </Tooltip>
-                        <Tooltip title="Details" arrow>
-                            <Link
-                                href={`/category/${name}`}
-                                className={stylesNew.categoryActionButton}
-                            >
-                                <ShowChartIcon sx={{ fill: "var(--exxpenses-light-green)", padding: "0", width: "20px", height: "20px" }} />
-                            </Link>
-                        </Tooltip>
-                        <Tooltip title="Delete" arrow>
-                            <Button
-                                aria-describedby={id}
-                                onClick={(e) => handleClick(e)}
-                                className={stylesNew.categoryActionButton}
-                            >
-                                <DeleteIcon className={styles.categoryDeleteIcon} sx={{ padding: "0", width: "20px", height: "20px" }} />
-                            </Button>
-                        </Tooltip>
-                        <Popover
-                            id={id}
-                            open={open}
-                            anchorEl={anchorEl}
-                            onClose={handleClose}
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "center"
-                            }}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: "center"
-                            }}
-                            PaperProps={{ style: { background: "none" } }}
-                        >
-                            <Box
-                                sx={{ background: "var(--exxpenses-main-bg-color)", width: "260px", borderRadius: "10px" }}
-                                padding="10px"
-                                display="flex"
-                                flexDirection="column"
-                                border="1px var(--exxpenses-main-border-color) solid"
-                                textAlign="center"
-                            >
-                                <Box>
-                                    <b>Are you sure?</b>
-                                </Box>
-                                <Divider sx={{ width: "100%", background: "var(--exxpenses-main-border-color)", marginY: "5px" }} />
-                                Deleting this category will also delete all of it&apos;s expenses forever!
-                                <Button
-                                    className={styles.categoryDeleteConfirmButton}
-                                    onClick={async () => {
-                                        await categoryDelete({ variables: { category_name: name } });
-                                        router.reload();
-                                    }}
-                                >
-                                    Delete {name}
-                                </Button>
-                            </Box>
-                        </Popover >
-                    </Box>
-                </Box>
-            </Paper>
-        </Grid >
-    );
-}
-
 interface MobileViewDashboardButtonsProps {
     default_currency: string;
 }
@@ -751,12 +578,17 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
     )
 }
 
+function findExpenses(expenses: MultiCategoryExpenses, name: string) {
+    let cat = expenses.categories.find(c => c.name === name);
+    return cat!.expenses;
+}
+
 interface MobileDashboardNewCategoryProps {
     isOpen: boolean;
     category?: string;
 };
 
-function DashboardMobileView({ preferred_currency, totalCosts, categories }: DashboardCategoriesTabProps) {
+function DashboardMobileView({ preferred_currency, expensesMultipleCategories, categories }: DashboardCategoriesTabProps) {
 
     const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
 
@@ -768,9 +600,6 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
 
         setNewCategory(tmp);
     }
-
-    let now = new Date();
-    let defaultSince = new Date(now.getFullYear(), now.getMonth(), 1);
 
     return (
         <Box display="flex">
@@ -802,8 +631,8 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
             </Modal>
             <Box padding="4px" width="100%">
                 <Stats
-                    preferred_currency={preferred_currency}
-                    totalCosts={totalCosts}
+                    preferred_currency={preferred_currency!}
+                    expensesMultipleCategories={expensesMultipleCategories}
                     categories={categories}
                     isMobileView={true}
                 />
@@ -817,14 +646,12 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
                     <Grid container spacing={2}>
                         {categories.map((cat, idx) =>
                             <CategoryBox
-                                until={now}
-                                since={defaultSince}
+                                category={cat}
+                                expenses={findExpenses(expensesMultipleCategories, cat.name)}
+                                preferred_currency={preferred_currency}
                                 isMobileView={true}
                                 focusCategory={focusCategoryActual}
                                 key={idx}
-                                default_currency={cat.default_currency}
-                                name={cat.name}
-                                totalCost={totalCosts?.find(c => c.category_name === cat.name)}
                             />
                         )}
                     </Grid>
@@ -836,17 +663,17 @@ function DashboardMobileView({ preferred_currency, totalCosts, categories }: Das
 
 interface DashboardCategoriesTabProps {
     categories: Category[];
-    totalCosts?: ExpenseTotalCostMultiple[] | null;
+    expensesMultipleCategories: MultiCategoryExpenses;
     focusCategory: (cat: string | undefined) => void;
     focusedCategory: string | undefined;
     preferred_currency: string | null;
 }
 
-function DashboardFullView({ preferred_currency, focusedCategory, focusCategory, totalCosts, categories }: DashboardCategoriesTabProps) {
+function DashboardFullView({ preferred_currency, focusedCategory, focusCategory, categories }: DashboardCategoriesTabProps) {
     return (
         <Box display="flex">
 
-            <Box marginTop="20px">
+            {/* <Box marginTop="20px">
                 <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
                     <AddNewCategoryCard isMobileView={false} />
                     <Box mb="20px" />
@@ -860,6 +687,7 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
 
             <Box width="100%">
                 <Stats
+                    preferred_currency={preferred_currency}
                     totalCosts={totalCosts}
                     categories={categories}
                     isMobileView={false}
@@ -882,7 +710,7 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
                         )}
                     </Grid>
                 </Box>
-            </Box>
+            </Box> */}
         </Box>
     )
 }
