@@ -588,7 +588,14 @@ interface MobileDashboardNewCategoryProps {
     category?: string;
 };
 
-function DashboardMobileView({ preferred_currency, expensesMultipleCategories, categories }: DashboardCategoriesTabProps) {
+function DashboardMobileView({
+    preferred_currency,
+    expensesMultipleCategories,
+    categories,
+    since, until
+}: DashboardCategoriesTabProps) {
+
+    console.log(since, until)
 
     const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
 
@@ -648,9 +655,11 @@ function DashboardMobileView({ preferred_currency, expensesMultipleCategories, c
                             <CategoryBox
                                 category={cat}
                                 expenses={findExpenses(expensesMultipleCategories, cat.name)}
-                                preferred_currency={preferred_currency}
+                                preferred_currency={preferred_currency!}
                                 isMobileView={true}
                                 focusCategory={focusCategoryActual}
+                                since={since}
+                                until={until}
                                 key={idx}
                             />
                         )}
@@ -664,6 +673,8 @@ function DashboardMobileView({ preferred_currency, expensesMultipleCategories, c
 interface DashboardCategoriesTabProps {
     categories: Category[];
     expensesMultipleCategories: MultiCategoryExpenses;
+    since: Date,
+    until: Date,
     focusCategory: (cat: string | undefined) => void;
     focusedCategory: string | undefined;
     preferred_currency: string | null;

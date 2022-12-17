@@ -16,13 +16,15 @@ import expensesToTotal from "../utils/expensesToTotal";
 interface CategoryBoxProps {
     category: Category;
     expenses: Expense[];
+    since: Date;
+    until: Date;
     preferred_currency: string;
     key: number;
     focusCategory: (category: string) => void;
     isMobileView: boolean;
 }
 
-export default function CategoryBox({ preferred_currency, category, expenses, isMobileView, focusCategory }: CategoryBoxProps) {
+export default function CategoryBox({ since, until, preferred_currency, category, expenses, isMobileView, focusCategory }: CategoryBoxProps) {
 
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -106,7 +108,7 @@ export default function CategoryBox({ preferred_currency, category, expenses, is
                     </Box>
 
                     <Box style={{}} marginLeft="auto" marginRight="auto" width="90%">
-                        <MinifiedExpenseChart dailyTotals={dailyExpenses} />
+                        <MinifiedExpenseChart since={since} until={until} dailyTotals={dailyExpenses} />
                     </Box>
 
                     <Box

@@ -36,6 +36,8 @@ export default function Dashboard({ ssr }: DashboardProps) {
                     focusedCategory={focusedCategory}
                     expensesMultipleCategories={ssr.expensesGetMultipleCategoriesGet}
                     categories={ssr.categoriesGet.categories as Category[]}
+                    since={ssr.since}
+                    until={ssr.until}
                 />
             );
             break;
@@ -118,7 +120,9 @@ export async function getServerSideProps({ req }: any) {
             ssr: {
                 userGet: userData,
                 categoriesGet: categoriesData,
-                expensesGetMultipleCategoriesGet: expensesGetMultipleCategoriesData
+                expensesGetMultipleCategoriesGet: expensesGetMultipleCategoriesData,
+                until: now.toDateString(),
+                since: since.toDateString()
             }
         }
     }
