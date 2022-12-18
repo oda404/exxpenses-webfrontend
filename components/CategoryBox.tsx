@@ -174,7 +174,7 @@ export default function CategoryBox({ since, until, preferred_currency, category
                                 <Button
                                     className={styles.categoryDeleteConfirmButton}
                                     onClick={async () => {
-                                        await categoryDelete({ variables: { category_name: name } });
+                                        await categoryDelete({ variables: { category_name: category.name } });
                                         router.reload();
                                     }}
                                 >
