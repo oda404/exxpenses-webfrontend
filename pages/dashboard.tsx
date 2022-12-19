@@ -11,6 +11,8 @@ import Footer from "../components/Footer";
 import userGet from "../gql/ssr/userGet";
 import categoriesGet from "../gql/ssr/categoriesGet";
 import expensesGetMultipleCategories from "../gql/ssr/expensesGetMultipleCategories";
+import getNowUserOffset from "../utils/getNowWithUserOffset";
+import Cookies from "universal-cookie";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -87,6 +89,8 @@ export default function Dashboard({ ssr }: DashboardProps) {
 
 export async function getServerSideProps({ req }: any) {
 
+    const cookies = new Cookies(req.headers.cookie);
+
     /* Redirect if not logged in */
     const userData = await userGet(req);
     if (!userData.user) {
@@ -109,7 +113,8 @@ export async function getServerSideProps({ req }: any) {
         }
     }
 
-    const now = new Date();
+    const user_offset = cookies.get("user_tz_offset");
+    const now = getNowUserOffset(user_offset);
     const since = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const expensesGetMultipleCategoriesData =

@@ -9,7 +9,8 @@ import PropTypes from 'prop-types';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../utils/theme';
 import { useEffect, useState } from 'react';
-import { Router } from 'next/router';
+import { Router, useRouter } from 'next/router';
+import Cookies from "universal-cookie";
 
 const isBrowser = typeof document !== 'undefined';
 
@@ -31,6 +32,19 @@ function createEmotionCache() {
 const clientSideEmotionCache = createEmotionCache();
 
 export default function App({ Component, pageProps }: AppProps) {
+
+  /* This runs on the client side */
+  const cookies = new Cookies();
+  if (cookies.get("user_tz_offset") === undefined) {
+    let now = new Date();
+    now.setMonth(now.getMonth() + 1);
+
+    cookies.set("user_tz_offset", new Date().getTimezoneOffset(), {
+      path: "/",
+      sameSite: "lax",
+      expires: now
+    });
+  }
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {

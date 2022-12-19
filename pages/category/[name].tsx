@@ -24,6 +24,8 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import HelpIcon from '@mui/icons-material/Help';
 import userGet from "../../gql/ssr/userGet";
 import expensesGet from "../../gql/ssr/expensesGet";
+import Cookies from "universal-cookie";
+import getNowUserOffset from "../../utils/getNowWithUserOffset";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -178,8 +180,6 @@ interface CategoryTabExpenseProps {
 function CategoryTabExpense({ category_name, category_currency, expense: { id, price, currency, date, description } }: CategoryTabExpenseProps) {
 
     const [expenseDelete] = useMutation(ExpenseDeleteDocument);
-    const router = useRouter();
-    const dateobj = new Date(date);
 
     const [detailsShown, setDetailsShown] = useState(false);
 
@@ -266,7 +266,6 @@ export default function Category({ ssr }: CategoryProps) {
     const user = userGet.user;
 
     let now = new Date();
-    let until = new Date(now);
     let since = new Date(now.getFullYear(), now.getMonth(), 1);
 
     /* If unpaid, we only count the expenses with the default currency towards the total */
@@ -520,6 +519,8 @@ export default function Category({ ssr }: CategoryProps) {
 
 export async function getServerSideProps({ req, params }: any) {
 
+    const cookies = new Cookies(req.headers.cookie);
+
     /* Redirect if not logged in */
     const userData = await userGet(req);
     if (!userData.user) {
@@ -530,9 +531,6 @@ export async function getServerSideProps({ req, params }: any) {
             }
         }
     }
-
-    const now = new Date();
-    const since = new Date(now.getFullYear(), now.getMonth(), 1);
 
     const { data: { categoryGet } }: ApolloQueryResult<CategoryGetQuery> = await apolloClient.query({
         query: CategoryGetDocument,
@@ -553,6 +551,10 @@ export async function getServerSideProps({ req, params }: any) {
             }
         }
     }
+
+    const user_tz_offset = cookies.get("user_tz_offset");
+    const now = getNowUserOffset(user_tz_offset);
+    const since = new Date(now.getUTCFullYear(), now.getUTCMonth(), 1);
 
     const expensesData = await expensesGet(req, params.name, since, now);
 
