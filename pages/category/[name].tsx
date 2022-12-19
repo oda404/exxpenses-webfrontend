@@ -1,8 +1,8 @@
 import { ApolloQueryResult, useMutation } from "@apollo/client";
-import { Box, Button, IconButton, Link, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Divider, IconButton, Link, Stack, Tooltip, Typography } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { CategoryEditDocument, CategoryGetDocument, CategoryGetQuery, ExpenseAddDocument, ExpenseDeleteDocument, ExpensesGetDocument, ExpensesGetQuery, UserGetDocument, UserGetQuery } from "../../generated/graphql";
+import { CategoryEditDocument, CategoryGetDocument, CategoryGetQuery, Expense, ExpenseAddDocument, ExpenseDeleteDocument, ExpensesGetDocument, ExpensesGetQuery, User, UserGetDocument, UserGetQuery } from "../../generated/graphql";
 import apolloClient from "../../utils/apollo-client";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -26,6 +26,19 @@ import userGet from "../../gql/ssr/userGet";
 import expensesGet from "../../gql/ssr/expensesGet";
 import Cookies from "universal-cookie";
 import getNowUserOffset from "../../utils/getNowWithUserOffset";
+import useShowMobileView from "../../utils/useShowMobileView";
+import MinifiedExpenseChart from "../../components/MinifiedExpenseChart";
+import expensesToDailyTotals, { DailyExpenses, DailyTotal, dailyTotalsKeepCurrency } from "../../utils/expensesToDaily";
+import FullViewCategoryExpensesTab from "../../components/FullViewCategoryExpensesTab";
+import CategoryTabExpense from "../../components/CategoryTabExpense";
+import dynamic from "next/dynamic";
+import FullViewCategory from "../../components/CategoryFullView";
+
+/* What in the living fuck ?!:)dwdA!@W! */
+const FullBarExpenseChart = dynamic(
+    import("../../components/FullBarExpenseChart"),
+    { ssr: false }
+);
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -165,105 +178,15 @@ function AddNewExpenseCard({ width, isMobileView, default_category, default_curr
     )
 }
 
-interface CategoryTabExpenseProps {
-    category_name: string;
-    category_currency: string;
-    expense: {
-        id: string,
-        price: number,
-        currency: string,
-        date: Date,
-        description: string | null;
-    }
+interface CategoryViewsProps {
+    user: User;
+    expenses: Expense[];
+    category: Category;
 }
 
-function CategoryTabExpense({ category_name, category_currency, expense: { id, price, currency, date, description } }: CategoryTabExpenseProps) {
-
-    const [expenseDelete] = useMutation(ExpenseDeleteDocument);
-
-    const [detailsShown, setDetailsShown] = useState(false);
-
-    let leadingIcon: any;
-    if (true && currency !== category_currency) { // free account
-        leadingIcon = (
-            <Tooltip title="This expense is not counted towards the total. Click to learn more.">
-                <Link href="/free-account">
-                    <HelpIcon
-                        sx={{
-                            width: "22px",
-                            height: "22px",
-                            fill: "#e9e976",
-                            '&:hover': {
-                                cursor: "pointer"
-                            }
-                        }}
-                    />
-                </Link>
-            </Tooltip>
-        )
-    }
-    else {
-        leadingIcon = (
-            <RemoveCircleIcon sx={{ width: "22px", height: "22px", }} />
-        )
-    }
-
-    return (
-        <Box
-            paddingX="6px"
-            borderRadius="6px"
-            marginLeft="5px"
-            fontSize="14px"
-            width="fit-content"
-        >
-            <Box
-                display="flex"
-                alignItems="center"
-            >
-                <Box marginRight="10px">
-                    {leadingIcon}
-                </Box>
-                <Box>
-                    <b>{currency}&nbsp;{price}</b>
-                </Box>
-                <IconButton onClick={() => setDetailsShown(!detailsShown)}>
-                    {detailsShown ? <KeyboardArrowUpIcon sx={{ width: "20px", height: "20px" }} /> : <KeyboardArrowDownIcon sx={{ width: "20px", height: "20px" }} />}
-                </IconButton>
-            </Box>
-
-            <Box alignItems="center" marginLeft="35px" marginBottom="10px" display={detailsShown ? "flex" : "none"}>
-                <Box marginRight="10px">{description ? `"${description}"` : "No description"}</Box>
-                <Tooltip title="Delete">
-                    <IconButton sx={{ width: "22px", height: "22px" }} onClick={async () => {
-                        await expenseDelete({
-                            variables: {
-                                deleteData: {
-                                    expense_id: id,
-                                    category_name: category_name
-                                }
-                            }
-                        });
-
-                        window.location.reload();
-                    }}>
-                        <DeleteOutlineIcon sx={{ width: "19px", height: "19px" }} />
-                    </IconButton>
-                </Tooltip>
-            </Box>
-        </Box>
-    )
-}
-
-type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
-
-export default function Category({ ssr }: CategoryProps) {
+function MobileViewCategory({ user, expenses, category }: CategoryViewsProps) {
 
     const [categoryEdit] = useMutation(CategoryEditDocument);
-
-    const { expensesGet, categoryGet, userGet } = ssr;
-    const category = categoryGet?.categories![0]!;
-    const expenses = expensesGet.expenses!;
-    const user = userGet.user;
 
     let now = new Date();
     let since = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -383,7 +306,7 @@ export default function Category({ ssr }: CategoryProps) {
         )
     }
 
-    if (!expensesGet?.expenses || expensesGet?.expenses!.length === 0) {
+    if (expenses.length === 0) {
         content = (
             <Box>
                 No expenses yet...
@@ -404,14 +327,14 @@ export default function Category({ ssr }: CategoryProps) {
 
                     let datestr = d.toDateString();
 
-                    let found = expensesGet?.expenses!.findIndex((e: any) => new Date(e.date).toDateString() == datestr);
+                    let found = expenses.findIndex((e: any) => new Date(e.date).toDateString() == datestr);
                     if (found === -1)
                         return;
 
                     return (
                         <Box key={idx}>
                             <Typography sx={{ fontSize: "14px", color: "#9f9f9f" }}>{d.getDate()}.{d.getMonth() + 1}.{d.getFullYear()}</Typography>
-                            {expensesGet.expenses!.map((e: any, idx2: number) => {
+                            {expenses.map((e: any, idx2: number) => {
                                 if (new Date(e.date).toDateString() == datestr)
                                     return <CategoryTabExpense key={idx2} category_name={category.name} category_currency={category.default_currency} expense={{ id: e.id, price: e.price, currency: e.currency, date: e.date, description: e.description }} />
 
@@ -428,7 +351,7 @@ export default function Category({ ssr }: CategoryProps) {
         <Box position="relative" minHeight="100vh">
             <Navbar username={user.lastname} />
 
-            <Box padding="10px">
+            <Box padding="15px">
                 <Box marginTop="25px" display="flex">
                     <Button
                         className={tabHeaderButtonStyles.tabHeaderButton}
@@ -492,14 +415,15 @@ export default function Category({ ssr }: CategoryProps) {
 
                     <Box fontSize="18px">
                         {totalExpenses.length > 0 ?
-                            (<b>{totalExpenses[0].currency} {totalExpenses[0].price}</b>) :
+                            <Box>
+                                {totalExpenses[0].currency} {totalExpenses[0].price}
+                            </Box> :
                             (null)
                         }
-
                     </Box>
 
                     <Box fontSize="16px" marginBottom="10px">
-                        Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()}
+                        Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
                     </Box>
 
                     <Box sx={{ maxHeight: "80%", overflowY: "auto" }}>
@@ -515,6 +439,25 @@ export default function Category({ ssr }: CategoryProps) {
         </Box >
 
     )
+}
+
+type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+export default function Category({ ssr }: CategoryProps) {
+
+    const { expensesGet, categoryGet, userGet } = ssr;
+    const category = categoryGet?.categories![0]!;
+    const expenses = expensesGet.expenses!;
+    const user = userGet.user;
+
+    const isMobileView = useShowMobileView();
+
+    if (isMobileView) {
+        return <MobileViewCategory category={category} expenses={expenses} user={user} />
+    }
+    else {
+        return <FullViewCategory category={category} expenses={expenses} user={user} />
+    }
 }
 
 export async function getServerSideProps({ req, params }: any) {

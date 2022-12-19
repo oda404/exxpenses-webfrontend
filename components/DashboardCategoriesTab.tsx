@@ -595,8 +595,6 @@ function DashboardMobileView({
     since, until
 }: DashboardCategoriesTabProps) {
 
-    console.log(since, until)
-
     const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
 
     const focusCategoryActual = (name: string) => {
@@ -680,11 +678,11 @@ interface DashboardCategoriesTabProps {
     preferred_currency: string | null;
 }
 
-function DashboardFullView({ preferred_currency, focusedCategory, focusCategory, categories }: DashboardCategoriesTabProps) {
+function DashboardFullView({ since, until, expensesMultipleCategories, preferred_currency, focusedCategory, focusCategory, categories }: DashboardCategoriesTabProps) {
     return (
         <Box display="flex">
 
-            {/* <Box marginTop="20px">
+            <Box marginTop="20px">
                 <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
                     <AddNewCategoryCard isMobileView={false} />
                     <Box mb="20px" />
@@ -698,8 +696,8 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
 
             <Box width="100%">
                 <Stats
-                    preferred_currency={preferred_currency}
-                    totalCosts={totalCosts}
+                    preferred_currency={preferred_currency as string}
+                    expensesMultipleCategories={expensesMultipleCategories}
                     categories={categories}
                     isMobileView={false}
                 />
@@ -714,14 +712,16 @@ function DashboardFullView({ preferred_currency, focusedCategory, focusCategory,
                                 isMobileView={false}
                                 focusCategory={focusCategory}
                                 key={idx}
-                                default_currency={cat.default_currency}
-                                name={cat.name}
-                                totalCost={totalCosts?.find(c => c.category_name === cat.name)}
+                                category={cat}
+                                expenses={findExpenses(expensesMultipleCategories, cat.name)}
+                                since={since}
+                                until={until}
+                                preferred_currency={preferred_currency}
                             />
                         )}
                     </Grid>
                 </Box>
-            </Box> */}
+            </Box>
         </Box>
     )
 }
