@@ -7,29 +7,31 @@ export interface TotalExpense {
     price: number;
 }
 
-export default function expensesToTotal(expenses: Expense[], currency?: string) {
+export default function expensesToTotal(expenses: Expense[], currency: string) {
 
-    let totalExpenses: TotalExpense[] = [];
+    let totalExpenses: TotalExpense | undefined = undefined;
+
     expenses.forEach(e => {
-        const idx = totalExpenses.findIndex(t => t.currency === e.currency);
+        if (e.currency !== currency)
+            return;
 
-        if (idx === -1) {
-            totalExpenses.push({ currency: e.currency, price: e.price });
+        if (totalExpenses === undefined) {
+            totalExpenses = {
+                currency: e.currency,
+                price: e.price
+            }
         }
         else {
-
-            let x = new Decimal(totalExpenses[idx].price);
+            let x = new Decimal(totalExpenses.price);
             let y = new Decimal(e.price);
-            totalExpenses[idx].price = x.add(y).toNumber();
+            totalExpenses.price = x.add(y).toNumber();
         }
-    })
+    });
 
-    if (currency) {
-        for (let i = 0; i < totalExpenses.length; ++i) {
-            if (totalExpenses[i].currency !== currency) {
-                totalExpenses.splice(i, 1);
-                --i;
-            }
+    if (totalExpenses === undefined) {
+        totalExpenses = {
+            currency: currency,
+            price: 0
         }
     }
 

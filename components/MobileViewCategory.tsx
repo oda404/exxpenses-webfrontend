@@ -1,30 +1,35 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Divider, Box, Stack, Tooltip, Typography, Modal } from "@mui/material";
+import { Button, IconButton, Stack, Typography, Box, Divider } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
-import { Category, CategoryEditDocument, Expense, ExpenseAddDocument, User } from "../generated/graphql";
-import expensesToDailyTotals, { DailyExpenses } from "../utils/expensesToDaily";
+import { User, Expense, CategoryEditDocument, Category, ExpenseAddDocument } from "../generated/graphql";
 import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
+import CategoryTabExpense from "./CategoryTabExpense";
 import Footer from "./Footer";
-import FullBarExpenseChart from "./FullBarExpenseChart";
-import FullViewCategoryExpensesTab from "./FullViewCategoryExpensesTab";
 import InputField from "./InputField";
-import Navbar from "./navbar";
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import daysBetweenDates from "../utils/daysBetweenDates";
-import addFloats from "../utils/addFloats";
-import Decimal from "decimal.js";
+import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import Navbar from "./navbar";
+import dynamic from "next/dynamic";
+import styles from "../styles/Category.module.css"
+import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
 import { useRouter } from "next/router";
-import ClearIcon from '@mui/icons-material/Clear';
+import Decimal from "decimal.js";
+import addFloats from "../utils/addFloats";
+import daysBetweenDates from "../utils/daysBetweenDates";
+import expensesToDailyTotals, { DailyExpenses } from "../utils/expensesToDaily";
 import StatisticTab from "./StatisticsTab";
 
-interface MobileViewAddNewExpenseCardProps {
-    category: Category;
-    close: () => void;
+interface AddNewExpenseCardProps {
+    default_category: string;
+    default_currency: string;
+    isMobileView?: boolean;
+    width?: string;
 }
 
-function MobileViewAddNewExpenseCard({ close, category }: MobileViewAddNewExpenseCardProps) {
+function AddNewExpenseCard({ width, isMobileView, default_category, default_currency }: AddNewExpenseCardProps) {
+
     const [expenseAdd] = useMutation(ExpenseAddDocument);
     const router = useRouter();
 
@@ -35,25 +40,18 @@ function MobileViewAddNewExpenseCard({ close, category }: MobileViewAddNewExpens
             width={"auto"}
             display="flex"
             flexDirection="column"
-            border="1px #444444 solid"
-            height="fit-content"
-            padding="12px"
+            key={default_category}
             sx={{
-                background: "var(--exxpenses-main-bg-color)", borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+                animation: default_category !== undefined ? `${styles.blink} .5s linear` : "", borderRadius: "5px"
             }}>
             <Box marginBottom="5px" display="flex">
                 <Typography fontSize="17px" marginLeft="6px">
-                    New {category.name}
+                    Add a new expense to {default_category}
                 </Typography>
-                <Tooltip title="Close">
-                    <Button onClick={close} sx={{ width: "24px", height: "24px", marginLeft: "auto" }}>
-                        <ClearIcon />
-                    </Button>
-                </Tooltip>
             </Box>
             <Formik
                 enableReinitialize
-                initialValues={{ category: category.name, price: "", description: "", currency: category.default_currency, date: date }}
+                initialValues={{ category: default_category, price: "", description: "", currency: default_currency, date: date }}
                 onSubmit={async (values, actions) => {
 
                     if (!values.category || values.category.length === 0) {
@@ -106,81 +104,83 @@ function MobileViewAddNewExpenseCard({ close, category }: MobileViewAddNewExpens
             >
                 {({ setFieldValue, isSubmitting, errors }) => (
                     <Form>
-                        <Stack>
-                            <Box width="250px" display="flex">
-                                <Field name="price">
-                                    {({ field }: FieldProps) => (
-                                        <Box marginTop="10px">
-                                            <InputField type="number" field={field} name="price" label="Price" />
-                                            <ErrorMessage name="price" component="div" />
-                                        </Box>
-                                    )}
-                                </Field>
-                                <Box marginLeft="5px" marginRight="5px" />
-                                <Field name="currency">
-                                    {({ field }: FieldProps) => (
-                                        <Box marginTop="10px">
-                                            <InputField field={field} name="currency" label="Currency" />
-                                            <ErrorMessage name="currency" component="div" />
-                                        </Box>
-                                    )}
-                                </Field>
-                            </Box>
 
-
-                            <Field name="description">
+                        <Box display="flex">
+                            <Field name="price">
                                 {({ field }: FieldProps) => (
                                     <Box marginTop="10px">
-                                        <InputField field={field} name="description" label="Description" />
-                                        <ErrorMessage name="description" component="div" />
+                                        <InputField is_error={errors.price !== undefined} bg="var(--exxpenses-second-bg-color)" type="number" field={field} name="price" label="Price" />
+                                        <ErrorMessage name="price" component="div" />
                                     </Box>
                                 )}
                             </Field>
-
-                            <Field name="date">
+                            <Box marginX="5px" />
+                            <Field name="currency">
                                 {({ field }: FieldProps) => (
                                     <Box marginTop="10px">
-                                        <InputField field={field} type="date" name="date" label="Date" />
+                                        <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                        <ErrorMessage name="currency" component="div" />
+                                    </Box>
+                                )}
+                            </Field>
+                            <Box marginX="5px" />
+                            <Field name="date">
+                                {({ field }: FieldProps) => (
+                                    <Box width="145px" marginTop="10px">
+                                        <InputField is_error={errors.date !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} type="date" name="date" label="Date" />
                                         <ErrorMessage name="date" component="div" />
                                     </Box>
                                 )}
                             </Field>
-                        </Stack>
+                        </Box>
+
+                        <Field name="description">
+                            {({ field }: FieldProps) => (
+                                <Box marginTop="10px">
+                                    <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="description" label="Description" />
+                                    <ErrorMessage name="description" component="div" />
+                                </Box>
+                            )}
+                        </Field>
+
                         <Button
                             type="submit"
                             disabled={isSubmitting}
                             fullWidth={true}
-                            className="standardButton"
-                            sx={{ marginTop: "10px" }}
+                            className={styles.dashboardSubmitButton}
                         >
                             Add
                         </Button>
-                    </Form>
-                )}
-            </Formik>
+                    </Form >
+                )
+                }
+            </Formik >
         </Box >
     )
 }
 
-interface CategoryFullViewProps {
+interface CategoryViewsProps {
     user: User;
     expenses: Expense[];
     lastMonthExpenses: Expense[];
     category: Category;
 }
 
-export default function FullViewCategory({ lastMonthExpenses, user, category, expenses }: CategoryFullViewProps) {
+export default function MobileViewCategory({ lastMonthExpenses, user, expenses, category }: CategoryViewsProps) {
 
     const [categoryEdit] = useMutation(CategoryEditDocument);
-
-    const [newCategoryOpen, setNewCategoryOpen] = useState(false);
 
     let now = new Date();
     let since = new Date(now.getFullYear(), now.getMonth(), 1);
 
+    /* If unpaid, we only count the expenses with the default currency towards the total */
     let totalExpenses = expensesToTotal(expenses, category.default_currency);
+    let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
 
+    const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
+
+    let content: any;
 
     let categoryHeader: any;
     if (editCategory) {
@@ -226,10 +226,10 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                 >
                     {({ setFieldValue, isSubmitting, errors }) => (
                         <Form style={{ width: "100%" }}>
-                            <Box alignItems="center" display="flex">
+                            <Box display="flex">
                                 <Field name="name">
                                     {({ field }: FieldProps) => (
-                                        <Box marginTop="10px">
+                                        <Box width="120px" marginTop="10px">
                                             <InputField
                                                 is_error={errors.name !== undefined}
                                                 bg="var(--exxpenses-second-bg-color)"
@@ -252,10 +252,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                                 </Field>
                                 <Button
                                     sx={{
-                                        marginLeft: "20px",
-                                        width: "fit-content",
-                                        height: "fit-content",
-                                        borderRadius: "25px"
+                                        marginLeft: "auto"
                                     }}
                                     type="submit"
                                     disabled={isSubmitting}
@@ -272,7 +269,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
     else {
         categoryHeader = (
             <Box display="flex">
-                <Box fontSize="18px">
+                <Box fontSize="20px">
                     <b>{category.name}</b>
                 </Box>
                 <Box fontSize="12px" marginTop="10px" marginLeft="8px">
@@ -280,49 +277,117 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                 </Box>
                 <IconButton
                     sx={{
-                        marginLeft: "20px"
+                        marginLeft: "auto"
                     }}
                     onClick={() => {
                         setEditCategory(true);
                     }}
                 >
-                    <ModeEditIcon sx={{ width: "18px", height: "18px" }} />
+                    <ModeEditIcon sx={{ width: "20px", height: "20px" }} />
                 </IconButton>
-                <Button onClick={() => setNewCategoryOpen(true)} className="standardButton" sx={{ marginLeft: "auto" }} >
-                    + New expense
-                </Button>
             </Box>
         )
     }
 
-    let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
+    if (expenses.length === 0) {
+        content = (
+            <Box marginX="auto">
+                No expenses yet...
+            </Box>
+        )
+    }
+    else {
+
+        var dates = [];
+        for (let d = new Date(since); d <= now; d.setDate(d.getDate() + 1)) {
+            dates.push(new Date(d));
+        }
+        dates.reverse();
+
+        content = (
+            <Stack spacing={1}>
+                {dates.map((d: Date, idx: number) => {
+
+                    let datestr = d.toDateString();
+
+                    let found = expenses.findIndex((e: any) => new Date(e.date).toDateString() == datestr);
+                    if (found === -1)
+                        return;
+
+                    return (
+                        <Box key={idx}>
+                            <Typography sx={{ fontSize: "14px", color: "#9f9f9f" }}>{d.getDate()}.{d.getMonth() + 1}.{d.getFullYear()}</Typography>
+                            {expenses.map((e: any, idx2: number) => {
+                                if (new Date(e.date).toDateString() == datestr)
+                                    return <CategoryTabExpense key={idx2} category_name={category.name} category_currency={category.default_currency} expense={{ id: e.id, price: e.price, currency: e.currency, date: e.date, description: e.description }} />
+
+                                return <Box key={idx2}></Box>
+                            })}
+                        </Box>
+                    );
+                })}
+            </Stack>
+        );
+    }
+
     return (
         <Box position="relative" minHeight="100vh">
             <Navbar username={user.lastname} />
 
-            <Modal
-                // sx={{ position: "absolute !important", zIndex: "998", background: "rgba(0, 0, 0, 0.3)" }
-                open={newCategoryOpen}
-                onClose={() => {
-                    setNewCategoryOpen(false);
-                }}
-                sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center" }}
-            >
-                <Box>
-                    <MobileViewAddNewExpenseCard
-                        close={() => {
-                            setNewCategoryOpen(false);
-                        }}
-                        category={category}
-                    />
-                </Box>
-            </Modal>
+            <Box padding="15px">
+                <Box marginTop="25px" display="flex">
+                    <Button
+                        className={tabHeaderButtonStyles.tabHeaderButton}
+                        sx={{
+                            background: "var(--exxpenses-second-bg-color)",
 
-            <Box paddingX="110px" paddingY="80px">
+                            "&:hover": {
+                                background: "var( --exxpenses-main-button-hover-bg-color)",
+                                textDecoration: "none"
+                            },
+                            paddingX: "10px",
+                            textDecoration: "none",
+                            width: "100%"
+                        }}
+                        onClick={() => {
+                            window.location.assign("/dashboard");
+                        }}
+                    >
+                        Dashboard
+                    </Button>
+                    <Box marginX="5px" />
+                    <Button
+                        className={tabHeaderButtonStyles.tabHeaderButton}
+                        sx={{
+                            background: "var(--exxpenses-second-bg-color)",
+
+                            "&:hover": {
+                                background: "var( --exxpenses-main-button-hover-bg-color)",
+                                textDecoration: "none"
+                            },
+                            paddingX: "10px",
+                            textDecoration: "none",
+                            width: "100%"
+                        }}
+                        onClick={() => setSShowNewExpenseAdd(!showNewExpenseAdd)}
+                    >
+                        {showNewExpenseAdd ? "Close" : "+ New expense"}
+                    </Button>
+                </Box>
                 <Box
                     sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                    paddingX="20px"
-                    paddingY="16px"
+                    padding="10px"
+                    flexDirection="column"
+                    borderRadius="8px"
+                    height={showNewExpenseAdd ? "fit-content !important" : "0 !important"}
+                    marginTop="15px"
+                    display={showNewExpenseAdd ? "flex" : "none"}
+                >
+                    <AddNewExpenseCard default_category={category.name} default_currency={category.default_currency} />
+                </Box>
+                <Box
+                    sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
+                    padding="10px"
                     display="flex"
                     flexDirection="column"
                     borderRadius="8px"
@@ -330,59 +395,48 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                     marginTop="15px"
                 >
                     {categoryHeader}
-                    <Box fontSize="22px">
-                        <Box>
-                            <b>{totalExpenses.currency} {totalExpenses.price}</b>
-                        </Box>
+
+                    <Box fontSize="18px">
+                        {totalExpenses.currency} {totalExpenses.price}
                     </Box>
 
-                    <Box display="flex">
-                        <Box fontSize="16px">
-                            Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
-                        </Box>
-                        <Box marginLeft="auto">
-
-                        </Box>
+                    <Box fontSize="16px">
+                        Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
                     </Box>
+                </Box >
 
+                <Box
+                    sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
+                    padding="10px"
+                    display="flex"
+                    flexDirection="column"
+                    borderRadius="8px"
+                    height="fit-content"
+                    marginTop="15px"
+                >
+                    <StatisticTab lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
                 </Box>
 
-                <Box display="flex">
+                <Box
+                    sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
+                    padding="10px"
+                    display="flex"
+                    flexDirection="column"
+                    borderRadius="8px"
+                    height="fit-content"
+                    marginTop="15px"
+                >
+                    <Box marginBottom="10px">
+                        Expenses
+                    </Box>
+                    {content}
 
-                    <Box
-                        sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                        paddingX="20px"
-                        paddingY="16px"
-                        display="flex"
-                        flexDirection="column"
-                        borderRadius="8px"
-                        marginTop="15px"
-                        width="70%"
-                    >
-                        <StatisticTab lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
-                    </Box>
-                    <Box marginX="10px" />
-                    <Box
-                        sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                        paddingX="20px"
-                        paddingY="16px"
-                        display="flex"
-                        flexDirection="column"
-                        borderRadius="8px"
-                        height="fit-content"
-                        marginTop="15px"
-                        width="30%"
-                    >
-                        <Box marginBottom="10px">
-                            Expenses
-                        </Box>
-                        <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
-                    </Box>
+                    <AccessibleForwardIcon sx={{ marginTop: "20px", marginLeft: "auto", marginRight: "auto" }} />
                 </Box>
-
             </Box>
 
             <Footer />
         </Box >
+
     )
 }

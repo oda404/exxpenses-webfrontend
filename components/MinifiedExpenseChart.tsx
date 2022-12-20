@@ -35,14 +35,10 @@ export default function MinifiedExpenseChart({ since, until, dailyTotals }: Mini
         })
     }
 
-
     dailyTotals.forEach((e, idx) => {
-        if (e.expenses.length === 0)
-            return;
-
         plotData[new Date(e.date).getDate() - 1] = {
             name: e.date,
-            pv: e.expenses[0].price,
+            pv: e.expense.price,
         }
     })
 

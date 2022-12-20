@@ -3,7 +3,7 @@ import { Grid, Paper, Button, Popover, Divider, Tooltip, Box, Link } from "@mui/
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { CategoryDeleteDocument, Expense, Category } from "../generated/graphql";
-import expensesToDaily, { DailyExpenses, dailyTotalsKeepCurrency } from "../utils/expensesToDaily";
+import expensesToDaily, { DailyExpenses } from "../utils/expensesToDaily";
 import MinifiedExpenseChart from "./MinifiedExpenseChart";
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import AddIcon from '@mui/icons-material/Add';
@@ -43,25 +43,16 @@ export default function CategoryBox({ since, until, preferred_currency, category
     const router = useRouter();
 
     let dailyExpenses: DailyExpenses[] = [];
-    dailyExpenses = expensesToDaily(expenses);
-    dailyExpenses = dailyTotalsKeepCurrency(dailyExpenses, category.default_currency);
+    dailyExpenses = expensesToDaily(expenses, category.default_currency);
 
     let total = expensesToTotal(expenses, category.default_currency);
     let monthly: any;
-    if (total?.length > 0) {
-        monthly = (
-            <Box>
-                {total[0].price} {total[0].currency}
-            </Box>
-        );
-    }
-    else {
-        monthly = (
-            <Box>
-                Nothing
-            </Box>
-        );
-    }
+
+    monthly = (
+        <Box>
+            {total.price} {total.currency}
+        </Box>
+    );
 
     let categoryIcon: any;
     if (preferred_currency !== category.default_currency) {

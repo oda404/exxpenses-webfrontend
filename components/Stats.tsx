@@ -184,23 +184,17 @@ export default function Stats({ preferred_currency, isMobileView, expensesMultip
 
     let total = expensesToTotal(workingExpenses, preferred_currency);
 
-    if (total.length === 0) {
-        totalThisMonth = 0;
-    }
-    else {
-        totalThisMonth = (
-            <Box>
-                <Box display="flex">
-                    <Box>
-                        <b>{total[0].currency}</b>
-                    </Box>
-                    &nbsp;
-                    <Box><b>{total[0].price}</b></Box>
+    totalThisMonth = (
+        <Box>
+            <Box display="flex">
+                <Box>
+                    <b>{total.currency}</b>
                 </Box>
+                &nbsp;
+                <Box><b>{total.price}</b></Box>
             </Box>
-        )
-    }
-
+        </Box>
+    )
 
     let content: any;
     if (isMobileView) {

@@ -52,3 +52,16 @@ html {
 a:hover {
   text-decoration: underline;
 }
+
+.standardButton {
+  height: 34px;
+  background: var(--exxpenses-dark-green);
+  /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
+  color: var(--exxpenses-main-color);
+  text-transform: none;
+  padding: 6px;
+}
+
+.standardButton:hover {
+  background: var(--exxpenses-light-green);
+}
