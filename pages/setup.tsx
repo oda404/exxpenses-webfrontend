@@ -12,6 +12,7 @@ import styles from "../styles/Setup.module.css";
 import Navbar from "../components/navbar";
 import { useEffect } from "react";
 import Footer from "../components/Footer";
+import Head from "next/head";
 
 interface NumberBubbleProps {
     number: string;
@@ -244,6 +245,14 @@ export default function Setup({ ssr }: DashboardProps) {
 
     return (
         <Box position="relative" minHeight="100vh" display="flex" flexDirection="column" sx={{ height: "100vh", overflowY: "auto" }}>
+            <Head>
+                <title>Setup | Exxpenses</title>
+                <meta
+                    name="description"
+                    content="Setup your Exxpenses account"
+                    key="desc"
+                />
+            </Head>
             <Navbar username={lastname} />
             <Box>
 

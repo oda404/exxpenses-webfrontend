@@ -13,6 +13,7 @@ import categoriesGet from "../gql/ssr/categoriesGet";
 import expensesGetMultipleCategories from "../gql/ssr/expensesGetMultipleCategories";
 import getNowUserOffset from "../utils/getNowWithUserOffset";
 import Cookies from "universal-cookie";
+import Head from "next/head";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -80,6 +81,15 @@ export default function Dashboard({ ssr }: DashboardProps) {
 
     return (
         <Box position="relative" minHeight="100vh">
+            <Head>
+                <title>Dashboard | Exxpenses</title>
+                <meta
+                    name="description"
+                    content="Overview of your expenses."
+                    key="desc"
+                />
+            </Head>
+
             <Navbar username={user.lastname} />
             {content}
             <Footer />

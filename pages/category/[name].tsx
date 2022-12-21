@@ -24,6 +24,7 @@ import CategoryTabExpense from "../../components/CategoryTabExpense";
 import dynamic from "next/dynamic";
 import FullViewCategory from "../../components/CategoryFullView";
 import MobileViewCategory from "../../components/MobileViewCategory";
+import Head from "next/head";
 
 /* What in the living fuck ?!:)dwdA!@W! */
 
@@ -40,12 +41,22 @@ export default function Category({ ssr }: CategoryProps) {
 
     const isMobileView = useShowMobileView();
 
+    let content: any;
     if (isMobileView) {
-        return <MobileViewCategory lastMonthExpenses={lastMonthExpenses} category={category} expenses={expenses} user={user} />
+        content = <MobileViewCategory lastMonthExpenses={lastMonthExpenses} category={category} expenses={expenses} user={user} />
     }
     else {
-        return <FullViewCategory lastMonthExpenses={lastMonthExpenses} category={category} expenses={expenses} user={user} />
+        content = <FullViewCategory lastMonthExpenses={lastMonthExpenses} category={category} expenses={expenses} user={user} />
     }
+
+    return (
+        <Box>
+            <Head>
+                <title>{category.name} | Exxpenses</title>
+            </Head>
+            {content}
+        </Box>
+    )
 }
 
 export async function getServerSideProps({ req, params }: any) {

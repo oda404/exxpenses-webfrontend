@@ -15,6 +15,7 @@ import styles from "../styles/Login.module.css";
 import { CircularProgress } from "@mui/material";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
+import Head from "next/head";
 
 type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -25,6 +26,15 @@ export default function Login({ }: LoginProps) {
 
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
+            <Head>
+                <title>Login | Exxpenses</title>
+                <meta
+                    name="description"
+                    content="Login to your Exxpenses account."
+                    key="desc"
+                />
+            </Head>
+
             <Navbar />
 
             <Box height="70vh" display="flex" alignItems="center" justifyContent="center">

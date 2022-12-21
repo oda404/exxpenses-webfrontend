@@ -11,6 +11,7 @@ import { Box, Button, CircularProgress, Link, Stack } from "@mui/material";
 import styles from "../styles/Register.module.css";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
+import Head from "next/head";
 
 type RegisterProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -21,6 +22,15 @@ export default function Register({ }: RegisterProps) {
 
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
+            <Head>
+                <title>Register | Exxpenses</title>
+                <meta
+                    name="description"
+                    content="Create an Exxpenses account."
+                    key="desc"
+                />
+            </Head>
+
             <Navbar />
 
             <Box height="70vh" display="flex" alignItems="center" justifyContent="center">

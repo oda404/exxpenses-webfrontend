@@ -1,6 +1,7 @@
 import { ApolloQueryResult } from '@apollo/client'
 import { Box } from '@mui/material'
 import type { InferGetServerSidePropsType } from 'next'
+import Head from 'next/head'
 import Navbar from '../components/navbar'
 import { UserGetDocument, UserGetQuery } from '../generated/graphql'
 import apolloClient from '../utils/apollo-client'
@@ -11,6 +12,14 @@ export default function Home({ ssr }: HomeProps) {
 
   return (
     <Box width="100vw" height="100vh" bgcolor="var(--exxpenses-main-bg-color)">
+      <Head>
+        <title>Exxpenses</title>
+        <meta
+          name="description"
+          content="Track your day-to-day expenses."
+          key="desc"
+        />
+      </Head>
       <Navbar />
     </Box>
   )
