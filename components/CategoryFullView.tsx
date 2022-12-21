@@ -17,7 +17,7 @@ import addFloats from "../utils/addFloats";
 import Decimal from "decimal.js";
 import { useRouter } from "next/router";
 import ClearIcon from '@mui/icons-material/Clear';
-import StatisticTab from "./StatisticsTab";
+import CategoryStatistics from "./CategoryStatistics";
 
 interface MobileViewAddNewExpenseCardProps {
     category: Category;
@@ -359,7 +359,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                         marginTop="15px"
                         width="70%"
                     >
-                        <StatisticTab lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                        <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
                     </Box>
                     <Box marginX="10px" />
                     <Box

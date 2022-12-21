@@ -35,7 +35,7 @@ interface StatisticsTabProps {
     until: Date;
 }
 
-export default function StatisticTab({ lastMonthExpenses, category, since, until, totalExpenses, dailyTotals }: StatisticsTabProps) {
+export default function CategoryStatistics({ lastMonthExpenses, category, since, until, totalExpenses, dailyTotals }: StatisticsTabProps) {
 
     let mostExpensiveDay: DailyExpenses | undefined = undefined;
     for (let i = 0; i < dailyTotals.length; ++i) {

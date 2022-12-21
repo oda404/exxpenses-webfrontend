@@ -19,7 +19,7 @@ import Decimal from "decimal.js";
 import addFloats from "../utils/addFloats";
 import daysBetweenDates from "../utils/daysBetweenDates";
 import expensesToDailyTotals, { DailyExpenses } from "../utils/expensesToDaily";
-import StatisticTab from "./StatisticsTab";
+import CategoryStatistics from "./CategoryStatistics";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -414,7 +414,7 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     height="fit-content"
                     marginTop="15px"
                 >
-                    <StatisticTab lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                    <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
                 </Box>
 
                 <Box
