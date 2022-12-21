@@ -12,6 +12,7 @@ import useShowMobileView from "../utils/useShowMobileView";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryBox from "./CategoryBox";
 import Stats from "./Stats";
+import CardBox from "./CardBox";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -741,17 +742,8 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = <DashboardFullView {...props} />;
 
     return (
-        <Box
-            sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-            padding="10px"
-            display="flex"
-            flexDirection="column"
-            marginTop="15px"
-            borderRadius="8px"
-            height="fit-content"
-            className={styles.categoriesBox}
-        >
+        <CardBox>
             {content}
-        </Box >
+        </CardBox>
     )
 }

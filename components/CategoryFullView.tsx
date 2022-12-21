@@ -18,6 +18,7 @@ import Decimal from "decimal.js";
 import { useRouter } from "next/router";
 import ClearIcon from '@mui/icons-material/Clear';
 import CategoryStatistics from "./CategoryStatistics";
+import CardBox from "./CardBox";
 
 interface MobileViewAddNewExpenseCardProps {
     category: Category;
@@ -319,16 +320,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
             </Modal>
 
             <Box paddingX="110px" paddingY="80px">
-                <Box
-                    sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                    paddingX="20px"
-                    paddingY="16px"
-                    display="flex"
-                    flexDirection="column"
-                    borderRadius="8px"
-                    height="fit-content"
-                    marginTop="15px"
-                >
+                <CardBox>
                     {categoryHeader}
                     <Box fontSize="22px">
                         <Box>
@@ -344,40 +336,21 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
 
                         </Box>
                     </Box>
-
-                </Box>
+                </CardBox>
 
                 <Box display="flex">
-
-                    <Box
-                        sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                        paddingX="20px"
-                        paddingY="16px"
-                        display="flex"
-                        flexDirection="column"
-                        borderRadius="8px"
-                        marginTop="15px"
-                        width="70%"
-                    >
+                    <CardBox width="70%">
                         <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
-                    </Box>
+                    </CardBox>
+
                     <Box marginX="10px" />
-                    <Box
-                        sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                        paddingX="20px"
-                        paddingY="16px"
-                        display="flex"
-                        flexDirection="column"
-                        borderRadius="8px"
-                        height="fit-content"
-                        marginTop="15px"
-                        width="30%"
-                    >
+
+                    <CardBox width="30%">
                         <Box marginBottom="10px">
                             Expenses
                         </Box>
                         <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
-                    </Box>
+                    </CardBox>
                 </Box>
 
             </Box>
