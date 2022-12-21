@@ -16,10 +16,10 @@ const FullBarExpenseChart = dynamic(
 function FullViewStatistic({ title, content }: { title: string; content: string }) {
     return (
         <Box width="fit-content" borderBottom="1px solid var(--exxpenses-main-border-color)" marginTop="20px">
-            <Box>
+            <Box fontSize="14px">
                 {title}
             </Box>
-            <Box>
+            <Box fontSize="14px">
                 <b>{content}</b>
             </Box>
         </Box>

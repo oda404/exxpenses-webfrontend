@@ -130,7 +130,8 @@ export default function FullBarExpenseChart({ dailyTotals }: FullBarExpenseChart
                         paddingY: "5px",
                         paddingX: "10px",
                         textDecoration: "none",
-                        width: "100%"
+                        width: "100%",
+                        fontSize: "14px"
                     }}
                     onClick={() => {
                         setActivePeriod("1 Day");
@@ -152,7 +153,8 @@ export default function FullBarExpenseChart({ dailyTotals }: FullBarExpenseChart
                         paddingY: "5px",
                         paddingX: "10px",
                         textDecoration: "none",
-                        width: "100%"
+                        width: "100%",
+                        fontSize: "14px"
                     }}
                     onClick={() => {
                         setActivePeriod("1 Week");
@@ -174,7 +176,8 @@ export default function FullBarExpenseChart({ dailyTotals }: FullBarExpenseChart
                         paddingY: "5px",
                         paddingX: "10px",
                         textDecoration: "none",
-                        width: "100%"
+                        width: "100%",
+                        fontSize: "14px"
                     }}
                     onClick={() => {
                         setActivePeriod("1 Month");
@@ -196,7 +199,8 @@ export default function FullBarExpenseChart({ dailyTotals }: FullBarExpenseChart
                         paddingY: "5px",
                         paddingX: "10px",
                         textDecoration: "none",
-                        width: "100%"
+                        width: "100%",
+                        fontSize: "14px"
                     }}
 
                 >
