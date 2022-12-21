@@ -717,7 +717,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
                                 expenses={findExpenses(expensesMultipleCategories, cat.name)}
                                 since={since}
                                 until={until}
-                                preferred_currency={preferred_currency}
+                                preferred_currency={preferred_currency as string}
                             />
                         )}
                     </Grid>

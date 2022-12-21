@@ -5,21 +5,23 @@ import { useState } from "react";
 import TabHeaderButton from "../components/TabHeaderButton";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
 import { Box, Divider } from "@mui/material";
-import { Category } from "../generated/graphql";
+import { Category, User } from "../generated/graphql";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 import userGet from "../gql/ssr/userGet";
 import categoriesGet from "../gql/ssr/categoriesGet";
-import expensesGetMultipleCategories from "../gql/ssr/expensesGetMultipleCategories";
+import expensesGetMultipleCategories, { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import getNowUserOffset from "../utils/getNowWithUserOffset";
 import Cookies from "universal-cookie";
 import Head from "next/head";
+import StatisticsTab from "../components/StatisticsTab";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Dashboard({ ssr }: DashboardProps) {
 
     const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>("Home");
+    const [focusedCategory, setFocusedCategory] = useState<string | undefined>("");
 
     const isMobileView = useShowMobileView();
 
@@ -27,12 +29,14 @@ export default function Dashboard({ ssr }: DashboardProps) {
         setDashboardActiveTab(name);
     }
 
-    const [focusedCategory, setFocusedCategory] = useState<string | undefined>("");
+    const user = ssr.userGet.user as User;
+    const categories = ssr.categoriesGet.categories as Category[];
+    const expensesMultipleCategories = ssr.expensesGetMultipleCategoriesGet as MultiCategoryExpenses;
 
     let activeTab: any;
     switch (dashboardActiveTab) {
         case "Home":
-            activeTab = (
+            activeTab =
                 <DashboardCategoriesTab
                     preferred_currency={ssr?.userGet.user?.preferred_currency}
                     focusCategory={setFocusedCategory}
@@ -42,13 +46,14 @@ export default function Dashboard({ ssr }: DashboardProps) {
                     since={ssr.since}
                     until={ssr.until}
                 />
-            );
+            break;
+
+        case "Statistics":
+            activeTab = <StatisticsTab user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
             break;
         default:
             activeTab = null;
     }
-
-    const user = ssr.userGet.user!;
 
     let content: any;
     if (isMobileView) {

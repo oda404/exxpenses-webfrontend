@@ -15,7 +15,7 @@ function CustomizedAxisTick({ x, y, stroke, payload }: any) {
     return (
         <g transform={`translate(${x},${y})`}>
             <text x={0} y={0} dy={16} textAnchor="end" fill="#666" fontSize="14px" transform="rotate(-35)">
-                {payload.value}
+
             </text>
         </g>
     );
@@ -109,7 +109,7 @@ export default function FullBarExpenseChart({ dailyTotals }: FullBarExpenseChart
                             <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                         </linearGradient>
                     </defs>
-                    <XAxis fontSize="8px" dataKey="name" height={0} tick={<CustomizedAxisTick />} />
+                    <XAxis fontSize="8px" dataKey="name" height={10} tick={<CustomizedAxisTick />} />
                     <YAxis />
                     <Tooltip content={<CustomTooltip />} cursorStyle={{ background: "black" }} />
                     <Area type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
