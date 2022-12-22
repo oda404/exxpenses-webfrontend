@@ -38,7 +38,7 @@ export default function Category({ ssr }: CategoryProps) {
     return (
         <Box>
             <Head>
-                <title>{category.name} | Exxpenses</title>
+                <title>{category.name + " | Exxpenses"}</title>
             </Head>
             {content}
         </Box>
