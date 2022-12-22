@@ -38,8 +38,8 @@ function OrderedCategories({ categoryTotals }: OrderedCategoriesProps) {
 
     let content = (
         <Box width="fit-content">
-            {categoryTotals.map(c =>
-                <Box display="flex">
+            {categoryTotals.map((c, idx) =>
+                <Box key={idx} display="flex">
                     <Box marginBottom="9px" marginRight="6px" borderRadius="8px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
                     <Box marginBottom="12px" width="fit-content">
                         <Box>
