@@ -5,7 +5,7 @@ import CategoryTotal from "../utils/CategoryTotal";
 
 const renderActiveShape = (props: any) => {
     const RADIAN = Math.PI / 180;
-    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value, currency } = props;
+    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value, currency, setActiveCategory } = props;
     const sin = Math.sin(-RADIAN * midAngle);
     const cos = Math.cos(-RADIAN * midAngle);
     const sx = cx + (outerRadius + 10) * cos;
@@ -15,6 +15,8 @@ const renderActiveShape = (props: any) => {
     const ex = mx + (cos >= 0 ? 1 : -1) * 22;
     const ey = my;
     const textAnchor = cos >= 0 ? 'start' : 'end';
+
+    setActiveCategory(payload.name)
 
     return (
         <g>
@@ -49,6 +51,12 @@ const renderActiveShape = (props: any) => {
     );
 };
 
+interface ActiveCategory {
+    name: string;
+    total: number;
+    currency: string;
+}
+
 interface CategoriesPiechartProps {
     categoryTotals: CategoryTotal[];
 }
@@ -61,41 +69,54 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
         setState(index);
     };
 
+    const [activeCategory, setActiveCategory] = useState("");
+
     const data: any[] = [];
     categoryTotals.forEach(ct => {
         data.push({
             name: ct.category,
             value: ct.price,
-            currency: ct.currency
+            currency: ct.currency,
+            setActiveCategory: setActiveCategory
         })
     })
 
-    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+    const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042'];
+
+    const category: ActiveCategory = {
+        name: activeCategory,
+        total: data.find(d => d.name === activeCategory)?.value,
+        currency: data.find(d => d.name === activeCategory)?.currency
+    }
 
     return (
-        <Box width="100%">
-            <ResponsiveContainer width="100%" height={220}>
-                <PieChart>
-                    <Pie
-                        activeIndex={state}
-                        activeShape={renderActiveShape}
+        <Box paddingX="14px" paddingY="10px">
+            <Box>{category.name}: <b>{category.currency} {category.total}</b></Box>
 
-                        data={data}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={80}
-                        fill="var(--exxpenses-light-green)"
-                        dataKey="value"
-                        onMouseEnter={onPieEnter}
-                        paddingAngle={5}
-                    >
-                        {data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                    </Pie>
-                </PieChart>
-            </ResponsiveContainer>
-        </Box >
+            <Box display="flex" alignItems="center" height="220px" width="100%">
+                <ResponsiveContainer width="100%" height={260}>
+                    <PieChart margin={{ bottom: 20 }}>
+                        <Pie
+                            activeIndex={state}
+                            activeShape={renderActiveShape}
+                            data={data}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={60}
+                            outerRadius={80}
+                            fill="var(--exxpenses-light-green)"
+                            dataKey="value"
+                            onMouseEnter={onPieEnter}
+                            paddingAngle={data.length > 1 ? 5 : 0}
+                        >
+                            {data.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                    </PieChart>
+                </ResponsiveContainer>
+            </Box >
+        </Box>
+
     )
 }
