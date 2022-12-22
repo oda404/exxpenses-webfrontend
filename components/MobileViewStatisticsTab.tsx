@@ -32,27 +32,30 @@ interface OrderedCategoriesProps {
 
 function OrderedCategories({ categoryTotals }: OrderedCategoriesProps) {
 
+    categoryTotals.sort((a, b) => {
+        return b.price - a.price;
+    });
+
     let content = (
         <Box width="fit-content">
             {categoryTotals.map(c =>
                 <Box display="flex">
-                    <Box marginBottom="9px" marginRight="5px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
-                    <Box borderBottom="1px solid var(--exxpenses-main-border-color)" marginBottom="10px" width="fit-content">
+                    <Box marginBottom="9px" marginRight="6px" borderRadius="8px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
+                    <Box marginBottom="12px" width="fit-content">
                         <Box>
                             {c.category}
                         </Box>
                         <b>{c.currency} {c.price}</b> ({c.percentage}%)
                     </Box>
                 </Box>
-
             )}
         </Box>
     )
 
     return (
-        <Box sx={{ background: "var(--exxpenses-main-bg-color)" }} paddingX="12px" paddingY="8px" borderRadius="8px">
+        <Box>
             <Box marginBottom="5px">
-                Categories sorted by most expensive
+                Categories
             </Box>
             {content}
         </Box>
@@ -63,8 +66,8 @@ function Statistic({ title, content }: { title: string; content: string }) {
     return (
         <Box width="fit-content">
             <Box display="flex">
-                <Box marginRight="5px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
-                <Box borderBottom="1px solid var(--exxpenses-main-border-color)">
+                <Box marginRight="6px" borderRadius="8px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
+                <Box>
                     <Box>
                         {title}
                     </Box>
@@ -72,7 +75,6 @@ function Statistic({ title, content }: { title: string; content: string }) {
                 </Box>
 
             </Box>
-
         </Box>
     )
 }
@@ -104,17 +106,22 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
 
     return (
         <Box>
-            <Box marginBottom="10px">Stats for this month</Box>
-            <Box marginBottom="10px">
-                <CategoriesPiechart categoryTotals={categoryTotals} />
-                <OrderedCategories categoryTotals={categoryTotals} />
+            <Box sx={{ marginBottom: "10px", fontSize: "20px" }}>
+                <b>Stats this month</b>
             </Box>
-            <Box sx={{ background: "var(--exxpenses-main-bg-color)" }} paddingX="12px" paddingY="8px" borderRadius="8px">
+            <Box sx={{ background: "var(--exxpenses-main-bg-color)" }} borderRadius="8px" marginBottom="12px">
+                <CategoriesPiechart categoryTotals={categoryTotals} />
+            </Box>
+
+            <Box marginBottom="14px">
                 <Box marginBottom="5px">General statistics</Box>
                 <Statistic title="Total" content={`${total.currency} ${total.price}`} />
-                <Box marginY="10px" />
+                <Box marginY="12px" />
                 <Statistic title="Most expensive category" content={`${mostExpensiveCategory.category} (${mostExpensiveCategory.currency} ${mostExpensiveCategory.price})`} />
+            </Box>
 
+            <Box marginBottom="14px">
+                <OrderedCategories categoryTotals={categoryTotals} />
             </Box>
         </Box>
     )
