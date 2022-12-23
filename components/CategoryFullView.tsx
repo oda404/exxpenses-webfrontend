@@ -319,7 +319,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                 </Box>
             </Modal>
 
-            <Box paddingX="110px" paddingY="80px">
+            <Box marginX="auto" width="650px" paddingY="60px">
                 <CardBox>
                     {categoryHeader}
                     <Box fontSize="22px">
@@ -338,14 +338,14 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                     </Box>
                 </CardBox>
 
-                <Box display="flex">
-                    <CardBox width="70%">
+                <Box>
+                    <CardBox>
                         <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
                     </CardBox>
 
                     <Box marginX="10px" />
 
-                    <CardBox width="30%">
+                    <CardBox>
                         <Box marginBottom="10px">
                             Expenses
                         </Box>
