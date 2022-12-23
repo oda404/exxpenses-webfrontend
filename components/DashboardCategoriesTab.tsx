@@ -635,7 +635,7 @@ function DashboardMobileView({
                     />
                 </Box>
             </Modal>
-            <Box padding="4px" width="100%">
+            <Box width="100%">
                 <Stats
                     preferred_currency={preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}
@@ -680,50 +680,77 @@ interface DashboardCategoriesTabProps {
 }
 
 function DashboardFullView({ since, until, expensesMultipleCategories, preferred_currency, focusedCategory, focusCategory, categories }: DashboardCategoriesTabProps) {
+
+    const [newCategory, setNewCategory] = useState<MobileDashboardNewCategoryProps>({ isOpen: false });
+
+    const focusCategoryActual = (name: string) => {
+        const tmp: MobileDashboardNewCategoryProps = {
+            isOpen: true,
+            category: name
+        }
+
+        setNewCategory(tmp);
+    }
+
     return (
         <Box display="flex">
+            <Modal
+                // sx={{ position: "absolute !important", zIndex: "998", background: "rgba(0, 0, 0, 0.3)" }}
+                open={newCategory.isOpen}
+                onClose={() => {
+                    const tmp: MobileDashboardNewCategoryProps = {
+                        isOpen: false,
+                    }
 
-            <Box marginTop="20px">
-                <Box display="flex" flexDirection="column" width="fit-content" marginRight="40px">
-                    <AddNewCategoryCard isMobileView={false} />
-                    <Box mb="20px" />
-                    <AddNewExpenseCard
-                        default_category={focusedCategory}
-                        focusCategory={focusCategory}
+                    setNewCategory(tmp);
+                }}
+                sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center" }}
+            >
+                <Box>
+                    <MobileViewAddNewExpenseCard
+                        close={() => {
+                            const tmp: MobileDashboardNewCategoryProps = {
+                                isOpen: false,
+                            }
+
+                            setNewCategory(tmp);
+                        }}
+                        default_category={newCategory.category}
                         categories={categories}
                     />
                 </Box>
-            </Box>
-
-            <Box width="100%">
+            </Modal>
+            <Box marginX="auto" maxWidth="650px">
                 <Stats
-                    preferred_currency={preferred_currency as string}
+                    preferred_currency={preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}
                     categories={categories}
-                    isMobileView={false}
+                    isMobileView={true}
                 />
 
-                <Box width="100%" marginTop="20px">
-                    <Typography variant="h6" style={{ marginBottom: "10px" }}>
-                        Your categories
-                    </Typography>
-                    <Grid width="100%" container spacing={3}>
+                <MobileViewDashboardButtons default_currency={preferred_currency!} />
+
+                <Box maxWidth="650px" marginTop="15px">
+                    <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
+                        Categories
+                    </Box>
+                    <Grid container spacing={2}>
                         {categories.map((cat, idx) =>
                             <CategoryBox
-                                isMobileView={false}
-                                focusCategory={focusCategory}
-                                key={idx}
                                 category={cat}
                                 expenses={findExpenses(expensesMultipleCategories, cat.name)}
+                                preferred_currency={preferred_currency!}
+                                isMobileView={true}
+                                focusCategory={focusCategoryActual}
                                 since={since}
                                 until={until}
-                                preferred_currency={preferred_currency as string}
+                                key={idx}
                             />
                         )}
                     </Grid>
                 </Box>
             </Box>
-        </Box>
+        </Box >
     )
 }
 
@@ -742,8 +769,13 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = <DashboardFullView {...props} />;
 
     return (
-        <CardBox>
-            {content}
-        </CardBox>
+        <Box>
+            <Box justifyContent="center" display="flex">
+                <CardBox width="fit-content">
+                    {content}
+                </CardBox>
+            </Box>
+
+        </Box>
     )
 }

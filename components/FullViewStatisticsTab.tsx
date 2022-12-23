@@ -1,7 +1,9 @@
 
 
-import { Box, Divider } from "@mui/material";
+import { FormatColorResetRounded } from "@mui/icons-material";
+import { Box, Divider, Link } from "@mui/material";
 import Decimal from "decimal.js";
+import { useState } from "react";
 import { Category, Expense, User } from "../generated/graphql";
 import { CategoryExpenses, MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
@@ -33,6 +35,8 @@ interface OrderedCategoriesProps {
 
 function OrderedCategories({ categoryTotals }: OrderedCategoriesProps) {
 
+    const [entered, setEntered] = useState(-1);
+
     categoryTotals.sort((a, b) => {
         return b.price - a.price;
     });
@@ -40,15 +44,33 @@ function OrderedCategories({ categoryTotals }: OrderedCategoriesProps) {
     let content = (
         <Box width="fit-content">
             {categoryTotals.map((c, idx) =>
-                <Box key={idx} display="flex">
-                    <Box marginBottom="9px" marginRight="6px" borderRadius="8px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
+                <Link
+                    sx={{
+                        textDecoration: "none",
+                        "&:hover": {
+                            textDecoration: "none"
+                        }
+                    }}
+                    href={"/category/" + c.category}
+                    key={idx}
+                    display="flex"
+                    onMouseEnter={() => { setEntered(idx) }}
+                    onMouseLeave={() => { setEntered(-1) }}
+                >
+                    <Box
+                        marginBottom="9px"
+                        marginRight="6px"
+                        borderRadius="8px"
+                        width="4px"
+                        sx={{ background: entered === idx ? "var(--exxpenses-dark-green)" : "var(--exxpenses-light-green)" }}
+                    />
                     <Box marginBottom="12px" width="fit-content">
                         <Box>
                             {c.category}
                         </Box>
                         <b>{c.currency} {c.price}</b> ({c.percentage}%)
                     </Box>
-                </Box>
+                </Link>
             )}
         </Box>
     )
@@ -122,9 +144,34 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
                 <Statistic title="Most expensive category" content={`${mostExpensiveCategory.category} (${mostExpensiveCategory.currency} ${mostExpensiveCategory.price})`} />
             </Box>
 
-            <Box marginBottom="14px">
-                <OrderedCategories categoryTotals={categoryTotals} />
-            </Box>
+
+        </Box>
+    )
+}
+
+function CategoriesThisMonth({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
+
+    let workingExpenses: Expense[] = [];
+    expensesMultipleCategories.categories.forEach(category => {
+
+        const tmp = categories?.find(c => c.name === category.name);
+        if (!tmp || tmp.default_currency !== user.preferred_currency)
+            return;
+
+        workingExpenses.push(...category.expenses);
+    });
+
+    let total = expensesToTotal(workingExpenses, user.preferred_currency as string);
+
+
+    let categoryTotals: CategoryTotal[] = [];
+    expensesMultipleCategories.categories.forEach(c => {
+        categoryTotals.push(expensesToCategoryTotal(c.expenses, categories.find(cat => cat.name === c.name)!, total.price))
+    })
+
+    return (
+        <Box>
+            <OrderedCategories categoryTotals={categoryTotals} />
         </Box>
     )
 }
@@ -135,12 +182,16 @@ interface StatisticsTabProps {
     expensesMultipleCategories: MultiCategoryExpenses;
 }
 
-export default function MobileViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
+export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
     return (
         <Box>
             <Box display="flex">
-                <CardBox width="100%">
+                <CardBox width="70%">
                     <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
+                </CardBox>
+                <Box marginX="10px" />
+                <CardBox width="30%">
+                    <CategoriesThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
             </Box>
         </Box>

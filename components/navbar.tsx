@@ -10,6 +10,7 @@ import Link from "@mui/material/Link"
 import styles from "../styles/Navbar.module.css"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
+import useShowMobileView from "../utils/useShowMobileView";
 
 interface ContainerProps {
     children: React.ReactNode;
@@ -37,15 +38,20 @@ export default function Navbar({ username }: NavbarProps) {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const router = useRouter();
 
+    const isMobileView = useShowMobileView();
+
     let buttonContent: React.ReactNode;
 
     if (username !== undefined) {
         /* If we are logged in */
         buttonContent = (
-            <Link sx={{ textDecoration: "none !important" }} alignItems="center" justifyContent="center" className={styles.signInButton} href="/login" >
-                <AccountCircleIcon sx={{ width: "22px", height: "22px", marginRight: "8px" }} />
-                <Box fontSize="14px">{username}</Box>
-            </Link >
+            <Box>
+                <Link sx={{ textDecoration: "none !important" }} alignItems="center" justifyContent="center" className={styles.signInButton} href="/account" >
+                    <AccountCircleIcon sx={{ width: "22px", height: "22px", marginRight: "8px" }} />
+                    <Box fontSize="14px">{username}</Box>
+                </Link>
+            </Box>
+
         );
     }
     else if (router.pathname == "/register") {

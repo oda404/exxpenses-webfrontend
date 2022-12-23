@@ -7,6 +7,7 @@ import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
 import useShowMobileView from "../utils/useShowMobileView";
 import CardBox from "./CardBox";
 import CategoriesPiechart from "./CategoriesPiechart";
+import FullViewStatisticsTab from "./FullViewStatisticsTab";
 import MobileViewStatisticsTab from "./MobileViewStatisticsTab";
 
 interface StatisticsTabProps {
@@ -23,7 +24,7 @@ export default function StatisticsTab({ user, categories, expensesMultipleCatego
     if (isMobileView)
         content = <MobileViewStatisticsTab user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
     else
-        content = <Box></Box>
+        content = <FullViewStatisticsTab user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
 
     return (
         <Box>

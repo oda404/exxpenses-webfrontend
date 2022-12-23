@@ -72,12 +72,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
         content = (
             <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: isMobileView ? "10px" : "40px" }}>
                 <Box display="flex" flexDirection="column" height="100%" width="100%">
-                    <Box display="flex">
-                        <TabHeaderButton active={dashboardActiveTab === "Home"} name="Home" setActive={setDashboardTab} />
-                        <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
-                        <Box ml="auto" />
-                    </Box>
-                    <Divider sx={{ width: "100%", backgroundColor: "var(--exxpenses-main-border-color)" }} />
                     {activeTab}
                 </Box>
             </Box>

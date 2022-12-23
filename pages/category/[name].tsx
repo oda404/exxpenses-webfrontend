@@ -12,9 +12,6 @@ import FullViewCategory from "../../components/CategoryFullView";
 import MobileViewCategory from "../../components/MobileViewCategory";
 import Head from "next/head";
 
-/* What in the living fuck ?!:)dwdA!@W! */
-
-
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Category({ ssr }: CategoryProps) {

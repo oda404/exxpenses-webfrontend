@@ -19,7 +19,7 @@ function StatCard({ isMobileView, text, content }: StatCardProps) {
             <Grid sx={{ overflow: "hidden" }} item>
                 <Paper className={styles.statCardPaper} sx={{ height: "fit-content !important" }}>
                     <Box display="flex">
-                        <Box sx={{ fontSize: "20px" }}>
+                        <Box sx={{ fontSize: "21px" }}>
                             <b>{content}</b>
                         </Box>
                         <Typography sx={{ marginLeft: "6px", marginTop: "9px", fontSize: "12px" }}>

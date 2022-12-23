@@ -98,7 +98,7 @@ export default function CategoryBox({ since, until, preferred_currency, category
                         </Box>
                     </Box>
 
-                    <Box style={{}} marginLeft="auto" marginRight="auto" width="90%">
+                    <Box style={{}} marginLeft="auto" marginRight="auto" width="70%">
                         <MinifiedExpenseChart since={since} until={until} dailyTotals={dailyExpenses} />
                     </Box>
 
