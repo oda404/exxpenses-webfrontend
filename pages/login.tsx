@@ -35,8 +35,6 @@ export default function Login({ }: LoginProps) {
                 />
             </Head>
 
-            <Navbar />
-
             <Box height="70vh" display="flex" alignItems="center" justifyContent="center">
                 <Box
                     display="flex"

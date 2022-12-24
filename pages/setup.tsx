@@ -253,7 +253,6 @@ export default function Setup({ ssr }: DashboardProps) {
                     key="desc"
                 />
             </Head>
-            <Navbar username={lastname} />
             <Box>
 
                 <Box
