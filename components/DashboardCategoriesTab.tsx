@@ -731,7 +731,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
 
                 <MobileViewDashboardButtons default_currency={preferred_currency!} />
 
-                <Box maxWidth="480px" marginTop="15px">
+                <Box maxWidth="480px" width="480px" marginTop="15px">
                     <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
                         Categories
                     </Box>
@@ -768,7 +768,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = (
             <Box padding="10px" paddingTop="60px" justifyContent="center" display="flex" flexDirection="column">
                 <MobileViewNavigationBar />
-                <CardBox width="fit-content">
+                <CardBox>
                     <DashboardMobileView {...props} />
                 </CardBox>
             </Box>
