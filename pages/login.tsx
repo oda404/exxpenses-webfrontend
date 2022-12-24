@@ -84,7 +84,6 @@ export default function Login({ }: LoginProps) {
                                     }
 
                                     window.location.assign("/dashboard");
-                                    window.location.reload();
                                 }}
                             >
                                 {({ handleSubmit, isSubmitting, errors }) => (

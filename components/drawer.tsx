@@ -27,7 +27,6 @@ function DrawerLink({ name, href, icon }: DrawerLinkProps) {
                 className={styles.drawerButton}
                 onClick={() => {
                     window.location.assign(href);
-                    window.location.reload();
                 }}
             >
                 {icon}
@@ -75,7 +74,6 @@ export default function CustomDrawer({ isOpen, setState, username }: CustomDrawe
                     <Button
                         onClick={() => {
                             window.location.assign("/");
-                            window.location.reload();
                         }}
                     >
                         <Box fontSize="16px" className={styles.drawerButtonText}>Exxpenses</Box>

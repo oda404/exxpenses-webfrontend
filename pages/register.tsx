@@ -109,7 +109,6 @@ export default function Register({ }: RegisterProps) {
                                     }
 
                                     window.location.assign("/login");
-                                    window.location.reload();
                                 }}
                             >
                                 {({ handleSubmit, isSubmitting, errors }) => (
