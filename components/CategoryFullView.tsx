@@ -298,7 +298,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
 
     let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
     return (
-        <Box position="relative" minHeight="100vh">
+        <Box position="relative" paddingTop="40px" minHeight="100vh">
             <Navbar username={user.lastname} />
 
             <Modal

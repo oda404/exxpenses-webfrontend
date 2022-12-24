@@ -1,12 +1,7 @@
-import { Box, Divider } from "@mui/material";
-import Decimal from "decimal.js";
-import { Category, Expense, User } from "../generated/graphql";
-import { CategoryExpenses, MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
-import CategoryTotal from "../utils/CategoryTotal";
-import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
+import { Box } from "@mui/material";
+import { Category, User } from "../generated/graphql";
+import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import useShowMobileView from "../utils/useShowMobileView";
-import CardBox from "./CardBox";
-import CategoriesPiechart from "./CategoriesPiechart";
 import FullViewStatisticsTab from "./FullViewStatisticsTab";
 import MobileViewStatisticsTab from "./MobileViewStatisticsTab";
 

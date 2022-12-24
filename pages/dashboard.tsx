@@ -14,7 +14,6 @@ import expensesGetMultipleCategories, { MultiCategoryExpenses } from "../gql/ssr
 import getNowUserOffset from "../utils/getNowWithUserOffset";
 import Cookies from "universal-cookie";
 import Head from "next/head";
-import StatisticsTab from "../components/StatisticsTab";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -33,50 +32,16 @@ export default function Dashboard({ ssr }: DashboardProps) {
     const categories = ssr.categoriesGet.categories as Category[];
     const expensesMultipleCategories = ssr.expensesGetMultipleCategoriesGet as MultiCategoryExpenses;
 
-    let activeTab: any;
-    switch (dashboardActiveTab) {
-        case "Home":
-            activeTab =
-                <DashboardCategoriesTab
-                    preferred_currency={ssr?.userGet.user?.preferred_currency}
-                    focusCategory={setFocusedCategory}
-                    focusedCategory={focusedCategory}
-                    expensesMultipleCategories={ssr.expensesGetMultipleCategoriesGet}
-                    categories={ssr.categoriesGet.categories as Category[]}
-                    since={ssr.since}
-                    until={ssr.until}
-                />
-            break;
-
-        case "Statistics":
-            activeTab = <StatisticsTab user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
-            break;
-        default:
-            activeTab = null;
-    }
-
-    let content: any;
-    if (isMobileView) {
-        content = (
-            <Box padding="10px">
-                <Box marginTop="25px" display="flex">
-                    <TabHeaderButton active={dashboardActiveTab === "Home"} name="Home" setActive={setDashboardTab} />
-                    <TabHeaderButton active={dashboardActiveTab === "Statistics"} name="Statistics" setActive={setDashboardTab} />
-                    <Box ml="auto" />
-                </Box>
-                {activeTab}
-            </Box>
-        )
-    }
-    else {
-        content = (
-            <Box marginTop="60px" display="flex" flexDirection="row" sx={{ paddingX: isMobileView ? "10px" : "40px" }}>
-                <Box display="flex" flexDirection="column" height="100%" width="100%">
-                    {activeTab}
-                </Box>
-            </Box>
-        );
-    }
+    let content =
+        <DashboardCategoriesTab
+            preferred_currency={user.preferred_currency!}
+            focusCategory={setFocusedCategory}
+            focusedCategory={focusedCategory}
+            expensesMultipleCategories={expensesMultipleCategories}
+            categories={categories}
+            since={ssr.since}
+            until={ssr.until}
+        />
 
     return (
         <Box position="relative" minHeight="100vh">
@@ -90,7 +55,9 @@ export default function Dashboard({ ssr }: DashboardProps) {
             </Head>
 
             <Navbar username={user.lastname} />
-            {content}
+            <Box>
+                {content}
+            </Box>
             <Footer />
         </Box>
     );
@@ -113,7 +80,7 @@ export async function getServerSideProps({ req }: any) {
 
     /* If the user doesnt have any categories redirect to setup */
     const categoriesData = await categoriesGet(req);
-    if (categoriesData.categories?.length === 0) {
+    if (userData.user.preferred_currency === undefined || categoriesData.categories?.length === 0) {
         return {
             redirect: {
                 permanent: false,

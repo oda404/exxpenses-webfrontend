@@ -48,8 +48,6 @@ interface CustomDrawerProps {
 
 export default function CustomDrawer({ isOpen, setState, username }: CustomDrawerProps) {
 
-    const [userLogout] = useMutation(UserLogoutDocument);
-
     return (
         <Drawer
             open={isOpen}

@@ -13,6 +13,7 @@ import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories"
 import CategoryBox from "./CategoryBox";
 import Stats from "./Stats";
 import CardBox from "./CardBox";
+import MobileViewNavigationBar from "./MobileViewNavigationBar";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -720,7 +721,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
                     />
                 </Box>
             </Modal>
-            <Box marginX="auto" maxWidth="650px">
+            <Box marginX="auto" maxWidth="480px">
                 <Stats
                     preferred_currency={preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}
@@ -730,7 +731,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
 
                 <MobileViewDashboardButtons default_currency={preferred_currency!} />
 
-                <Box maxWidth="650px" marginTop="15px">
+                <Box maxWidth="480px" marginTop="15px">
                     <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
                         Categories
                     </Box>
@@ -764,18 +765,26 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
 
     // XSS vulnerability ? i dont think so....
     if (mobileView)
-        content = <DashboardMobileView {...props} />;
+        content = (
+            <Box padding="10px" paddingTop="60px" justifyContent="center" display="flex" flexDirection="column">
+                <MobileViewNavigationBar />
+                <CardBox width="fit-content">
+                    <DashboardMobileView {...props} />
+                </CardBox>
+            </Box>
+        )
     else
-        content = <DashboardFullView {...props} />;
+        content = (
+            <Box padding="100px" justifyContent="center" display="flex">
+                <CardBox width="fit-content">
+                    <DashboardFullView {...props} />
+                </CardBox>
+            </Box>
+        )
 
     return (
         <Box>
-            <Box justifyContent="center" display="flex">
-                <CardBox width="fit-content">
-                    {content}
-                </CardBox>
-            </Box>
-
+            {content}
         </Box>
     )
 }

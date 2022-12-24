@@ -132,7 +132,7 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
             <Box sx={{ marginBottom: "10px", fontSize: "20px" }}>
                 <b>Stats this month</b>
             </Box>
-            <Box sx={{ background: "var(--exxpenses-main-bg-color)" }} borderRadius="8px" marginBottom="12px">
+            <Box marginBottom="12px">
                 <CategoriesPiechart categoryTotals={categoryTotals} />
                 {/* <CategoriesLinechart preferred_currency={user.preferred_currency} expensesMultipleCategories={expensesMultipleCategories} /> */}
             </Box>
@@ -145,7 +145,7 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
             </Box>
 
 
-        </Box>
+        </Box >
     )
 }
 
@@ -184,13 +184,13 @@ interface StatisticsTabProps {
 
 export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
     return (
-        <Box>
-            <Box display="flex">
-                <CardBox width="70%">
+        <Box marginTop="40px">
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <CardBox width="500px">
                     <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
                 <Box marginX="10px" />
-                <CardBox width="30%">
+                <CardBox width="500px">
                     <CategoriesThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
             </Box>

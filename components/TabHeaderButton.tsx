@@ -2,18 +2,19 @@ import { Box, Button } from "@mui/material";
 import styles from "../styles/TabHeaderButton.module.css";
 import CloseIcon from '@mui/icons-material/Close';
 import ButtonUnstyled from '@mui/base/ButtonUnstyled';
+import Link from "next/link";
 
 interface TabHeaderButtonProps {
     name: string;
     setActive: (name: string) => void;
     active: boolean;
+    href: string;
 }
 
-export default function TabHeaderButton({ active, name, setActive }: TabHeaderButtonProps) {
+export default function TabHeaderButton({ href, active, name, setActive }: TabHeaderButtonProps) {
     return (
-        <Button
-            className={styles.tabHeaderButton}
-            onClick={() => setActive(name)}
+        <Link
+            href={href}
             sx={{
                 background: active ? "var(--exxpenses-second-bg-color)" : "none",
                 "&:hover": {
@@ -24,7 +25,7 @@ export default function TabHeaderButton({ active, name, setActive }: TabHeaderBu
             }}
         >
             {name}
-        </Button>
+        </Link>
     )
 }
 

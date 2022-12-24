@@ -9,6 +9,7 @@ import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
 import CardBox from "./CardBox";
 import CategoriesLinechart from "./CategoriesLinechart";
 import CategoriesPiechart from "./CategoriesPiechart";
+import MobileViewNavigationBar from "./MobileViewNavigationBar";
 
 
 function expensesToCategoryTotal(expenses: Expense[], category: Category, totalPrice: number) {
@@ -110,9 +111,8 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
             <Box sx={{ marginBottom: "10px", fontSize: "20px" }}>
                 <b>Stats this month</b>
             </Box>
-            <Box sx={{ background: "var(--exxpenses-main-bg-color)" }} borderRadius="8px" marginBottom="12px">
+            <Box marginBottom="12px">
                 <CategoriesPiechart categoryTotals={categoryTotals} />
-                {/* <CategoriesLinechart preferred_currency={user.preferred_currency} expensesMultipleCategories={expensesMultipleCategories} /> */}
             </Box>
 
             <Box marginBottom="14px">
@@ -138,11 +138,10 @@ interface StatisticsTabProps {
 export default function MobileViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
     return (
         <Box>
-            <Box display="flex">
-                <CardBox width="100%">
-                    <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
-                </CardBox>
-            </Box>
+            <MobileViewNavigationBar />
+            <CardBox>
+                <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
+            </CardBox>
         </Box>
     )
 }

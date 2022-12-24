@@ -90,7 +90,7 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
     }
 
     return (
-        <Box paddingX="14px" paddingY="10px">
+        <Box>
             <Box>{category.name}: <b>{category.currency} {category.total}</b></Box>
 
             <Box display="flex" alignItems="center" height="220px" width="100%">
