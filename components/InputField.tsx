@@ -18,6 +18,7 @@ interface InputFieldProps {
 
 export default function InputField({ bg, label, type, name, field, is_error, params, handleChange }: InputFieldProps) {
 
+    const [focused, setFocused] = useState(false);
     const [isLabelShown, setLabel] = useState(true);
     const [passwordType, setPasswordType] = useState<"password" | "text">("password");
 
@@ -31,6 +32,12 @@ export default function InputField({ bg, label, type, name, field, is_error, par
         show = false;
     }
 
+    let borderColor: string = "#666666";
+    if (is_error)
+        borderColor = "var(--exxpenses-main-error-color)";
+    else if (focused)
+        borderColor = "var(--exxpenses-dark-green)"
+
     return (
         <Box
             display="flex"
@@ -40,7 +47,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 marginBottom: "5px",
                 borderWidth: "1px",
                 borderStyle: "solid",
-                borderColor: is_error ? "var(--exxpenses-main-error-color)" : "#666666",
+                borderColor: borderColor,
                 borderRadius: "6px",
                 padding: "1px"
             }}
@@ -64,6 +71,8 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 name={name}
                 {...field}
                 {...params}
+                onFocusCapture={() => { setFocused(true); }}
+                onBlurCapture={() => { setFocused(false); }}
                 className={styles.inputField}
                 autoComplete="off"
                 style={{ background: bg ? bg : "var(--exxpenses-main-bg-color)" }}

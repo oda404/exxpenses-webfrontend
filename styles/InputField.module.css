@@ -65,7 +65,7 @@ className={styles.inputField} */
     padding-left: 4px;
     padding-right: 4px;
     pointer-events: none;
-    transition: 0.2s ease-in-out;
+    transition: 0.1s ease-in-out;
     font-size: 15px;
     transform: none;
 }
