@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import CustomDrawer from "./drawer"
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import Divider from "@mui/material/Divider"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
@@ -15,6 +15,106 @@ import { useMutation } from "@apollo/client";
 import { UserLogoutDocument } from "../generated/graphql";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+
+function SidebarUserBox({ username }: { username: string; }) {
+
+    const [expanded, setExpanded] = useState(false);
+    const [userLogout] = useMutation(UserLogoutDocument);
+
+    let expandedContent = (
+        <Stack marginTop="10px" spacing="4px" alignItems="center" width="100%" padding="4px" display="flex" flexDirection="column">
+            <Link
+                href="/preferences"
+                sx={{
+                    textDecoration: "none",
+                    color: "var(--exxpenses-main-color)",
+                    width: "100%",
+                    fontSize: "14px",
+                    textAlign: "center",
+                    borderRadius: "4px",
+                    "&:hover": {
+                        textDecoration: "none",
+                        background: "var(--exxpenses-main-button-hover-bg-color)"
+                    }
+                }}
+            >
+                Preferences
+            </Link>
+            <Box sx={{ height: "1px", width: "100%", background: "var(--exxpenses-main-border-color)" }} />
+            <Button
+                sx={{
+                    fontSize: "14px",
+                    textTransform: "none",
+                    padding: "0",
+                    display: "inline-block",
+                    margin: "0",
+                    color: "var(--exxpenses-main-color)",
+                    width: "100%",
+                    "&:hover": {
+                        background: "var(--exxpenses-main-button-hover-bg-color)"
+                    }
+                }}
+                onClick={async () => {
+                    await userLogout();
+                    window.location.reload()
+                }}
+            >
+                Log out
+            </Button>
+        </Stack>
+    );
+
+    return (
+        <Box
+            sx={{ background: "var(--exxpenses-second-bg-color)", borderRadius: "8px" }}
+            width="174px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+        >
+            <Button
+                fullWidth
+                sx={{
+                    display: "flex",
+                    borderRadius: "12px",
+                    padding: "8px",
+                    textDecoration: "none",
+                    background: expanded ? "var(--exxpenses-main-button-hover-bg-color)" : "none",
+                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+                    "&:hover": {
+                        background: expanded ? "none" : "var(--exxpenses-main-button-hover-bg-color)",
+                        textDecoration: "none",
+                        cursor: "pointer"
+                    },
+                }}
+                onClick={() => { setExpanded(!expanded) }}
+            >
+                <AccountCircleIcon sx={{ width: "20px", height: "20px", marginRight: "8px" }} />
+                <Box fontSize="14px">{username}</Box>
+            </Button>
+            {expanded ? expandedContent : null}
+        </Box >
+    )
+}
+
+interface SidebarProps {
+    isMobileView: boolean;
+    username: string;
+    router: NextRouter;
+}
+
+function Sidebar({ username, router, isMobileView }: SidebarProps) {
+    return (
+        <Box display={isMobileView ? "none" : "initial"} borderRadius="8px" margin="20px" marginTop="120px" left="0" top="0" width="200px" height="fit-content" position="absolute">
+            <Stack width="150px" spacing={1}>
+                <SidebarUserBox username={username} />
+                <Box marginTop="10px" />
+                <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
+                <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" icon={<ShowChartIcon sx={{ width: "20px", height: "20px" }} />} />
+            </Stack>
+        </Box>
+    )
+}
 
 interface UserDropdownButtonProps {
     title: string;
@@ -214,35 +314,7 @@ export default function Navbar({ username }: NavbarProps) {
     return (
         <Box sx={{ paddingLeft: "20px", paddingRight: "20px" }}>
             <CustomDrawer username={username} isOpen={drawerOpen} setState={setDrawerOpen} />
-            <Box display={isMobileView ? "none" : "initial"} borderRadius="8px" margin="20px" marginTop="120px" left="0" top="0" width="200px" height="fit-content" position="absolute">
-                <Stack width="150px" spacing={1}>
-                    <Box width="174px">
-                        <Button
-                            fullWidth
-                            sx={{
-                                display: "flex",
-                                borderRadius: "12px",
-                                padding: "8px",
-                                background: "var(--exxpenses-second-bg-color)",
-                                textDecoration: "none",
-                                "&:hover": {
-                                    background: "var(--exxpenses-main-button-hover-bg-color)",
-                                    textDecoration: "none",
-                                    cursor: "pointer"
-                                },
-                            }}
-                        >
-                            <AccountCircleIcon sx={{ width: "20px", height: "20px", marginRight: "8px" }} />
-                            <Box fontSize="14px">{username}</Box>
-                        </Button>
-                    </Box>
-                    <Box marginTop="10px" />
-
-                    <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
-                    <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" icon={<ShowChartIcon sx={{ width: "20px", height: "20px" }} />} />
-                </Stack>
-
-            </Box>
+            <Sidebar username={username} router={router} isMobileView={isMobileView} />
             <Box display={!isMobileView ? "none" : "flex"} className={styles.navbar} >
                 <Button
                     className={styles.drawerButton}
