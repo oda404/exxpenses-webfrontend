@@ -6,7 +6,7 @@
   /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
   color: var(--exxpenses-main-color);
   text-transform: none;
-  height: 40px;
+  height: 34px;
 }
 
 .loginButton:hover {

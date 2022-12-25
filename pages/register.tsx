@@ -35,26 +35,23 @@ export default function Register({ }: RegisterProps) {
                     justifyContent="center"
                     marginX="auto"
                     padding="22px"
-                    border={showMobileView ? "none" : "1px var(--exxpenses-main-border-color) solid"}
                     width="fit-content"
                     borderRadius="8px"
-                    boxShadow={showMobileView ? "none" : "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"}
                 >
                     <Box display="flex" flexDirection="column" alignItems="center">
-                        <Stack spacing={20}>
+                        <Box textAlign="center" marginBottom="20px">
                             <Box
                                 color={'gray.100'}
                                 lineHeight={1.1}
                                 fontSize="24px"
-                                sx={{ marginBottom: "20px" }}
                             >
-                                Sign up for exxpenses!
+                                Sign up for Exxpenses!
                             </Box>
-                        </Stack>
+                        </Box>
                         <Box width="320px">
                             <Formik
-                                initialValues={{ firstname: "", lastname: "", email: "", password: "" }}
-                                onSubmit={async ({ firstname, lastname, email, password }, actions) => {
+                                initialValues={{ firstname: "", lastname: "", email: "", password: "", confirm_password: "" }}
+                                onSubmit={async ({ firstname, lastname, email, password, confirm_password }, actions) => {
                                     if (!firstname || firstname.length === 0) {
                                         actions.setFieldError("firstname", "The firstname is required!");
                                         return;
@@ -84,6 +81,11 @@ export default function Register({ }: RegisterProps) {
 
                                     if (!password || password.length === 0) {
                                         actions.setFieldError("password", "The password is required!");
+                                        return;
+                                    }
+
+                                    if (password !== confirm_password) {
+                                        actions.setFieldError("confirm_password", "The passwords don't match!");
                                         return;
                                     }
 
@@ -144,6 +146,14 @@ export default function Register({ }: RegisterProps) {
                                                 <Box marginTop="18px">
                                                     <InputField is_error={errors.password !== undefined} field={field} type="password" label="Password" name="password" />
                                                     <ErrorMessage name="password" />
+                                                </Box>
+                                            )}
+                                        </Field>
+                                        <Field name="confirm_password">
+                                            {({ field }: FieldProps) => (
+                                                <Box marginTop="18px">
+                                                    <InputField is_error={errors.confirm_password !== undefined} field={field} type="password" label="Confirm password" name="confirm_password" />
+                                                    <ErrorMessage name="confirm_password" />
                                                 </Box>
                                             )}
                                         </Field>
