@@ -2,11 +2,9 @@ import { InferGetServerSidePropsType } from "next";
 import Navbar from "../components/navbar";
 import "../styles/Dashboard.module.css"
 import { useState } from "react";
-import TabHeaderButton from "../components/TabHeaderButton";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
-import { Box, Divider } from "@mui/material";
+import { Box } from "@mui/material";
 import { Category, User } from "../generated/graphql";
-import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 import userGet from "../gql/ssr/userGet";
 import categoriesGet from "../gql/ssr/categoriesGet";
@@ -19,14 +17,7 @@ type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Dashboard({ ssr }: DashboardProps) {
 
-    const [dashboardActiveTab, setDashboardActiveTab] = useState<string | null>("Home");
     const [focusedCategory, setFocusedCategory] = useState<string | undefined>("");
-
-    const isMobileView = useShowMobileView();
-
-    const setDashboardTab = (name: string | null) => {
-        setDashboardActiveTab(name);
-    }
 
     const user = ssr.userGet.user as User;
     const categories = ssr.categoriesGet.categories as Category[];

@@ -9,7 +9,6 @@ import { UserGetQuery, UserGetDocument, CategoriesGetDocument, CategoriesGetQuer
 import apolloClient from "../utils/apollo-client";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import styles from "../styles/Setup.module.css";
-import Navbar from "../components/navbar";
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Head from "next/head";
@@ -274,7 +273,6 @@ export default function Setup({ ssr }: DashboardProps) {
                                 grayed_out={preferred_currency !== null}
                             />
                             <AddFirstCategoryCard
-                                id="addFirstCategoryBox"
                                 preferred_currency={preferred_currency ? preferred_currency : ""}
                                 grayed_out={preferred_currency === null}
                             />

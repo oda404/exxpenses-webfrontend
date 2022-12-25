@@ -1,7 +1,6 @@
 
 import React, { useState } from "react";
 import CustomDrawer from "./drawer"
-import { BiUserCircle } from "react-icons/bi"
 import { useRouter } from "next/router";
 import Divider from "@mui/material/Divider"
 import Box from "@mui/material/Box"
@@ -11,10 +10,9 @@ import styles from "../styles/Navbar.module.css"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import useShowMobileView from "../utils/useShowMobileView";
-import { Dialog, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useMutation } from "@apollo/client";
 import { UserLogoutDocument } from "../generated/graphql";
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 

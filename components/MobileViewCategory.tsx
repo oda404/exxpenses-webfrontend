@@ -1,9 +1,9 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Stack, Typography, Box, Divider } from "@mui/material";
+import { Button, IconButton, Stack, Typography, Box } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { User, Expense, CategoryEditDocument, Category, ExpenseAddDocument } from "../generated/graphql";
-import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
+import expensesToTotal from "../utils/expensesToTotal";
 import CategoryTabExpense from "./CategoryTabExpense";
 import Footer from "./Footer";
 import InputField from "./InputField";
@@ -11,14 +11,10 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import Navbar from "./navbar";
-import dynamic from "next/dynamic";
 import styles from "../styles/Category.module.css"
 import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
 import { useRouter } from "next/router";
-import Decimal from "decimal.js";
-import addFloats from "../utils/addFloats";
-import daysBetweenDates from "../utils/daysBetweenDates";
-import expensesToDailyTotals, { DailyExpenses } from "../utils/expensesToDaily";
+import expensesToDailyTotals from "../utils/expensesToDaily";
 import CategoryStatistics from "./CategoryStatistics";
 
 interface AddNewExpenseCardProps {

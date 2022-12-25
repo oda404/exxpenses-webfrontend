@@ -1,18 +1,11 @@
 
 import { Dispatch, SetStateAction } from "react";
-import { UserLogoutDocument } from "../generated/graphql";
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
-import Divider from "@mui/material/Divider"
 import Box from "@mui/material/Box"
 import Button from "@mui/material/Button"
 import styles from "../styles/Drawer.module.css"
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Link from "@mui/material/Link"
 import Drawer from "@mui/material/Drawer"
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 
 interface DrawerLinkProps {
     icon: any;

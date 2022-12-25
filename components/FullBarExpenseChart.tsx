@@ -1,6 +1,6 @@
 import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
 import { Backdrop, Box, Button } from "@mui/material";
-import { XAxis, YAxis, ResponsiveContainer, Tooltip, Line, Area, AreaChart } from "recharts";
+import { XAxis, YAxis, ResponsiveContainer, Tooltip, Area, AreaChart } from "recharts";
 import { DailyExpenses } from "../utils/expensesToDaily";
 import { useState } from "react";
 

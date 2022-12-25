@@ -1,8 +1,6 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import styles from "../styles/TabHeaderButton.module.css";
 import CloseIcon from '@mui/icons-material/Close';
-import ButtonUnstyled from '@mui/base/ButtonUnstyled';
-import Link from "next/link";
 
 interface TabHeaderButtonProps {
     name: string;

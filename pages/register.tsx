@@ -1,13 +1,11 @@
 
-import Navbar from "../components/navbar";
-import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldProps, Formik } from "formik";
 import InputField from "../components/InputField";
 import { ApolloQueryResult, useMutation } from "@apollo/client";
 import { UserGetDocument, UserGetQuery, UserRegisterDocument } from "../generated/graphql";
-import { useRouter } from "next/router";
 import apolloClient from "../utils/apollo-client";
 import { InferGetServerSidePropsType } from "next";
-import { Box, Button, CircularProgress, Link, Stack } from "@mui/material";
+import { Box, Button, CircularProgress, Stack } from "@mui/material";
 import styles from "../styles/Register.module.css";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";

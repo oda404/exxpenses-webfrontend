@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 
-
 export default function CardBox(props: any) {
     return (
         <Box

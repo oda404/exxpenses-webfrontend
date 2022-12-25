@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from "@mui/material";
-import { Expense } from "../generated/graphql";
+import { Category, Expense } from "../generated/graphql";
 import CategoryTabExpense from "./CategoryTabExpense";
 
 interface FullViewCategoryExpensesTabProps {

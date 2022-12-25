@@ -1,15 +1,13 @@
 
 
-import { FormatColorResetRounded } from "@mui/icons-material";
-import { Box, Divider, Link } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import Decimal from "decimal.js";
 import { useState } from "react";
 import { Category, Expense, User } from "../generated/graphql";
-import { CategoryExpenses, MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
+import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
-import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
+import expensesToTotal from "../utils/expensesToTotal";
 import CardBox from "./CardBox";
-import CategoriesLinechart from "./CategoriesLinechart";
 import CategoriesPiechart from "./CategoriesPiechart";
 
 

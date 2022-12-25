@@ -1,11 +1,9 @@
 
-import Navbar from "../components/navbar";
 import { ApolloQueryResult, useMutation } from "@apollo/client";
 import { UserGetDocument, UserGetQuery, UserLoginDocument } from "../generated/graphql";
-import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldProps, Formik } from "formik";
 import InputField from "../components/InputField";
-import { useRouter } from "next/router";
-import apolloClient, { cache } from "../utils/apollo-client";
+import apolloClient from "../utils/apollo-client";
 import { InferGetServerSidePropsType } from "next";
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';

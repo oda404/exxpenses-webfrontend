@@ -1,8 +1,7 @@
 import { Box } from "@mui/material";
-import { Area, AreaChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Expense } from "../generated/graphql";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
-import CategoryTotal from "../utils/CategoryTotal";
 import expensesToDailyTotals from "../utils/expensesToDaily";
 
 function CustomizedAxisTick({ x, y, stroke, payload }: any) {
