@@ -11,6 +11,7 @@ import useShowMobileView from "../../utils/useShowMobileView";
 import FullViewCategory from "../../components/CategoryFullView";
 import MobileViewCategory from "../../components/MobileViewCategory";
 import Head from "next/head";
+import Navbar from "../../components/navbar";
 
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -37,7 +38,8 @@ export default function Category({ ssr }: CategoryProps) {
             <Head>
                 <title>{category.name + " | Exxpenses"}</title>
             </Head>
-            {content}
+            <Navbar username={user.lastname} />
+            <Box>{content}</Box>
         </Box>
     )
 }

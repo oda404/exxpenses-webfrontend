@@ -20,7 +20,6 @@ export default function Home({ ssr }: HomeProps) {
           key="desc"
         />
       </Head>
-      <Navbar />
     </Box>
   )
 }

@@ -328,8 +328,6 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
 
     return (
         <Box position="relative" minHeight="100vh">
-            <Navbar username={user.lastname} />
-
             <Box padding="15px" paddingTop="40px">
                 <Box marginTop="25px" display="flex">
                     <Button

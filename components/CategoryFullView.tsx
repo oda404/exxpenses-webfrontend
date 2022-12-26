@@ -294,9 +294,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
 
     let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
     return (
-        <Box position="relative" paddingTop="40px" minHeight="100vh">
-            <Navbar username={user.lastname} />
-
+        <Box paddingTop="40px" minHeight="100vh">
             <Modal
                 // sx={{ position: "absolute !important", zIndex: "998", background: "rgba(0, 0, 0, 0.3)" }
                 open={newCategoryOpen}
