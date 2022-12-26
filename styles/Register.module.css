@@ -1,5 +1,5 @@
 .registerButton {
-    width: 100%;
+    width: 100px;
     margin-top: 10px;
     margin-bottom: 6px;
     background: var(--exxpenses-dark-green);
@@ -15,4 +15,22 @@
 
 .registerForgot {
     text-decoration: none;
+}
+
+.createAccountButton {
+    width: fit-content;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-top: 10px;
+    margin-bottom: 6px;
+    /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
+    color: var(--exxpenses-dark-green);
+    text-transform: none;
+    height: 34px;
+}
+
+.createAccountButton:hover {
+    background: var(--exxpenses-second-bg-color);
+    color: var(--exxpenses-light-green);
 }

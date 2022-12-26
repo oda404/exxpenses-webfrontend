@@ -22,12 +22,12 @@ type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 export default function Login({ }: LoginProps) {
 
     const [userLogin] = useMutation(UserLoginDocument);
-    const showMobileView = useShowMobileView();
+    const isMobileView = useShowMobileView();
 
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Login | Exxpenses</title>
+                <title>Exxpenses</title>
                 <meta
                     name="description"
                     content="Login to your Exxpenses account."
@@ -35,16 +35,16 @@ export default function Login({ }: LoginProps) {
                 />
             </Head>
 
-            <Box height="70vh" display="flex" alignItems="center" justifyContent="center">
+            <Box height="70vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
                     marginX="auto"
-                    padding="26px"
-                    width="fit-content"
+                    padding="50px"
+                    width="100%"
                     borderRadius="8px"
                 >
-                    <Box display="flex" flexDirection="column" alignItems="center">
+                    <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <Stack spacing={20}>
                             <Box
                                 color={'gray.100'}
@@ -55,22 +55,22 @@ export default function Login({ }: LoginProps) {
                                 Sign in
                             </Box>
                         </Stack>
-                        <Box width="320px">
+                        <Box width={isMobileView ? "100%" : "320px"}>
                             <Formik
                                 initialValues={{ email: "", password: "" }}
                                 onSubmit={async (values, actions) => {
 
                                     if (!values.email || values.email.length === 0) {
-                                        actions.setFieldError("email", "The email address is required!")
+                                        actions.setFieldError("email", "Enter your email address.")
                                         return;
                                     }
                                     else if (values.email.match(/^[a-zA-Z0-9.!#$&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === null) {
-                                        actions.setFieldError("email", "Invalid email address!");
+                                        actions.setFieldError("email", "This email address is invalid.");
                                         return;
                                     }
 
                                     if (!values.password || values.password.length === 0) {
-                                        actions.setFieldError("password", "The password is required!");
+                                        actions.setFieldError("password", "Enter your password.");
                                         return;
                                     }
 
@@ -90,7 +90,9 @@ export default function Login({ }: LoginProps) {
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="14px">
                                                     <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
-                                                    <ErrorMessage name="email" />
+                                                    <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                        <ErrorMessage name="email" />
+                                                    </Box>
                                                 </Box>
                                             )}
                                         </Field>
@@ -98,14 +100,23 @@ export default function Login({ }: LoginProps) {
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="18px">
                                                     <InputField is_error={errors.password !== undefined} field={field} type="password" label="Password" name="password" />
-                                                    <ErrorMessage name="password" />
+                                                    <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                        <ErrorMessage name="password" />
+                                                    </Box>
+                                                    <Link href="/password-recover" className={styles.loginForgot}><b style={{ color: "#5f5fe0" }}>Forgot password?</b></Link>
                                                 </Box>
                                             )}
                                         </Field>
-                                        <Button className={styles.loginButton} type="submit">
-                                            {isSubmitting ? <CircularProgress style={{ width: "26px", height: "26px" }} /> : "Sign in"}
-                                        </Button>
-                                        <Link href="/forgotpass" className={styles.loginForgot}>Forgot your password?</Link>
+
+                                        <Box marginTop="20px" display="flex" justifyContent="space-between">
+                                            <Button href="/register" className={styles.createAccountButton}>
+                                                Create account
+                                            </Button>
+                                            <Button className={styles.loginButton} type="submit">
+                                                {isSubmitting ? <CircularProgress style={{ width: "26px", height: "26px" }} /> : "Sign in"}
+                                            </Button>
+                                        </Box>
+
                                     </form>
                                 )}
                             </Formik>
