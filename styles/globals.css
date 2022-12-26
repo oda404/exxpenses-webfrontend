@@ -16,9 +16,8 @@
   --exxpenses-main-color: #c7c9c8;
   --exxpenses-main-button-hover-bg-color: #24262b;
   --exxpenses-main-divider-bg: var(--exxpenses-main-color);
-  --exxpenses-main-error-color: #A50104;
   --exxpenses-main-border-color: #444444;
-  --exxpenses-main-error-color: #f8564e;
+  --exxpenses-main-error-color: #df473f;
 
   --exxpenses-dark-green: #446a50;
   --exxpenses-light-green: #487958;
