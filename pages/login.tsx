@@ -14,6 +14,8 @@ import { CircularProgress } from "@mui/material";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 import Head from "next/head";
+import Cookies from "universal-cookie";
+import userGet from "../gql/ssr/userGet";
 
 type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -113,22 +115,21 @@ export default function Login({ }: LoginProps) {
                 </Box>
             </Box>
             <Footer />
-        </Box>
+        </Box >
     )
 }
 
 export async function getServerSideProps({ req, res }: any) {
-    const { data: { userGet } }: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
-        query: UserGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
 
-    if (userGet.user !== undefined && userGet.user !== null) {
-        return {
-            redirect: {
-                permanent: false,
-                destination: "/dashboard"
+    const cookies = new Cookies(req.headers.cookie);
+    if (cookies.get("user_session") !== undefined) {
+        const userData = await userGet(req);
+        if (userData.user !== undefined && userData.user !== null) {
+            return {
+                redirect: {
+                    permanent: false,
+                    destination: "/dashboard"
+                }
             }
         }
     }
@@ -136,8 +137,6 @@ export async function getServerSideProps({ req, res }: any) {
     return {
         props: {
             ssr: {
-                userResponse: userGet
-
             }
         }
     }
