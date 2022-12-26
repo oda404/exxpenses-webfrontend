@@ -182,8 +182,8 @@ export default function Register({ }: RegisterProps) {
                                         </Box>
 
                                         <Box marginTop="20px" display="flex" justifyContent="space-between">
-                                            <Button href="/register" className={styles.createAccountButton}>
-                                                Create account
+                                            <Button href="/login" className={styles.createAccountButton}>
+                                                Already have an account?
                                             </Button>
 
                                             <Button className={styles.registerButton} type="submit">
