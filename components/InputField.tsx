@@ -32,7 +32,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
         show = false;
     }
 
-    let borderColor: string = "#666666";
+    let borderColor: string = "#444444";
     if (is_error)
         borderColor = "var(--exxpenses-main-error-color)";
     else if (focused)
@@ -55,7 +55,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
             <Box
                 sx={{
                     color: show ? "#797272 !important" : "#c3b2b2 !important",
-                    transform: show ? "none !important" : "translate(-5px, -90%) !important",
+                    transform: show ? "none !important" : "translate(-5px, -80%) !important",
                     background: bg ? bg : "var(--exxpenses-main-bg-color)"
                 }}
                 className={styles.inputFieldLabel}
@@ -75,7 +75,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 onBlurCapture={() => { setFocused(false); }}
                 className={styles.inputField}
                 autoComplete="off"
-                style={{ background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
+                style={{ height: "18px", fontSize: "14px", background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
             />
             {type === "password" ?
                 <Button
@@ -84,7 +84,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                         setPasswordType(passwordType === "password" ? "text" : "password")
                     }}
                 >
-                    {passwordType === "text" ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                    {passwordType === "text" ? <VisibilityIcon sx={{ width: "22px", height: "22px", }} /> : <VisibilityOffIcon sx={{ width: "22px", height: "22px", fill: "#777777" }} />}
                 </Button> : null}
         </Box>
     );
