@@ -7,7 +7,7 @@ export default function Topbar() {
 
     return (
         <Box display="flex" justifyContent={isMobileView ? "normal" : "center"} padding="5px" paddingX="18px" paddingTop="18px" width="auto" borderBottom="1px solid var(--exxpenses-main-border-color)">
-            <a href="/dashboard">
+            <Link href="/dashboard">
                 <svg style={{ marginLeft: isMobileView ? "0px" : '-450px' }} width="130" height="25" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0.76136 15V0.454544H9.53977V2.01704H2.52272V6.93182H9.08522V8.49432H2.52272V13.4375H9.65341V15H0.76136Z" fill="#EDEDED" />
                     <path d="M13.7372 4.09091L16.3508 8.55114L18.9645 4.09091H20.8963L17.3736 9.54545L20.8963 15H18.9645L16.3508 10.767L13.7372 15H11.8054L15.2713 9.54545L11.8054 4.09091H13.7372Z" fill="#EDEDED" />
@@ -21,8 +21,7 @@ export default function Topbar() {
                     <path d="M14.7841 4.09091L17.3977 8.55114L20.0114 4.09091H21.9432L18.4205 9.54545L21.9432 15H20.0114L17.3977 10.767L14.7841 15H12.8523L16.3182 9.54545L12.8523 4.09091H14.7841Z" fill="#487958" />
                     <path d="M25.4841 4.09091L28.0977 8.55114L30.7114 4.09091H32.6432L29.1204 9.54545L32.6432 15H30.7114L28.0977 10.767L25.4841 15H23.5523L27.0182 9.54545L23.5523 4.09091H25.4841Z" fill="#487958" />
                 </svg>
-            </a>
-
+            </Link>
         </Box>
     )
 }
