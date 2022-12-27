@@ -102,8 +102,8 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
                             data={data}
                             cx="50%"
                             cy="50%"
-                            innerRadius={60}
-                            outerRadius={80}
+                            innerRadius={48}
+                            outerRadius={65}
                             fill="var(--exxpenses-light-green)"
                             dataKey="value"
                             onMouseEnter={onPieEnter}
