@@ -182,9 +182,10 @@ interface StatisticsTabProps {
 }
 
 export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
+
     return (
         <Box marginLeft="-210px" display="flex" justifyContent="center" marginTop="20px">
-            <Sidenav username={user.lastname} />
+            <Sidenav firstname={user.firstname} lastname={user.lastname} />
             <Box display="flex" flexDirection="column" alignItems="center">
                 <CardBox width="500px">
                     <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />

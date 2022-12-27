@@ -5,6 +5,7 @@ query UserGet
     {
         user {
             lastname
+            firstname
             preferred_currency
         }
 

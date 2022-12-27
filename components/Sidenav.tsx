@@ -46,14 +46,31 @@ function DrawerLink({ active, name, href, icon }: DrawerLinkProps) {
     )
 }
 
-
-function SidebarUserBox({ username }: { username: string; }) {
+function SidebarUserBox({ firstname, lastname }: { firstname: string; lastname: string }) {
 
     const [expanded, setExpanded] = useState(false);
     const [userLogout] = useMutation(UserLogoutDocument);
 
     let expandedContent = (
-        <Stack marginTop="10px" spacing="4px" alignItems="center" width="100%" padding="4px" display="flex" flexDirection="column">
+        <Stack marginTop="5px" spacing="4px" alignItems="center" width="100%" padding="4px" display="flex" flexDirection="column">
+            <Link
+                sx={{
+                    textDecoration: "none",
+                    color: "var(--exxpenses-main-color)",
+                    width: "100%",
+                    fontSize: "14px",
+                    borderRadius: "4px",
+                    textAlign: "center",
+                    "&:hover": {
+                        textDecoration: "none",
+                    }
+                }}
+            >
+                <Box paddingX="10px">
+                    <b>{firstname} {lastname}</b>
+                </Box>
+            </Link>
+            <Box height="4px" />
             <Link
                 href="/preferences"
                 sx={{
@@ -61,17 +78,19 @@ function SidebarUserBox({ username }: { username: string; }) {
                     color: "var(--exxpenses-main-color)",
                     width: "100%",
                     fontSize: "14px",
-                    textAlign: "center",
                     borderRadius: "4px",
+                    textAlign: "center",
                     "&:hover": {
                         textDecoration: "none",
                         background: "var(--exxpenses-main-button-hover-bg-color)"
                     }
                 }}
             >
-                Preferences
+                <Box paddingX="10px">
+                    Preferences
+                </Box>
             </Link>
-            <Box sx={{ height: "1px", width: "100%", background: "var(--exxpenses-main-border-color)" }} />
+            <Box height="4px" />
             <Button
                 sx={{
                     fontSize: "14px",
@@ -90,7 +109,9 @@ function SidebarUserBox({ username }: { username: string; }) {
                     window.location.reload()
                 }}
             >
-                Log out
+                <Box paddingX="10px">
+                    Sign out
+                </Box>
             </Button>
         </Stack>
     );
@@ -106,12 +127,14 @@ function SidebarUserBox({ username }: { username: string; }) {
             <Button
                 fullWidth
                 sx={{
-                    display: "flex",
                     borderRadius: "12px",
                     padding: "8px",
+                    paddingX: "12px",
                     textDecoration: "none",
                     background: expanded ? "var(--exxpenses-main-button-hover-bg-color)" : "none",
                     boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px",
+                    textAlign: "start !important",
+                    textTransform: "none",
                     "&:hover": {
                         background: expanded ? "none" : "var(--exxpenses-main-button-hover-bg-color)",
                         textDecoration: "none",
@@ -120,8 +143,11 @@ function SidebarUserBox({ username }: { username: string; }) {
                 }}
                 onClick={() => { setExpanded(!expanded) }}
             >
-                <AccountCircleIcon sx={{ width: "20px", height: "20px", marginRight: "8px" }} />
-                <Box fontSize="14px">{username}</Box>
+                <Box display="flex">
+                    <AccountCircleIcon sx={{ width: "20px", height: "20px", marginRight: "8px" }} />
+                    <Box fontSize="14px">Account</Box>
+                </Box>
+
             </Button>
             {expanded ? expandedContent : null}
         </Box >
@@ -129,18 +155,18 @@ function SidebarUserBox({ username }: { username: string; }) {
 }
 
 interface SidenavProps {
-    username: string;
+    firstname: string;
+    lastname: string;
 }
 
-export default function Sidenav({ username }: SidenavProps) {
+export default function Sidenav({ firstname, lastname }: SidenavProps) {
 
     const router = useRouter();
 
     return (
         <Box borderRadius="8px" margin="20px" width="180px" height="fit-content">
             <Stack width="150px" spacing={1}>
-                <SidebarUserBox username={username} />
-                <Box marginTop="10px" />
+                <SidebarUserBox firstname={firstname} lastname={lastname} />
                 <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
                 <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" icon={<ShowChartIcon sx={{ width: "20px", height: "20px" }} />} />
             </Stack>

@@ -14,7 +14,6 @@ import CategoryBox from "./CategoryBox";
 import Stats from "./Stats";
 import CardBox from "./CardBox";
 import MobileViewNavigationBar from "./MobileViewNavigationBar";
-import Navbar from "./navbar";
 import Sidenav from "./Sidenav";
 import Topbar from "./Topbar";
 
@@ -780,7 +779,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
     else
         content = (
             <Box padding="20px" marginLeft="-210px" justifyContent="center" display="flex">
-                <Sidenav username={props.user.lastname} />
+                <Sidenav firstname={props.user.firstname} lastname={props.user.lastname} />
                 <CardBox width="500px">
                     <DashboardFullView {...props} />
                 </CardBox>

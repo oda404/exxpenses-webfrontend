@@ -8,7 +8,6 @@ import expensesToTotal from "../utils/expensesToTotal";
 import Footer from "./Footer";
 import FullViewCategoryExpensesTab from "./FullViewCategoryExpensesTab";
 import InputField from "./InputField";
-import Navbar from "./navbar";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useRouter } from "next/router";
@@ -317,7 +316,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
 
             <Topbar />
             <Box paddingY="20px" marginX="auto" marginLeft="-210px" display="flex" justifyContent="center">
-                <Sidenav username={user.lastname} />
+                <Sidenav firstname={user.firstname} lastname={user.lastname} />
                 <Box width="540px" >
                     <CardBox>
                         {categoryHeader}
