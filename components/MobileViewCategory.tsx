@@ -16,6 +16,7 @@ import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
 import { useRouter } from "next/router";
 import expensesToDailyTotals from "../utils/expensesToDaily";
 import CategoryStatistics from "./CategoryStatistics";
+import Topbar from "./Topbar";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -328,8 +329,9 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
 
     return (
         <Box position="relative" minHeight="100vh">
+            <Topbar />
             <Box padding="15px" paddingTop="40px">
-                <Box marginTop="25px" display="flex">
+                <Box display="flex">
                     <Button
                         className={tabHeaderButtonStyles.tabHeaderButton}
                         sx={{

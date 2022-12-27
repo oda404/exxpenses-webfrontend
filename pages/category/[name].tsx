@@ -38,8 +38,9 @@ export default function Category({ ssr }: CategoryProps) {
             <Head>
                 <title>{category.name + " | Exxpenses"}</title>
             </Head>
-            <Navbar username={user.lastname} />
-            <Box>{content}</Box>
+            <Box>
+                {content}
+            </Box>
         </Box>
     )
 }

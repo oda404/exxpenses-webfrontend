@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import ClearIcon from '@mui/icons-material/Clear';
 import CategoryStatistics from "./CategoryStatistics";
 import CardBox from "./CardBox";
+import Sidenav from "./Sidenav";
+import Topbar from "./Topbar";
 
 interface MobileViewAddNewExpenseCardProps {
     category: Category;
@@ -294,7 +296,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
 
     let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
     return (
-        <Box paddingTop="40px" minHeight="100vh">
+        <Box minHeight="100vh">
             <Modal
                 // sx={{ position: "absolute !important", zIndex: "998", background: "rgba(0, 0, 0, 0.3)" }
                 open={newCategoryOpen}
@@ -313,40 +315,44 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                 </Box>
             </Modal>
 
-            <Box marginX="auto" width="650px" paddingY="60px">
-                <CardBox>
-                    {categoryHeader}
-                    <Box fontSize="22px">
-                        <Box>
-                            <b>{totalExpenses.currency} {totalExpenses.price}</b>
-                        </Box>
-                    </Box>
-
-                    <Box display="flex">
-                        <Box fontSize="16px">
-                            Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
-                        </Box>
-                        <Box marginLeft="auto">
-
-                        </Box>
-                    </Box>
-                </CardBox>
-
-                <Box>
+            <Topbar />
+            <Box paddingY="20px" marginX="auto" marginLeft="-210px" display="flex" justifyContent="center">
+                <Sidenav username={user.lastname} />
+                <Box width="540px" >
                     <CardBox>
-                        <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                        {categoryHeader}
+                        <Box fontSize="22px">
+                            <Box>
+                                <b>{totalExpenses.currency} {totalExpenses.price}</b>
+                            </Box>
+                        </Box>
+
+                        <Box display="flex">
+                            <Box fontSize="16px">
+                                Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
+                            </Box>
+                            <Box marginLeft="auto">
+
+                            </Box>
+                        </Box>
                     </CardBox>
 
-                    <Box marginX="10px" />
+                    <Box>
+                        <CardBox>
+                            <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                        </CardBox>
 
-                    <CardBox>
-                        <Box marginBottom="10px">
-                            Expenses
-                        </Box>
-                        <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
-                    </CardBox>
+                        <Box marginX="10px" />
+
+                        <CardBox>
+                            <Box marginBottom="10px">
+                                Expenses
+                            </Box>
+                            <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
+                        </CardBox>
+                    </Box>
+
                 </Box>
-
             </Box>
 
             <Footer />

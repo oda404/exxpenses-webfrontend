@@ -9,6 +9,7 @@ import CategoryTotal from "../utils/CategoryTotal";
 import expensesToTotal from "../utils/expensesToTotal";
 import CardBox from "./CardBox";
 import CategoriesPiechart from "./CategoriesPiechart";
+import Sidenav from "./Sidenav";
 
 
 function expensesToCategoryTotal(expenses: Expense[], category: Category, totalPrice: number) {
@@ -182,7 +183,8 @@ interface StatisticsTabProps {
 
 export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
     return (
-        <Box marginTop="40px">
+        <Box marginLeft="-210px" display="flex" justifyContent="center" marginTop="20px">
+            <Sidenav username={user.lastname} />
             <Box display="flex" flexDirection="column" alignItems="center">
                 <CardBox width="500px">
                     <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />

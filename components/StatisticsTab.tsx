@@ -4,6 +4,7 @@ import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories"
 import useShowMobileView from "../utils/useShowMobileView";
 import FullViewStatisticsTab from "./FullViewStatisticsTab";
 import MobileViewStatisticsTab from "./MobileViewStatisticsTab";
+import Topbar from "./Topbar";
 
 interface StatisticsTabProps {
     user: User;
@@ -23,6 +24,7 @@ export default function StatisticsTab({ user, categories, expensesMultipleCatego
 
     return (
         <Box>
+            <Topbar />
             {content}
         </Box>
     )

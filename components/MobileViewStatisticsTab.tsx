@@ -136,7 +136,7 @@ interface StatisticsTabProps {
 
 export default function MobileViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
     return (
-        <Box>
+        <Box padding="10px" marginTop="28px">
             <MobileViewNavigationBar />
             <CardBox>
                 <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />

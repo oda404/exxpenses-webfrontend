@@ -47,7 +47,6 @@ export default function MobileViewNavigationBar() {
             <Stack direction="row" spacing={1}>
                 <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" />
                 <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" />
-
             </Stack>
         </Box>
     )

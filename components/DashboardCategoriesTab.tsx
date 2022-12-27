@@ -14,6 +14,9 @@ import CategoryBox from "./CategoryBox";
 import Stats from "./Stats";
 import CardBox from "./CardBox";
 import MobileViewNavigationBar from "./MobileViewNavigationBar";
+import Navbar from "./navbar";
+import Sidenav from "./Sidenav";
+import Topbar from "./Topbar";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -678,6 +681,7 @@ interface DashboardCategoriesTabProps {
     focusCategory: (cat: string | undefined) => void;
     focusedCategory: string | undefined;
     preferred_currency: string | null;
+    user: User;
 }
 
 function DashboardFullView({ since, until, expensesMultipleCategories, preferred_currency, focusedCategory, focusCategory, categories }: DashboardCategoriesTabProps) {
@@ -721,7 +725,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
                     />
                 </Box>
             </Modal>
-            <Box marginX="auto" maxWidth="480px">
+            <Box marginX="auto" maxWidth="500px">
                 <Stats
                     preferred_currency={preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}
@@ -731,7 +735,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
 
                 <MobileViewDashboardButtons default_currency={preferred_currency!} />
 
-                <Box maxWidth="480px" width="480px" marginTop="15px">
+                <Box maxWidth="500px" width="500px" marginTop="15px">
                     <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
                         Categories
                     </Box>
@@ -766,7 +770,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
     // XSS vulnerability ? i dont think so....
     if (mobileView)
         content = (
-            <Box padding="10px" paddingTop="60px" justifyContent="center" display="flex" flexDirection="column">
+            <Box padding="10px" paddingTop="40px" justifyContent="center" display="flex" flexDirection="column">
                 <MobileViewNavigationBar />
                 <CardBox>
                     <DashboardMobileView {...props} />
@@ -775,8 +779,9 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         )
     else
         content = (
-            <Box padding="100px" justifyContent="center" display="flex">
-                <CardBox width="fit-content">
+            <Box padding="20px" marginLeft="-210px" justifyContent="center" display="flex">
+                <Sidenav username={props.user.lastname} />
+                <CardBox width="500px">
                     <DashboardFullView {...props} />
                 </CardBox>
             </Box>
@@ -784,6 +789,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
 
     return (
         <Box>
+            <Topbar />
             {content}
         </Box>
     )

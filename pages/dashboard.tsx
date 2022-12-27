@@ -32,10 +32,11 @@ export default function Dashboard({ ssr }: DashboardProps) {
             categories={categories}
             since={ssr.since}
             until={ssr.until}
+            user={user}
         />
 
     return (
-        <Box position="relative" minHeight="100vh">
+        <Box position="relative" minWidth="100%" minHeight="100vh">
             <Head>
                 <title>Dashboard | Exxpenses</title>
                 <meta
@@ -45,7 +46,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Navbar username={user.lastname} />
             <Box>
                 {content}
             </Box>

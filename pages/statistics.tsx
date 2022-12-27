@@ -30,9 +30,7 @@ export default function Statistics({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Navbar username={user.lastname} />
-
-            <Box padding="10px" paddingTop="60px">
+            <Box>
                 <StatisticsTab user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
             </Box>
 
