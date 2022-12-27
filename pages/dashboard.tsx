@@ -12,6 +12,7 @@ import expensesGetMultipleCategories, { MultiCategoryExpenses } from "../gql/ssr
 import getNowUserOffset from "../utils/getNowWithUserOffset";
 import Cookies from "universal-cookie";
 import Head from "next/head";
+import Logo from "../components/Logo";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -38,7 +39,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
     return (
         <Box position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Dashboard | Exxpenses</title>
+                <title>Exxpenses - Track your day-to-day expenses</title>
                 <meta
                     name="description"
                     content="Overview of your expenses."

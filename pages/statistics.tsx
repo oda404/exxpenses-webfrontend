@@ -3,7 +3,6 @@ import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Cookies from "universal-cookie";
 import Footer from "../components/Footer";
-import Navbar from "../components/navbar";
 import StatisticsTab from "../components/StatisticsTab";
 import { Category } from "../generated/graphql";
 import categoriesGet from "../gql/ssr/categoriesGet";
@@ -22,7 +21,7 @@ export default function Statistics({ ssr }: DashboardProps) {
     return (
         <Box position="relative" minHeight="100vh">
             <Head>
-                <title>Dashboard | Exxpenses</title>
+                <title>Exxpenses - Track your day-to-day expenses</title>
                 <meta
                     name="description"
                     content="Statistics for your expenses."

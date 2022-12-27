@@ -21,7 +21,7 @@ export default function Register({ }: RegisterProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Register | Exxpenses</title>
+                <title>Exxpenses - Create an account</title>
                 <meta
                     name="description"
                     content="Create an Exxpenses account."

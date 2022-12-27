@@ -13,7 +13,7 @@ export default function Home({ ssr }: HomeProps) {
   return (
     <Box width="100vw" height="100vh" bgcolor="var(--exxpenses-main-bg-color)">
       <Head>
-        <title>Exxpenses</title>
+        <title>Exxpenses - Track your day-to-day expenses</title>
         <meta
           name="description"
           content="Track your day-to-day expenses."

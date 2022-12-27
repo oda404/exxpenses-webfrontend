@@ -245,7 +245,7 @@ export default function Setup({ ssr }: DashboardProps) {
     return (
         <Box position="relative" minHeight="100vh" display="flex" flexDirection="column" sx={{ height: "100vh", overflowY: "auto" }}>
             <Head>
-                <title>Setup | Exxpenses</title>
+                <title>Exxpenses - Track your day-to-day expenses</title>
                 <meta
                     name="description"
                     content="Setup your Exxpenses account"

@@ -27,7 +27,7 @@ export default function Login({ }: LoginProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Exxpenses</title>
+                <title>Exxpenses - Log in</title>
                 <meta
                     name="description"
                     content="Login to your Exxpenses account."
