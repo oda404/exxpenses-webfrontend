@@ -52,7 +52,7 @@ export default function MinifiedExpenseChart({ since, until, dailyTotals }: Mini
                         <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
                     </linearGradient>
                 </defs>
-                <Area type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+                <Area type="monotone" dataKey="pv" stroke="var(--exxpenses-light-green)" fillOpacity={1} fill="url(#colorPv)" />
             </AreaChart>
         </ResponsiveContainer>
     )

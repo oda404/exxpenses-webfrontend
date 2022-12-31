@@ -496,23 +496,21 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                 + New category
             </Button>
             <Box display={showAddCategory ? "initial" : "none"}>
-                <Box marginTop="10px" />
-
                 <Box
                     width={"auto"}
                     height="fit-content"
                     display="flex"
                     flexDirection="column"
-                    padding={"6px"}
+                    paddingY="2px"
                     border={"none"}
                     sx={{ borderRadius: "5px" }}
                 >
                     <Box display="flex">
                         <Box sx={{ fontSize: "14px", color: "var(--exxpenses-light-green)" }} marginLeft="6px">
-                            New category
+                            + New category
                         </Box>
-                        <Button onClick={() => setShowAddCategory(false)} sx={{ width: "22px", height: "22px", marginLeft: "auto" }}>
-                            <ClearIcon sx={{ width: "22px", height: "22px" }} />
+                        <Button onClick={() => setShowAddCategory(false)} sx={{ width: "20px", height: "20px", marginLeft: "auto" }}>
+                            <ClearIcon sx={{ width: "20px", height: "20px" }} />
                         </Button>
                     </Box>
 
@@ -548,7 +546,7 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                                 <Box display="flex">
                                     <Field name="name">
                                         {({ field, form }: FieldProps) => (
-                                            <Box marginTop="12px">
+                                            <Box width="75%" marginTop="12px">
                                                 <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="name" label="Name" />
                                                 <ErrorMessage name="name" component="div" />
                                             </Box>
@@ -557,7 +555,7 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                                     <Box marginX="10px" />
                                     <Field name="default_curr">
                                         {({ field }: FieldProps) => (
-                                            <Box marginTop="10px">
+                                            <Box width="25%" marginTop="10px">
                                                 <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="default_curr" label="Currency" />
                                                 <ErrorMessage name="default_curr" component="div" />
                                             </Box>

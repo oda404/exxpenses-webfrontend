@@ -20,8 +20,14 @@ const renderActiveShape = (props: any) => {
 
     return (
         <g>
-            <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+            <text x={cx} y={cy} dy={-14} textAnchor="middle" fill={fill}>
                 {payload.name}
+            </text>
+            <text fontSize="13px" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+                {currency} {value}
+            </text>
+            <text fontSize="13px" x={cx} y={cy} dy={24} textAnchor="middle" fill={fill}>
+                {(percent * 100).toFixed(2)}%
             </text>
             <Sector
                 cx={cx}
@@ -41,12 +47,12 @@ const renderActiveShape = (props: any) => {
                 outerRadius={outerRadius + 10}
                 fill={fill}
             />
-            <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
+            {/* <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
             <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
             <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#ddd">{`${currency} ${value}`}</text>
             <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#999">
                 {`(${(percent * 100).toFixed(2)}% of total)`}
-            </text>
+            </text> */}
         </g>
     );
 };
@@ -73,6 +79,9 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
 
     const data: any[] = [];
     categoryTotals.forEach(ct => {
+        if (ct.price === 0)
+            return;
+
         data.push({
             name: ct.category,
             value: ct.price,
@@ -91,7 +100,7 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
 
     return (
         <Box>
-            <Box>{category.name}: <b>{category.currency} {category.total}</b></Box>
+            {/* <Box>{category.name}: <b>{category.currency} {category.total}</b></Box> */}
 
             <Box display="flex" alignItems="center" height="220px" width="100%">
                 <ResponsiveContainer width="100%" height={260}>
@@ -102,8 +111,8 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
                             data={data}
                             cx="50%"
                             cy="50%"
-                            innerRadius={48}
-                            outerRadius={65}
+                            innerRadius={60}
+                            outerRadius={80}
                             fill="var(--exxpenses-light-green)"
                             dataKey="value"
                             onMouseEnter={onPieEnter}

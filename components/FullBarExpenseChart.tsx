@@ -112,7 +112,7 @@ export default function FullBarExpenseChart({ dailyTotals }: FullBarExpenseChart
                     <XAxis fontSize="8px" dataKey="name" height={10} tick={<CustomizedAxisTick />} />
                     <YAxis />
                     <Tooltip content={<CustomTooltip />} cursorStyle={{ background: "black" }} />
-                    <Area type="monotone" dataKey="pv" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+                    <Area type="monotone" dataKey="pv" stroke="var(--exxpenses-light-green)" fillOpacity={1} fill="url(#colorPv)" />
                 </AreaChart>
             </ResponsiveContainer>
 

@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Grid, Paper, Button, Popover, Divider, Tooltip, Box, Link } from "@mui/material";
+import { Grid, Paper, Button, Popover, Divider, Tooltip, Box, Link, IconButton } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { CategoryDeleteDocument, Expense, Category } from "../generated/graphql";
@@ -12,6 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import styles from "../styles/Dashboard.module.css";
 import stylesNew from "../styles/DashboardCategoriesTab.module.css";
 import expensesToTotal from "../utils/expensesToTotal";
+import WarningIcon from '@mui/icons-material/Warning';
 
 interface CategoryBoxProps {
     category: Category;
@@ -54,24 +55,16 @@ export default function CategoryBox({ since, until, preferred_currency, category
         </Box>
     );
 
-    let categoryIcon: any;
+    let warningIcon: any = null;
     if (preferred_currency !== category.default_currency) {
-        categoryIcon = (
-            <Link href="/free-account">
+        warningIcon = (
+            <IconButton onClick={() => { window.location.assign("/free-account") }} sx={{ padding: "0", marginLeft: "10px" }}>
                 <Tooltip title="This category is not counted towards the total. Click to learn more.">
-                    <ClassIcon
-                        sx={{ width: "22px", height: "22px", fill: "#e9e976" }}
+                    <WarningIcon
+                        sx={{ width: "20px", height: "20px", fill: "var(--exxpenses-warning-color)" }}
                     />
                 </Tooltip>
-
-            </Link>
-        )
-    }
-    else {
-        categoryIcon = (
-            <ClassIcon
-                sx={{ width: "22px", height: "22px" }}
-            />
+            </IconButton>
         )
     }
 
@@ -80,9 +73,14 @@ export default function CategoryBox({ since, until, preferred_currency, category
             <Paper className={styles.categoryBox} sx={{ width: isMobileView ? "auto" : "150px" }}>
                 <Box display="flex">
                     <Box minWidth="fit-content">
-                        <Box sx={{ overflowX: "hidden" }} display="flex">
-                            {categoryIcon}
-                            <Box sx={{ textTransform: "none", marginLeft: "8px", fontSize: "14px" }}><b>{category.name}</b></Box>
+                        <Box alignItems="center" sx={{ overflowX: "hidden" }} display="flex">
+                            <Link href={`/category/${category.name}`} sx={{ textDecoration: "none", display: "flex", "&:hover": { textDecoration: "none" } }}>
+                                <ClassIcon
+                                    sx={{ width: "20px", height: "20px" }}
+                                />
+                                <Box sx={{ textTransform: "none", marginLeft: "8px", fontSize: "14px" }}><b>{category.name}</b></Box>
+                            </Link>
+                            {warningIcon}
                         </Box>
 
                         <Box

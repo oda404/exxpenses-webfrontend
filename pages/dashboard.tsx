@@ -1,5 +1,4 @@
 import { InferGetServerSidePropsType } from "next";
-import Navbar from "../components/navbar";
 import "../styles/Dashboard.module.css"
 import { useState } from "react";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
@@ -12,7 +11,6 @@ import expensesGetMultipleCategories, { MultiCategoryExpenses } from "../gql/ssr
 import getNowUserOffset from "../utils/getNowWithUserOffset";
 import Cookies from "universal-cookie";
 import Head from "next/head";
-import Logo from "../components/Logo";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 

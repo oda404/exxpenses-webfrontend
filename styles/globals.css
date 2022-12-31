@@ -22,6 +22,8 @@
   --exxpenses-dark-green: #446a50;
   --exxpenses-light-green: #487958;
 
+  --exxpenses-warning-color: #bbbb45;
+
   color: var(--exxpenses-main-color);
 }
 
