@@ -1,0 +1,6 @@
+mutation UserVerifyEmail(
+    $token: String!
+)
+{
+    userVerifyEmail(token: $token)
+}

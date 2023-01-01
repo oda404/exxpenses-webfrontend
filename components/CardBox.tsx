@@ -10,7 +10,6 @@ export default function CardBox(props: any) {
             flexDirection="column"
             borderRadius="8px"
             height="fit-content"
-            marginTop="15px"
             {...props}
         >
             {props.children}

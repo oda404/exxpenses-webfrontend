@@ -16,6 +16,7 @@ import CategoryStatistics from "./CategoryStatistics";
 import CardBox from "./CardBox";
 import Sidenav from "./Sidenav";
 import Topbar from "./Topbar";
+import NewsTab from "./NewsTab";
 
 interface MobileViewAddNewExpenseCardProps {
     category: Category;
@@ -315,7 +316,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
             </Modal>
 
             <Topbar />
-            <Box paddingY="20px" marginX="auto" marginLeft="-210px" display="flex" justifyContent="center">
+            <Box paddingY="40px" marginX="auto" display="flex" justifyContent="center">
                 <Sidenav firstname={user.firstname} lastname={user.lastname} />
                 <Box width="540px" >
                     <CardBox>
@@ -352,6 +353,8 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                     </Box>
 
                 </Box>
+                <Box marginX="10px" />
+                <NewsTab user={user} />
             </Box>
 
             <Footer />

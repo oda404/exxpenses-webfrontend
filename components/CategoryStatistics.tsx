@@ -48,6 +48,9 @@ export default function CategoryStatistics({ lastMonthExpenses, category, since,
         avg = addFloats(avg, t.expense.price);
     });
     let averageString = new Decimal(avg).dividedBy(new Decimal(daysBetweenDates(since, until))).toFixed(2).replace(/\.0+$/, '');
+
+    if (!lastMonthExpenses)
+        lastMonthExpenses = [];
     let lastMonthTotal = expensesToTotal(lastMonthExpenses, category.default_currency);
 
     let diffPerc = String(totalExpenses.price);

@@ -1,7 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Box, Button, Stack, Grid, Paper, Typography, Autocomplete, Modal } from "@mui/material";
 import { useRouter } from "next/router";
-import { Category, CategoryAddDocument, ExpenseAddDocument } from "../generated/graphql";
+import { Category, CategoryAddDocument, ExpenseAddDocument, User } from "../generated/graphql";
 import { useState } from "react";
 import styles from "../styles/Dashboard.module.css";
 import Tooltip from '@mui/material/Tooltip';
@@ -16,6 +16,7 @@ import CardBox from "./CardBox";
 import MobileViewNavigationBar from "./MobileViewNavigationBar";
 import Sidenav from "./Sidenav";
 import Topbar from "./Topbar";
+import NewsTab from "./NewsTab";
 
 interface AddNewCategoryCardProps {
     isMobileView: boolean;
@@ -769,6 +770,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = (
             <Box padding="10px" paddingTop="40px" justifyContent="center" display="flex" flexDirection="column">
                 <MobileViewNavigationBar />
+                <Box marginY='5px' />
                 <CardBox>
                     <DashboardMobileView {...props} />
                 </CardBox>
@@ -776,11 +778,13 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         )
     else
         content = (
-            <Box padding="20px" marginLeft="-210px" justifyContent="center" display="flex">
+            <Box padding="20px" paddingY="40px" justifyContent="center" display="flex">
                 <Sidenav firstname={props.user.firstname} lastname={props.user.lastname} />
                 <CardBox width="500px">
                     <DashboardFullView {...props} />
                 </CardBox>
+                <Box marginX="10px" />
+                <NewsTab user={props.user} />
             </Box>
         )
 

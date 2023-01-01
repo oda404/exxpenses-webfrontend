@@ -190,10 +190,11 @@ export default function MobileViewStatisticsTab({ user, categories, expensesMult
     return (
         <Box padding="10px" marginTop="28px">
             <MobileViewNavigationBar />
+            <Box marginY='10px' />
             <CardBox>
                 <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
             </CardBox>
-
+            <Box marginY='10px' />
             <CardBox>
                 <OrderedCategories user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
             </CardBox>

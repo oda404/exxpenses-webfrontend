@@ -12,6 +12,7 @@ import CategoriesPiechart from "./CategoriesPiechart";
 import Sidenav from "./Sidenav";
 import WarningIcon from '@mui/icons-material/Warning';
 import PieChartIcon from '@mui/icons-material/PieChart';
+import NewsTab from "./NewsTab";
 
 function expensesToCategoryTotal(expenses: Expense[], category: Category, totalPrice: number) {
     let categoryTotal: CategoryTotal;
@@ -201,17 +202,19 @@ interface StatisticsTabProps {
 export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
 
     return (
-        <Box marginLeft="-210px" display="flex" justifyContent="center" marginTop="20px">
+        <Box display="flex" justifyContent="center" marginTop="40px">
             <Sidenav firstname={user.firstname} lastname={user.lastname} />
             <Box display="flex" flexDirection="column" alignItems="center">
                 <CardBox width="500px">
                     <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
-                <Box marginX="10px" />
+                <Box marginY="5px" />
                 <CardBox width="500px">
                     <OrderedCategories user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
             </Box>
+            <Box marginX="10px" />
+            <NewsTab user={user} />
         </Box>
     )
 }

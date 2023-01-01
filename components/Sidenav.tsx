@@ -164,7 +164,7 @@ export default function Sidenav({ firstname, lastname }: SidenavProps) {
     const router = useRouter();
 
     return (
-        <Box borderRadius="8px" margin="20px" width="180px" height="fit-content">
+        <Box borderRadius="8px" marginX="20px" width="180px" height="fit-content">
             <Stack width="150px" spacing={1}>
                 <SidebarUserBox firstname={firstname} lastname={lastname} />
                 <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
