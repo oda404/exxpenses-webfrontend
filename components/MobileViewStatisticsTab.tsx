@@ -59,25 +59,29 @@ function OrderedCategories({ user, categories, expensesMultipleCategories }: Sta
     });
 
     let content = (
-        <Box width="fit-content">
+        <Box>
             {categoryTotals.map((c, idx) =>
                 <Link
                     sx={{
                         textDecoration: "none",
                         "&:hover": {
-                            textDecoration: "none",
+                            textDecoration: "none"
                         }
                     }}
-                    href={`/category/${c.category}`}
+                    href={"/category/" + c.category}
                     key={idx}
                     display="flex"
                 >
-                    <Box marginBottom="9px" marginRight="6px" borderRadius="8px" width="4px" sx={{ background: "var(--exxpenses-light-green)" }} />
-                    <Box marginBottom="12px" width="fit-content">
-                        <Box>
-                            {c.category}
+                    <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
+                        <Box width="100px">
+                            <b>{c.category}</b>
                         </Box>
-                        <b>{c.currency} {c.price}</b> ({c.percentage}%)
+                        <Box width="100px">
+                            <b>{c.currency} {c.price}</b>
+                        </Box>
+                        <Box width="100px">
+                            <b>{c.percentage}%</b>
+                        </Box>
                     </Box>
                 </Link>
             )}
@@ -109,8 +113,16 @@ function OrderedCategories({ user, categories, expensesMultipleCategories }: Sta
 
     return (
         <Box>
-            <Box marginBottom="5px">
-                Categories
+            <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" display="flex" justifyContent="space-between" marginBottom="5px">
+                <Box width="100px">
+                    Category
+                </Box>
+                <Box width="100px">
+                    Total
+                </Box>
+                <Box width="100px">
+                    % of total
+                </Box>
             </Box>
             {content}
             {notice}

@@ -36,8 +36,6 @@ interface OrderedCategoriesProps {
 
 function OrderedCategories({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
 
-    const [entered, setEntered] = useState(-1);
-
     let workingExpenses: Expense[] = [];
     expensesMultipleCategories.categories.forEach(category => {
 
@@ -63,7 +61,7 @@ function OrderedCategories({ user, categories, expensesMultipleCategories }: Sta
     });
 
     let content = (
-        <Box width="fit-content">
+        <Box>
             {categoryTotals.map((c, idx) =>
                 <Link
                     sx={{
@@ -75,21 +73,17 @@ function OrderedCategories({ user, categories, expensesMultipleCategories }: Sta
                     href={"/category/" + c.category}
                     key={idx}
                     display="flex"
-                    onMouseEnter={() => { setEntered(idx) }}
-                    onMouseLeave={() => { setEntered(-1) }}
                 >
-                    <Box
-                        marginBottom="9px"
-                        marginRight="6px"
-                        borderRadius="8px"
-                        width="4px"
-                        sx={{ background: entered === idx ? "var(--exxpenses-dark-green)" : "var(--exxpenses-light-green)" }}
-                    />
-                    <Box marginBottom="12px" width="fit-content">
-                        <Box>
-                            {c.category}
+                    <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
+                        <Box width="100px">
+                            <b>{c.category}</b>
                         </Box>
-                        <b>{c.currency} {c.price}</b> ({c.percentage}%)
+                        <Box width="100px">
+                            <b>{c.currency} {c.price}</b>
+                        </Box>
+                        <Box width="100px">
+                            <b>{c.percentage}%</b>
+                        </Box>
                     </Box>
                 </Link>
             )}
@@ -121,8 +115,16 @@ function OrderedCategories({ user, categories, expensesMultipleCategories }: Sta
 
     return (
         <Box>
-            <Box marginBottom="5px">
-                Categories
+            <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" display="flex" justifyContent="space-between" marginBottom="5px">
+                <Box width="100px">
+                    Category
+                </Box>
+                <Box width="100px">
+                    Total
+                </Box>
+                <Box width="100px">
+                    % of total
+                </Box>
             </Box>
             {content}
             {notice}
