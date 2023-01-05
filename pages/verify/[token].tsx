@@ -97,9 +97,7 @@ export async function getServerSideProps({ req, params }: any) {
     if (!uuidRegex.test(params.token)) {
         return {
             notFound: true,
-            props: {
-
-            }
+            props: {}
         }
     }
 
@@ -114,7 +112,7 @@ export async function getServerSideProps({ req, params }: any) {
     return {
         props: {
             ssr: {
-                success: true
+                success: userVerifyEmail
             }
         }
     }
