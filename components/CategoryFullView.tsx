@@ -356,8 +356,6 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                 <Box marginX="10px" />
                 <NewsTab user={user} />
             </Box>
-
-            <Footer />
         </Box >
     )
 }

@@ -11,6 +11,7 @@ import useShowMobileView from "../../utils/useShowMobileView";
 import FullViewCategory from "../../components/CategoryFullView";
 import MobileViewCategory from "../../components/MobileViewCategory";
 import Head from "next/head";
+import Footer from "../../components/Footer";
 
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -33,13 +34,14 @@ export default function Category({ ssr }: CategoryProps) {
     }
 
     return (
-        <Box>
+        <Box position="relative">
             <Head>
                 <title>{"Exxpenses - " + category.name}</title>
             </Head>
             <Box>
                 {content}
             </Box>
+            <Footer />
         </Box>
     )
 }
