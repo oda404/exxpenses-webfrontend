@@ -1,62 +1,90 @@
-import { Box } from "@mui/material";
+import { Box, Link } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
-import Link from "next/link";
 import Footer from "../../components/Footer";
 import Topbar from "../../components/Topbar";
 import { UserVerifyEmailDocument } from "../../generated/graphql";
 import apolloClient from "../../utils/apollo-client";
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import Image from 'next/image'
+import Head from "next/head";
+import useShowMobileView from "../../utils/useShowMobileView";
 
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Verify({ ssr }: CategoryProps) {
 
+    const isMobileView = useShowMobileView();
+
     let content: any;
     if (ssr!.success) {
         content = (
-
-            <Box paddingTop="40px" display="flex" flexDirection="column" alignItems="center">
-                <Box>
-                    <Box flexDirection="column" display="flex" alignItems="center">
-                        <CheckRoundedIcon sx={{ fill: "var(--exxpenses-light-green)", width: "40px", height: "40px" }} />
-                        <Box fontSize="18px">
-                            <b>Your email has been successfully verified!</b>
+            <Box height="58vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    marginX="auto"
+                    padding="50px"
+                    width="100%"
+                    borderRadius="8px"
+                >
+                    <Box display="flex" flexDirection="column">
+                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
+                        <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
+                            <CheckRoundedIcon sx={{ fill: "var(--exxpenses-light-green)", width: "40px", height: "40px" }} />
+                            <Box fontSize="18px">
+                                <b>Your email has been successfully verified!</b>
+                            </Box>
                         </Box>
+                        <Link sx={{ color: "var(--exxpenses-main-color)", textDecoration: "none" }} href="/dashboard">
+                            Back to the dashboard
+                        </Link>
                     </Box>
-                    <Box marginY="10px" />
-                    <Link href="/dashboard">
-                        Back to the dashboard
-                    </Link>
                 </Box>
             </Box>
         )
     }
     else {
         content = (
-            <Box paddingTop="40px" display="flex" flexDirection="column" alignItems="center">
-                <Box>
-                    <Box flexDirection="column" display="flex" alignItems="center">
-                        <HeartBrokenIcon sx={{ width: "40px", height: "40px" }} />
-                        <Box marginTop="10px" width="500px" fontSize="18px">
-                            There was a problem verifying your email. The link you followed may have expired. Please try sending another email.
+            <Box height="66vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    marginX="auto"
+                    padding="50px"
+                    width="100%"
+                    borderRadius="8px"
+                >
+                    <Box display="flex" flexDirection="column">
+                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
+                        <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
+                            <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
+                            <Box marginTop="10px" width="500px" fontSize="18px">
+                                <b>There was a problem verifying your email. The link you followed may have expired. Please try sending another email.</b>
+                            </Box>
+                            <Box marginTop="5px" width="500px" fontSize="18px">
+                                <b>If the problem persists, please contact support.</b>
+                            </Box>
                         </Box>
-                        <Box marginTop="10px" width="500px" fontSize="18px">
-                            If the problem persists, please contact support.
-                        </Box>
+                        <Link sx={{ color: "var(--exxpenses-main-color)", textDecoration: "none" }} href="/dashboard">
+                            Back to the dashboard
+                        </Link>
                     </Box>
-                    <Box marginY="10px" />
-                    <Link href="/dashboard">
-                        Back to the dashboard
-                    </Link>
                 </Box>
-            </Box>
+            </Box >
         )
     }
 
     return (
         <Box>
-            <Topbar />
+            <Head>
+                <title>Exxpenses</title>
+                <meta
+                    name="description"
+                    content="Email confirmation"
+                    key="desc"
+                />
+            </Head>
             {content}
             <Footer />
         </Box>
