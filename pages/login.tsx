@@ -16,6 +16,7 @@ import Footer from "../components/Footer";
 import Head from "next/head";
 import Cookies from "universal-cookie";
 import userGet from "../gql/ssr/userGet";
+import Image from 'next/image'
 
 type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -45,7 +46,8 @@ export default function Login({ }: LoginProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Stack spacing={20}>
+                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
+                        <Box marginTop="20px">
                             <Box
                                 color={'gray.100'}
                                 lineHeight={1.1}
@@ -54,7 +56,7 @@ export default function Login({ }: LoginProps) {
                             >
                                 Sign in
                             </Box>
-                        </Stack>
+                        </Box>
                         <Box width={isMobileView ? "100%" : "320px"}>
                             <Formik
                                 initialValues={{ email: "", password: "" }}

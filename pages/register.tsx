@@ -10,6 +10,7 @@ import styles from "../styles/Register.module.css";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 import Head from "next/head";
+import Image from 'next/image'
 
 type RegisterProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -29,7 +30,7 @@ export default function Register({ }: RegisterProps) {
                 />
             </Head>
 
-            <Box height="70vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
+            <Box height="75vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -39,13 +40,14 @@ export default function Register({ }: RegisterProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Box textAlign="center" marginBottom="20px">
+                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
+                        <Box marginTop="20px" textAlign="center" marginBottom="20px">
                             <Box
                                 color={'gray.100'}
                                 lineHeight={1.1}
                                 fontSize="24px"
                             >
-                                Create your Exxpenses account
+                                Create your account
                             </Box>
                         </Box>
                         <Box width={isMobileView ? "100%" : "380px"}>
