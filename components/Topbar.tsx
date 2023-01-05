@@ -8,7 +8,7 @@ export default function Topbar() {
     return (
         <Box display="flex" justifyContent={isMobileView ? "normal" : "center"} padding="5px" paddingX="18px" paddingTop="18px" width="auto" borderBottom="1px solid var(--exxpenses-main-border-color)">
             <Link href="/dashboard">
-                <svg style={{ marginLeft: isMobileView ? "0px" : '-450px' }} width="130" height="25" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg style={{ marginLeft: isMobileView ? "0px" : '-490px' }} width="130" height="25" viewBox="0 0 100 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0.76136 15V0.454544H9.53977V2.01704H2.52272V6.93182H9.08522V8.49432H2.52272V13.4375H9.65341V15H0.76136Z" fill="#EDEDED" />
                     <path d="M13.7372 4.09091L16.3508 8.55114L18.9645 4.09091H20.8963L17.3736 9.54545L20.8963 15H18.9645L16.3508 10.767L13.7372 15H11.8054L15.2713 9.54545L11.8054 4.09091H13.7372Z" fill="#EDEDED" />
                     <path d="M24.538 4.09091L27.1516 8.55114L29.7653 4.09091H31.6971L28.1744 9.54545L31.6971 15H29.7653L27.1516 10.767L24.538 15H22.6062L26.0721 9.54545L22.6062 4.09091H24.538Z" fill="#EDEDED" />
