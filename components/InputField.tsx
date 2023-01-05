@@ -68,6 +68,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 onChange={handleChange}
                 onBlur={() => setLabel(true)}
                 type={type === "password" ? passwordType : type}
+                step={type === "number" ? "0.1" : undefined}
                 name={name}
                 {...field}
                 {...params}
