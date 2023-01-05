@@ -20,7 +20,7 @@ const renderActiveShape = (props: any) => {
 
     return (
         <g>
-            <text x={cx} y={cy} dy={-14} textAnchor="middle" fill={fill}>
+            <text x={cx} y={cy} dy={-10} textAnchor="middle" fill={fill}>
                 {payload.name}
             </text>
             <text fontSize="13px" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
@@ -111,7 +111,7 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
                             data={data}
                             cx="50%"
                             cy="50%"
-                            innerRadius={60}
+                            innerRadius={62}
                             outerRadius={80}
                             fill="var(--exxpenses-light-green)"
                             dataKey="value"
