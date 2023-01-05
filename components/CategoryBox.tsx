@@ -51,7 +51,7 @@ export default function CategoryBox({ since, until, preferred_currency, category
 
     monthly = (
         <Box>
-            {total.price} {total.currency}
+            {total.currency} {total.price}
         </Box>
     );
 
@@ -83,14 +83,6 @@ export default function CategoryBox({ since, until, preferred_currency, category
                             {warningIcon}
                         </Box>
 
-                        <Box
-                            marginLeft="4px"
-                            marginTop="4px"
-                            maxHeight="70px"
-                            fontSize="14px"
-                        >
-                            <Box>This month:</Box>
-                        </Box>
                         <Box className={styles.categoryTotalCostBox}>
                             {monthly}
                         </Box>
