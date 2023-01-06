@@ -46,7 +46,7 @@ export default function Login({ }: LoginProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
+                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
                         <Box marginTop="20px">
                             <Box
                                 color={'gray.100'}

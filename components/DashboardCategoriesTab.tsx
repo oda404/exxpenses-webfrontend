@@ -723,7 +723,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
                     />
                 </Box>
             </Modal>
-            <Box marginX="auto" maxWidth="500px">
+            <Box marginX="auto" maxWidth="500px" width="500px">
                 <Stats
                     preferred_currency={preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}
@@ -733,7 +733,7 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
 
                 <MobileViewDashboardButtons default_currency={preferred_currency!} />
 
-                <Box maxWidth="500px" width="500px" marginTop="15px">
+                <Box maxWidth="500px" marginTop="15px">
                     <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
                         Categories
                     </Box>
@@ -780,7 +780,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = (
             <Box padding="20px" paddingY="40px" justifyContent="center" display="flex">
                 <Sidenav firstname={props.user.firstname} lastname={props.user.lastname} />
-                <CardBox width="500px">
+                <CardBox width="540px">
                     <DashboardFullView {...props} />
                 </CardBox>
                 <Box marginX="10px" />

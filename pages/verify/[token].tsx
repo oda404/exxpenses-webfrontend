@@ -9,6 +9,7 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import Image from 'next/image'
 import Head from "next/head";
 import useShowMobileView from "../../utils/useShowMobileView";
+import BigLogo from "../../components/BigLogo";
 
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -29,8 +30,9 @@ export default function Verify({ ssr }: CategoryProps) {
                     borderRadius="8px"
                 >
                     <Box display="flex" flexDirection="column">
-                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
                         <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
+                            <BigLogo />
+                            <Box marginTop="20px" />
                             <CheckRoundedIcon sx={{ fill: "var(--exxpenses-light-green)", width: "40px", height: "40px" }} />
                             <Box fontSize="18px">
                                 <b>Your email has been successfully verified!</b>
@@ -56,8 +58,9 @@ export default function Verify({ ssr }: CategoryProps) {
                     borderRadius="8px"
                 >
                     <Box display="flex" flexDirection="column">
-                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
-                        <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
+                        <Box marginBottom="10px" flexDirection="column" display="flex" alignItems="center">
+                            <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                            <Box marginTop="20px" />
                             <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
                             <Box marginTop="10px" width="500px" fontSize="18px">
                                 <b>There was a problem verifying your email. The link you followed may have expired. Please try sending another email.</b>
@@ -85,7 +88,9 @@ export default function Verify({ ssr }: CategoryProps) {
                     key="desc"
                 />
             </Head>
-            {content}
+            <Box sx={{ height: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
+                {content}
+            </Box>
             <Footer />
         </Box>
     )

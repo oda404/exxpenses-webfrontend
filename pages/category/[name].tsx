@@ -1,7 +1,7 @@
 import { ApolloQueryResult } from "@apollo/client";
 import { Box } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
-import { CategoryGetDocument, CategoryGetQuery } from "../../generated/graphql";
+import { CategoryGetDocument, CategoryGetQuery, User } from "../../generated/graphql";
 import apolloClient from "../../utils/apollo-client";
 import userGet from "../../gql/ssr/userGet";
 import expensesGet from "../../gql/ssr/expensesGet";
@@ -18,10 +18,10 @@ type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 export default function Category({ ssr }: CategoryProps) {
 
     const { expensesGet, lastMonthExpensesGet, categoryGet, userGet } = ssr;
-    const category = categoryGet?.categories![0]!;
-    const expenses = expensesGet.expenses!;
-    const lastMonthExpenses = lastMonthExpensesGet.expenses!;
-    const user = userGet.user;
+    const category = categoryGet!.categories![0]!;
+    const expenses = expensesGet!.expenses!;
+    const lastMonthExpenses = lastMonthExpensesGet!.expenses!;
+    const user = userGet!.user! as User;
 
     const isMobileView = useShowMobileView();
 
@@ -38,7 +38,7 @@ export default function Category({ ssr }: CategoryProps) {
             <Head>
                 <title>{"Exxpenses - " + category.name}</title>
             </Head>
-            <Box>
+            <Box sx={{ height: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
                 {content}
             </Box>
             <Footer />

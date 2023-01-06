@@ -12,11 +12,10 @@ interface NewTabProps {
 export default function NewsTab({ user }: NewTabProps) {
 
     const [userSendVerificationEmail] = useMutation(UserSendVerificationEmailDocument);
+    const [emailSent, setEmailSent] = useState(false);
     let cards: any[] = [];
 
     if (!user.verified_email) {
-
-        const [emailSent, setEmailSent] = useState(false);
 
         let text: string;
         if (emailSent) {

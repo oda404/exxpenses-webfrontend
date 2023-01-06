@@ -29,8 +29,8 @@ export default function Dashboard({ ssr }: DashboardProps) {
             focusedCategory={focusedCategory}
             expensesMultipleCategories={expensesMultipleCategories}
             categories={categories}
-            since={ssr.since}
-            until={ssr.until}
+            since={new Date(ssr.since)}
+            until={new Date(ssr.until)}
             user={user}
         />
 
@@ -45,7 +45,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Box>
+            <Box sx={{ minHeight: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
                 {content}
             </Box>
             <Footer />

@@ -18,7 +18,10 @@ function expensesToCategoryTotal(expenses: Expense[], category: Category, totalP
     let categoryTotal: CategoryTotal;
 
     let total = expensesToTotal(expenses, category.default_currency);
-    let percentage = Number(new Decimal(100 * total.price / totalPrice).toFixed(2));
+
+    let percentage = 100;
+    if (total.price > 0)
+        percentage = Number(new Decimal(100 * total.price / totalPrice).toFixed(2));
 
     categoryTotal = {
         category: category.name,
@@ -56,39 +59,60 @@ function OrderedCategories({ user, categories, expensesMultipleCategories }: Sta
         categoryTotals.push(expensesToCategoryTotal(c.expenses, category, total.price))
     })
 
-    categoryTotals.sort((a, b) => {
-        return b.price - a.price;
-    });
+    let content: any;
+    if (categoryTotals.length === 0) {
+        content = (
+            <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
+                <Box width="100px">
+                    <b>---</b>
+                </Box>
+                <Box width="100px">
+                    <b>---</b>
+                </Box>
+                <Box width="100px">
+                    <b>---</b>
+                </Box>
+            </Box>
+        )
 
-    let content = (
-        <Box>
-            {categoryTotals.map((c, idx) =>
-                <Link
-                    sx={{
-                        textDecoration: "none",
-                        "&:hover": {
-                            textDecoration: "none"
-                        }
-                    }}
-                    href={"/category/" + c.category}
-                    key={idx}
-                    display="flex"
-                >
-                    <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
-                        <Box width="100px">
-                            <b>{c.category}</b>
-                        </Box>
-                        <Box width="100px">
-                            <b>{c.currency} {c.price}</b>
-                        </Box>
-                        <Box width="100px">
-                            <b>{c.percentage}%</b>
-                        </Box>
-                    </Box>
-                </Link>
-            )}
-        </Box>
-    )
+    }
+    else {
+        categoryTotals.sort((a, b) => {
+            return b.price - a.price;
+        });
+
+        content = (
+            <Box>
+                {
+                    categoryTotals.map((c, idx) =>
+                        <Link
+                            sx={{
+                                textDecoration: "none",
+                                "&:hover": {
+                                    textDecoration: "none"
+                                }
+                            }}
+                            href={"/category/" + c.category}
+                            key={idx}
+                            display="flex"
+                        >
+                            <Box padding="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
+                                <Box width="100px">
+                                    <b>{c.category}</b>
+                                </Box>
+                                <Box width="100px">
+                                    <b>{c.currency} {c.price}</b>
+                                </Box>
+                                <Box width="100px">
+                                    <b>{c.percentage}%</b>
+                                </Box>
+                            </Box>
+                        </Link>
+                    )
+                }
+            </Box>
+        )
+    }
 
     let notice: any = null;
     if (categoryTotals.length < expensesMultipleCategories.categories.length) {
@@ -173,6 +197,14 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
         if (categoryTotals[i].price > mostExpensiveCategory.price)
             mostExpensiveCategory = categoryTotals[i];
     }
+    if (mostExpensiveCategory === undefined) {
+        mostExpensiveCategory = {
+            category: "N/A",
+            price: 0,
+            currency: user.preferred_currency!,
+            percentage: 0
+        }
+    }
 
     return (
         <Box>
@@ -181,7 +213,7 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
             </Box>
 
             <Box marginBottom="12px">
-                <CategoriesPiechart categoryTotals={categoryTotals} />
+                <CategoriesPiechart preferred_currency={user.preferred_currency!} categoryTotals={categoryTotals} />
             </Box>
 
             <Box>
@@ -189,7 +221,7 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
                 <Box marginY="5px" />
                 <Statistic title="Total" content={`${total.currency} ${total.price}`} />
                 <Box marginY="20px" />
-                <Statistic title="Most expensive category" content={`${mostExpensiveCategory.category} (${mostExpensiveCategory.currency} ${mostExpensiveCategory.price})`} />
+                <Statistic title="Most expensive category" content={`${mostExpensiveCategory?.category} (${mostExpensiveCategory?.currency} ${mostExpensiveCategory?.price})`} />
             </Box>
         </Box>
     )
@@ -206,12 +238,12 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
     return (
         <Box display="flex" justifyContent="center" marginTop="40px">
             <Sidenav firstname={user.firstname} lastname={user.lastname} />
-            <Box display="flex" flexDirection="column" alignItems="center">
-                <CardBox width="500px">
+            <Box width="540px" display="flex" flexDirection="column" alignItems="center">
+                <CardBox width="540px">
                     <StatisticsThisMonth user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
                 <Box marginY="5px" />
-                <CardBox width="500px">
+                <CardBox width="540px">
                     <OrderedCategories user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
                 </CardBox>
             </Box>
@@ -220,4 +252,3 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
         </Box>
     )
 }
-

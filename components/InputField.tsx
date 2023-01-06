@@ -76,7 +76,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 onBlurCapture={() => { setFocused(false); }}
                 className={styles.inputField}
                 autoComplete="off"
-                style={{ height: "18px", fontSize: "14px", background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
+                style={{ height: "35px", fontSize: "14px", background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
             />
             {type === "password" ?
                 <Button

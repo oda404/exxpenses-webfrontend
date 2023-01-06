@@ -430,8 +430,6 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     <AccessibleForwardIcon sx={{ marginTop: "20px", marginLeft: "auto", marginRight: "auto" }} />
                 </Box>
             </Box>
-
-            <Footer />
         </Box >
 
     )

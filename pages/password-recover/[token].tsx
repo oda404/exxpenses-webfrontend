@@ -120,7 +120,7 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                 <Box display="flex" flexDirection="column">
                     <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
                         <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
-                        <Box marginTop="10px" width="500px" fontSize="18px">
+                        <Box marginTop="10px" width="400px" fontSize="18px">
                             <b>This link has expired, please create another password reset request!</b>
                         </Box>
                     </Box>
@@ -153,7 +153,7 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width="150px" height="30px" />
+                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
                         {content}
                     </Box>
                 </Box>

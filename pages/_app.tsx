@@ -11,79 +11,35 @@ import theme from '../utils/theme';
 import { useEffect, useState } from 'react';
 import { Router, useRouter } from 'next/router';
 import Cookies from "universal-cookie";
+import Head from 'next/head';
+import { CssBaseline } from '@mui/material';
+import createEmotionCache from '../utils/createEmotionCache';
 
 const isBrowser = typeof document !== 'undefined';
-
-// On the client side, Create a meta tag at the top of the <head> and set it as insertionPoint.
-// This assures that MUI styles are loaded first.
-// It allows developers to easily override MUI styles with other styling solutions, like CSS modules.
-function createEmotionCache() {
-  let insertionPoint: HTMLElement | undefined;
-
-  if (isBrowser) {
-    const emotionInsertionPoint = document.querySelector('meta[name="emotion-insertion-point"]');
-    insertionPoint = emotionInsertionPoint as HTMLElement ?? undefined;
-  }
-
-  return createCache({ key: 'mui-style', insertionPoint })
-}
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-export default function App({ Component, pageProps }: AppProps) {
-
-  /* This runs on the client side */
-  const cookies = new Cookies();
-  if (cookies.get("user_tz_offset") === undefined) {
-    let now = new Date();
-    now.setMonth(now.getMonth() + 1);
-
-    cookies.set("user_tz_offset", new Date().getTimezoneOffset(), {
-      path: "/",
-      sameSite: "lax",
-      expires: now
-    });
-  }
-
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const start = () => {
-      console.log("start");
-      setLoading(true);
-    };
-    const end = () => {
-      console.log("finished");
-      setLoading(false);
-    };
-    Router.events.on("routeChangeStart", start);
-    Router.events.on("routeChangeComplete", end);
-    Router.events.on("routeChangeError", end);
-    return () => {
-      Router.events.off("routeChangeStart", start);
-      Router.events.off("routeChangeComplete", end);
-      Router.events.off("routeChangeError", end);
-    };
-  }, []);
+export default function MyApp(props: any) {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
   return (
-    <>
-      {
-        loading ? (
-          <h1> Loading...</h1 >
-        ) : (
-          <CacheProvider value={clientSideEmotionCache}>
-            <ThemeProvider theme={theme}>
-              <ApolloProvider client={apolloClient} >
-                <Component {...pageProps} />
-              </ApolloProvider>
-            </ThemeProvider>
-          </CacheProvider>)}
-    </>
-  )
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ApolloProvider client={apolloClient}>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </ApolloProvider>
+    </CacheProvider>
+  );
 }
 
-App.propTypes = {
+MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   emotionCache: PropTypes.object,
   pageProps: PropTypes.object.isRequired,

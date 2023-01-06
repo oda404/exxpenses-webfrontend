@@ -9,7 +9,7 @@ export default function Topbar() {
     return (
         <Box display="flex" justifyContent={isMobileView ? "normal" : "center"} padding="5px" paddingX="18px" paddingTop="18px" width="auto" borderBottom="1px solid var(--exxpenses-main-border-color)">
             <Link style={{ marginLeft: isMobileView ? "0px" : "-850px" }} href="/dashboard">
-                <Image src="/exxpenses.svg" alt="Exxpenses" width="130px" height="25px" />
+                <Image src="/exxpenses.svg" alt="Exxpenses" width={130} height={25} />
             </Link>
         </Box>
     )

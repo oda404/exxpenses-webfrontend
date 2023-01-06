@@ -337,20 +337,20 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                         </Box>
                     </CardBox>
 
-                    <Box>
-                        <CardBox>
-                            <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
-                        </CardBox>
+                    <Box marginY="10px" />
 
-                        <Box marginX="10px" />
+                    <CardBox>
+                        <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                    </CardBox>
 
-                        <CardBox>
-                            <Box marginBottom="10px">
-                                Expenses
-                            </Box>
-                            <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
-                        </CardBox>
-                    </Box>
+                    <Box marginY="10px" />
+
+                    <CardBox>
+                        <Box marginBottom="10px">
+                            Expenses
+                        </Box>
+                        <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
+                    </CardBox>
 
                 </Box>
                 <Box marginX="10px" />

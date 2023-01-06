@@ -22,12 +22,12 @@ function DrawerLink({ active, name, href, icon }: DrawerLinkProps) {
                 href={href}
                 sx={{
                     display: "flex",
-                    borderRadius: "12px",
+                    borderRadius: "8px",
                     padding: "8px",
                     paddingX: "12px",
                     background: active ? "var(--exxpenses-main-button-hover-bg-color)" : '',
                     textDecoration: "none",
-                    width: "100%",
+                    width: "auto",
                     "&:hover": {
                         background: active ? "var(--exxpenses-main-button-hover-bg-color)" : "var(--exxpenses-second-bg-color)",
                         textDecoration: "none",
@@ -70,7 +70,7 @@ function SidebarUserBox({ firstname, lastname }: { firstname: string; lastname: 
                     <b>{firstname} {lastname}</b>
                 </Box>
             </Link>
-            <Box height="4px" />
+            <Box height="2px" />
             <Link
                 href="/preferences"
                 sx={{
@@ -90,7 +90,7 @@ function SidebarUserBox({ firstname, lastname }: { firstname: string; lastname: 
                     Preferences
                 </Box>
             </Link>
-            <Box height="4px" />
+            <Box height="2px" />
             <Button
                 sx={{
                     fontSize: "14px",
@@ -119,7 +119,7 @@ function SidebarUserBox({ firstname, lastname }: { firstname: string; lastname: 
     return (
         <Box
             sx={{ background: "var(--exxpenses-second-bg-color)", borderRadius: "8px" }}
-            width="174px"
+            // width="174px"
             display="flex"
             flexDirection="column"
             alignItems="center"
@@ -164,8 +164,8 @@ export default function Sidenav({ firstname, lastname }: SidenavProps) {
     const router = useRouter();
 
     return (
-        <Box borderRadius="8px" marginX="20px" width="180px" height="fit-content">
-            <Stack width="150px" spacing={1}>
+        <Box borderRadius="8px" marginX="20px" width="170px" height="fit-content">
+            <Stack spacing={1}>
                 <SidebarUserBox firstname={firstname} lastname={lastname} />
                 <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
                 <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" icon={<ShowChartIcon sx={{ width: "20px", height: "20px" }} />} />

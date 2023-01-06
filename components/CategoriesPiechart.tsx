@@ -16,8 +16,6 @@ const renderActiveShape = (props: any) => {
     const ey = my;
     const textAnchor = cos >= 0 ? 'start' : 'end';
 
-    setActiveCategory(payload.name)
-
     return (
         <g>
             <text x={cx} y={cy} dy={-10} textAnchor="middle" fill={fill}>
@@ -65,17 +63,16 @@ interface ActiveCategory {
 
 interface CategoriesPiechartProps {
     categoryTotals: CategoryTotal[];
+    preferred_currency: string;
 }
 
-export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechartProps) {
+export default function CategoriesPiechart({ categoryTotals, preferred_currency }: CategoriesPiechartProps) {
 
     const [state, setState] = useState(0);
 
     let onPieEnter = (_: any, index: number) => {
         setState(index);
     };
-
-    const [activeCategory, setActiveCategory] = useState("");
 
     const data: any[] = [];
     categoryTotals.forEach(ct => {
@@ -86,22 +83,24 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
             name: ct.category,
             value: ct.price,
             currency: ct.currency,
-            setActiveCategory: setActiveCategory
         })
     })
 
-    const COLORS = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042'];
-
-    const category: ActiveCategory = {
-        name: activeCategory,
-        total: data.find(d => d.name === activeCategory)?.value,
-        currency: data.find(d => d.name === activeCategory)?.currency
+    let colors: string[] = []
+    if (data.length === 0) {
+        colors = ["gray"];
+        data.push({
+            name: "N/A",
+            value: 1,
+            currency: preferred_currency,
+        })
+    }
+    else {
+        colors = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042'];
     }
 
     return (
         <Box>
-            {/* <Box>{category.name}: <b>{category.currency} {category.total}</b></Box> */}
-
             <Box display="flex" alignItems="center" height="220px" width="100%">
                 <ResponsiveContainer width="100%" height={260}>
                     <PieChart margin={{ bottom: 20 }}>
@@ -119,7 +118,7 @@ export default function CategoriesPiechart({ categoryTotals }: CategoriesPiechar
                             paddingAngle={data.length > 1 ? 5 : 0}
                         >
                             {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
                             ))}
                         </Pie>
                     </PieChart>

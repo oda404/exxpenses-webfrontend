@@ -171,6 +171,14 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
         if (categoryTotals[i].price > mostExpensiveCategory.price)
             mostExpensiveCategory = categoryTotals[i];
     }
+    if (mostExpensiveCategory === undefined) {
+        mostExpensiveCategory = {
+            category: "N/A",
+            price: 0,
+            currency: user.preferred_currency!,
+            percentage: 0
+        }
+    }
 
     return (
         <Box>
@@ -178,14 +186,14 @@ function StatisticsThisMonth({ user, categories, expensesMultipleCategories }: S
                 <b>Stats this month</b>
             </Box>
             <Box marginBottom="12px">
-                <CategoriesPiechart categoryTotals={categoryTotals} />
+                <CategoriesPiechart preferred_currency={user.preferred_currency!} categoryTotals={categoryTotals} />
             </Box>
 
             <Box>
                 <Box marginBottom="5px">General statistics</Box>
                 <Statistic title="Total" content={`${total.currency} ${total.price}`} />
                 <Box marginY="12px" />
-                <Statistic title="Most expensive category" content={`${mostExpensiveCategory.category} (${mostExpensiveCategory.currency} ${mostExpensiveCategory.price})`} />
+                <Statistic title="Most expensive category" content={`${mostExpensiveCategory?.category} (${mostExpensiveCategory?.currency} ${mostExpensiveCategory?.price})`} />
             </Box>
 
         </Box>

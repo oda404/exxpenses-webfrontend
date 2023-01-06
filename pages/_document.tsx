@@ -3,7 +3,6 @@ import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
 import theme from '../utils/theme';
 import createEmotionCache from '../utils/createEmotionCache';
-
 export default class MyDocument extends Document {
     render() {
         return (
@@ -13,7 +12,7 @@ export default class MyDocument extends Document {
                     <meta name="theme-color" content={theme.palette.primary.main} />
                     <link rel="shortcut icon" href="/favicon.ico" />
                     <meta name="emotion-insertion-point" content="" />
-                    {(this.props as any).emotionStyleTags}
+                    {this.props.emotionStyleTags}
                 </Head>
                 <body>
                     <Main />
@@ -68,7 +67,7 @@ MyDocument.getInitialProps = async (ctx) => {
     // This is important. It prevents Emotion to render invalid HTML.
     // See https://github.com/mui/material-ui/issues/26561#issuecomment-855286153
     const emotionStyles = extractCriticalToChunks(initialProps.html);
-    const emotionStyleTags = emotionStyles.styles.map((style: any) => (
+    const emotionStyleTags = emotionStyles.styles.map((style) => (
         <style
             data-emotion={`${style.key} ${style.ids.join(' ')}`}
             key={style.key}

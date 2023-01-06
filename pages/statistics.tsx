@@ -4,7 +4,7 @@ import Head from "next/head";
 import Cookies from "universal-cookie";
 import Footer from "../components/Footer";
 import StatisticsTab from "../components/StatisticsTab";
-import { Category } from "../generated/graphql";
+import { Category, User } from "../generated/graphql";
 import categoriesGet from "../gql/ssr/categoriesGet";
 import expensesGetMultipleCategories from "../gql/ssr/expensesGetMultipleCategories";
 import userGet from "../gql/ssr/userGet";
@@ -14,7 +14,7 @@ type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Statistics({ ssr }: DashboardProps) {
 
-    const user = ssr.userData.user!;
+    const user = ssr.userData.user! as User;
     const categories = ssr.categoriesData.categories as Category[];
     const expensesMultipleCategories = ssr.expensesMultipleCategoriesData;
 
@@ -29,7 +29,7 @@ export default function Statistics({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Box>
+            <Box sx={{ height: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
                 <StatisticsTab user={user} categories={categories} expensesMultipleCategories={expensesMultipleCategories} />
             </Box>
 
