@@ -38,7 +38,7 @@ function SideTab({ user, categoryTotals }: { user: User, categoryTotals: Categor
                 <Box fontSize='.875rem'>
                     <b>Piechart</b>
                     <Box fontSize=".75rem">
-                        This month's expenses piechart
+                        This month&apos;s expenses piechart
                     </Box>
                 </Box>
                 <CategoriesPiechart preferred_currency={user.preferred_currency!} categoryTotals={categoryTotals} />

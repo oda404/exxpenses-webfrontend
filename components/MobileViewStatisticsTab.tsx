@@ -34,7 +34,7 @@ function PiechartCard({ user, categoryTotals }: { user: User, categoryTotals: Ca
             <Box fontSize='22px'>
                 Piechart
                 <Box fontSize=".75rem">
-                    This month's expenses piechart
+                    This month&apos;s expenses piechart
                 </Box>
             </Box>
             <CategoriesPiechart preferred_currency={user.preferred_currency!} categoryTotals={categoryTotals} />
