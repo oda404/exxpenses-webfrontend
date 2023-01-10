@@ -47,13 +47,10 @@ export default function StatisticsThisMonth({ user, categoryTotals, total, categ
                 General statistics
             </Box>
 
-            {/* <Box>
-                <CategoriesPiechart preferred_currency={user.preferred_currency!} categoryTotals={categoryTotals} />
-            </Box> */}
-
-            <Box display="flex">
+            <Box>
                 <Statistic title="Total" content={`${total.currency} ${total.price}`} />
-                <Box height="auto" width="1px" bgcolor="var(--exxpenses-main-border-color)" marginX="10px" />
+                <Box marginY="10px" />
+                {/* <Box height="auto" width="1px" bgcolor="var(--exxpenses-main-border-color)" marginX="10px" /> */}
                 <Statistic title="Most expensive category" content={`${mostExpensiveCategory?.category} (${mostExpensiveCategory?.currency} ${mostExpensiveCategory?.price})`} />
             </Box>
         </Box>
