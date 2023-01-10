@@ -20,16 +20,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
     const categories = ssr.categoriesGet.categories as Category[];
     const expensesMultipleCategories = ssr.expensesGetMultipleCategoriesGet as MultiCategoryExpenses;
 
-    let content =
-        <DashboardCategoriesTab
-            preferred_currency={user.preferred_currency!}
-            expensesMultipleCategories={expensesMultipleCategories}
-            categories={categories}
-            since={new Date(ssr.since)}
-            until={new Date(ssr.until)}
-            user={user}
-        />
-
     return (
         <Box position="relative" minWidth="100%" minHeight="100vh">
             <Head>
@@ -42,7 +32,14 @@ export default function Dashboard({ ssr }: DashboardProps) {
             </Head>
 
             <Box sx={{ minHeight: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
-                {content}
+                <DashboardCategoriesTab
+                    preferred_currency={user.preferred_currency!}
+                    expensesMultipleCategories={expensesMultipleCategories}
+                    categories={categories}
+                    since={new Date(ssr.since)}
+                    until={new Date(ssr.until)}
+                    user={user}
+                />
             </Box>
             <Footer />
         </Box>
