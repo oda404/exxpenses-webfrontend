@@ -43,9 +43,9 @@ export default function MinifiedExpenseChart({ since, until, dailyTotals }: Mini
     })
 
     return (
-        <ResponsiveContainer width="100%" height={80}>
+        <ResponsiveContainer width="100%" height={70}>
             <AreaChart data={plotData}
-                margin={{ top: 10, right: 20, left: 20, bottom: 0 }}>
+                margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                 <defs>
                     <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />

@@ -37,6 +37,11 @@ export default function Category({ ssr }: CategoryProps) {
         <Box position="relative">
             <Head>
                 <title>{"Exxpenses - " + category.name}</title>
+                <meta
+                    name="description"
+                    content={`Details about your ${category.name} expenses this month.`}
+                    key="desc"
+                />
             </Head>
             <Box sx={{ height: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
                 {content}

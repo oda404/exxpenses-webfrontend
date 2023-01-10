@@ -14,8 +14,8 @@ export default function FullViewCategoryExpensesTab({ category, expenses, since,
 
     if (expenses.length === 0) {
         content = (
-            <Box>
-                No expenses yet...
+            <Box fontSize=".875rem">
+                No expenses yet, try adding some at the top of this page.
             </Box>
         )
     }

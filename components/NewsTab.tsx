@@ -27,9 +27,9 @@ export default function NewsTab({ user }: NewTabProps) {
 
         let content = (
             <CardBox>
-                <Box fontSize='14px'>
+                <Box fontSize='.875rem'>
                     <b>{emailSent ? "Verification email sent" : "Verify your email"}</b>
-                    <Box fontSize="13px">
+                    <Box fontSize=".75rem">
                         {text}
                     </Box>
                 </Box>
@@ -57,9 +57,9 @@ export default function NewsTab({ user }: NewTabProps) {
     if (cards.length === 0) {
         let content = (
             <CardBox>
-                <Box fontSize='14px'>
+                <Box fontSize='.875rem'>
                     <b>Nothing new</b>
-                    <Box fontSize="13px">
+                    <Box fontSize=".75rem">
                         You are up to date!
                     </Box>
                 </Box>

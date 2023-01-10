@@ -5,18 +5,17 @@ import { useState } from "react";
 import { User, Expense, CategoryEditDocument, Category, ExpenseAddDocument } from "../generated/graphql";
 import expensesToTotal from "../utils/expensesToTotal";
 import CategoryTabExpense from "./CategoryTabExpense";
-import Footer from "./Footer";
 import InputField from "./InputField";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import Navbar from "./navbar";
 import styles from "../styles/Category.module.css"
 import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
 import { useRouter } from "next/router";
 import expensesToDailyTotals from "../utils/expensesToDaily";
 import CategoryStatistics from "./CategoryStatistics";
 import Topbar from "./Topbar";
+import FullViewCategoryExpensesTab from "./CategoryExpenses";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -177,8 +176,6 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
     const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
 
-    let content: any;
-
     let categoryHeader: any;
     if (editCategory) {
         categoryHeader = (
@@ -266,10 +263,10 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
     else {
         categoryHeader = (
             <Box display="flex">
-                <Box fontSize="20px">
+                <Box fontSize="22px">
                     <b>{category.name}</b>
                 </Box>
-                <Box fontSize="12px" marginTop="10px" marginLeft="8px">
+                <Box fontSize=".875rem" marginTop="10px" marginLeft="8px">
                     {category.default_currency}
                 </Box>
                 <IconButton
@@ -284,47 +281,6 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                 </IconButton>
             </Box>
         )
-    }
-
-    if (expenses.length === 0) {
-        content = (
-            <Box marginX="auto">
-                No expenses yet...
-            </Box>
-        )
-    }
-    else {
-
-        var dates = [];
-        for (let d = new Date(since); d <= now; d.setDate(d.getDate() + 1)) {
-            dates.push(new Date(d));
-        }
-        dates.reverse();
-
-        content = (
-            <Stack spacing={1}>
-                {dates.map((d: Date, idx: number) => {
-
-                    let datestr = d.toDateString();
-
-                    let found = expenses.findIndex((e: any) => new Date(e.date).toDateString() == datestr);
-                    if (found === -1)
-                        return;
-
-                    return (
-                        <Box key={idx}>
-                            <Typography sx={{ fontSize: "14px", color: "#9f9f9f" }}>{d.getDate()}.{d.getMonth() + 1}.{d.getFullYear()}</Typography>
-                            {expenses.map((e: any, idx2: number) => {
-                                if (new Date(e.date).toDateString() == datestr)
-                                    return <CategoryTabExpense key={idx2} category_name={category.name} category_currency={category.default_currency} expense={{ id: e.id, price: e.price, currency: e.currency, date: e.date, description: e.description }} />
-
-                                return <Box key={idx2}></Box>
-                            })}
-                        </Box>
-                    );
-                })}
-            </Stack>
-        );
     }
 
     return (
@@ -392,11 +348,11 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                 >
                     {categoryHeader}
 
-                    <Box fontSize="18px">
-                        {totalExpenses.currency} {totalExpenses.price}
+                    <Box fontSize="1.250rem">
+                        <b>{totalExpenses.currency} {totalExpenses.price}</b>
                     </Box>
 
-                    <Box fontSize="16px">
+                    <Box fontSize=".875rem">
                         Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
                     </Box>
                 </Box >
@@ -422,10 +378,10 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     height="fit-content"
                     marginTop="15px"
                 >
-                    <Box marginBottom="10px">
+                    <Box fontSize="22px" marginBottom="10px">
                         Expenses
                     </Box>
-                    {content}
+                    <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
 
                     <AccessibleForwardIcon sx={{ marginTop: "20px", marginLeft: "auto", marginRight: "auto" }} />
                 </Box>

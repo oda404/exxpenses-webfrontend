@@ -62,7 +62,7 @@ export default function CategoryStatistics({ lastMonthExpenses, category, since,
 
     return (
         <Box sx={{ height: "100%" }}>
-            <Box marginBottom="15px">
+            <Box marginBottom="15px" fontSize="22px">
                 Statistics
             </Box>
             <FullBarExpenseChart dailyTotals={dailyTotals} since={since} until={until} />

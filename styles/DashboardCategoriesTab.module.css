@@ -1,9 +1,14 @@
 .categoryActionButton {
-    margin-left: 100px;
     padding: 0px;
     margin: 0px;
     display: inline-block;
     min-height: 0;
     min-width: 0;
-    background: var(--exxpenses-main-bg-color);
+    background: var(--exxpenses-dark-green);
+    height: 100%;
+}
+
+.categoryActionButton:hover {
+    background: var(--exxpenses-light-green);
+    ;
 }

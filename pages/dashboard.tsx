@@ -16,8 +16,6 @@ type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Dashboard({ ssr }: DashboardProps) {
 
-    const [focusedCategory, setFocusedCategory] = useState<string | undefined>("");
-
     const user = ssr.userGet.user as User;
     const categories = ssr.categoriesGet.categories as Category[];
     const expensesMultipleCategories = ssr.expensesGetMultipleCategoriesGet as MultiCategoryExpenses;
@@ -25,8 +23,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
     let content =
         <DashboardCategoriesTab
             preferred_currency={user.preferred_currency!}
-            focusCategory={setFocusedCategory}
-            focusedCategory={focusedCategory}
             expensesMultipleCategories={expensesMultipleCategories}
             categories={categories}
             since={new Date(ssr.since)}

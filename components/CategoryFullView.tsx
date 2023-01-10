@@ -6,7 +6,7 @@ import { Category, CategoryEditDocument, Expense, ExpenseAddDocument, User } fro
 import expensesToDailyTotals from "../utils/expensesToDaily";
 import expensesToTotal from "../utils/expensesToTotal";
 import Footer from "./Footer";
-import FullViewCategoryExpensesTab from "./FullViewCategoryExpensesTab";
+import FullViewCategoryExpensesTab from "./CategoryExpenses";
 import InputField from "./InputField";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -271,10 +271,10 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
     else {
         categoryHeader = (
             <Box display="flex">
-                <Box fontSize="18px">
+                <Box fontSize="22px">
                     <b>{category.name}</b>
                 </Box>
-                <Box fontSize="12px" marginTop="10px" marginLeft="8px">
+                <Box fontSize=".875rem" marginTop="10px" marginLeft="8px">
                     {category.default_currency}
                 </Box>
                 <IconButton
@@ -321,14 +321,14 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                 <Box width="540px" >
                     <CardBox>
                         {categoryHeader}
-                        <Box fontSize="22px">
+                        <Box fontSize="1.250rem">
                             <Box>
                                 <b>{totalExpenses.currency} {totalExpenses.price}</b>
                             </Box>
                         </Box>
 
                         <Box display="flex">
-                            <Box fontSize="16px">
+                            <Box fontSize=".875rem">
                                 Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
                             </Box>
                             <Box marginLeft="auto">
@@ -346,7 +346,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                     <Box marginY="10px" />
 
                     <CardBox>
-                        <Box marginBottom="10px">
+                        <Box fontSize="22px">
                             Expenses
                         </Box>
                         <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
