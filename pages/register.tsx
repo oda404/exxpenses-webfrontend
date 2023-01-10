@@ -189,7 +189,7 @@ export default function Register({ }: RegisterProps) {
                                             </Button>
 
                                             <Button className={styles.registerButton} type="submit">
-                                                {isSubmitting ? <CircularProgress style={{ width: "26px", height: "26px" }} /> : "Let's go!"}
+                                                {isSubmitting ? <CircularProgress style={{ width: "20px", height: "20px" }} /> : "Let's go!"}
                                             </Button>
                                         </Box>
 

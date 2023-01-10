@@ -115,7 +115,7 @@ export default function Login({ }: LoginProps) {
                                                 Create account
                                             </Button>
                                             <Button className={styles.loginButton} type="submit">
-                                                {isSubmitting ? <CircularProgress style={{ width: "26px", height: "26px" }} /> : "Sign in"}
+                                                {isSubmitting ? <CircularProgress style={{ width: "20px", height: "20px" }} /> : "Sign in"}
                                             </Button>
                                         </Box>
 
