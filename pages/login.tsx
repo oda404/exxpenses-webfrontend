@@ -42,37 +42,35 @@ export default function Login({ }: LoginProps) {
                     justifyContent="center"
                     marginX="auto"
                     padding="50px"
-                    width="100%"
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
-                        <Box marginTop="20px">
-                            <Box
-                                color={'gray.100'}
-                                lineHeight={1.1}
-                                fontSize="24px"
-                                sx={{ marginBottom: "8px" }}
-                            >
-                                Sign in
-                            </Box>
+                        <Box
+                            marginTop="20px"
+                            color={'gray.100'}
+                            lineHeight={1.1}
+                            fontSize="24px"
+                            sx={{ marginBottom: "8px" }}
+                        >
+                            Sign in
                         </Box>
-                        <Box width={isMobileView ? "100%" : "320px"}>
+                        <Box width={isMobileView ? "100%" : "405px"}>
                             <Formik
                                 initialValues={{ email: "", password: "" }}
                                 onSubmit={async (values, actions) => {
 
                                     if (!values.email || values.email.length === 0) {
-                                        actions.setFieldError("email", "Enter your email address.")
+                                        actions.setFieldError("email", "Enter your email address")
                                         return;
                                     }
                                     else if (values.email.match(/^[a-zA-Z0-9.!#$&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === null) {
-                                        actions.setFieldError("email", "This email address is invalid.");
+                                        actions.setFieldError("email", "Invalid email address");
                                         return;
                                     }
 
                                     if (!values.password || values.password.length === 0) {
-                                        actions.setFieldError("password", "Enter your password.");
+                                        actions.setFieldError("password", "Enter your password");
                                         return;
                                     }
 
@@ -92,7 +90,7 @@ export default function Login({ }: LoginProps) {
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="14px">
                                                     <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
-                                                    <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                    <Box marginBottom={errors.email ? "-8px" : "0"} fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="email" />
                                                     </Box>
                                                 </Box>
@@ -102,20 +100,20 @@ export default function Login({ }: LoginProps) {
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="18px">
                                                     <InputField is_error={errors.password !== undefined} field={field} type="password" label="Password" name="password" />
-                                                    <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                    <Box marginBottom={errors.password ? "-8px" : "0"} fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="password" />
                                                     </Box>
-                                                    <Link href="/password-recover" className={styles.loginForgot}><b style={{ color: "#5f5fe0" }}>Forgot password?</b></Link>
+                                                    <Link href="/password-recover" className={styles.loginForgot}>Forgot password?</Link>
                                                 </Box>
                                             )}
                                         </Field>
 
                                         <Box marginTop="20px" display="flex" justifyContent="space-between">
-                                            <Button href="/register" className={styles.createAccountButton}>
+                                            <Button href="/register" className="emptyButton">
                                                 Create account
                                             </Button>
-                                            <Button className={styles.loginButton} type="submit">
-                                                {isSubmitting ? <CircularProgress style={{ width: "20px", height: "20px" }} /> : "Sign in"}
+                                            <Button disabled={isSubmitting} className="fullButton" type="submit">
+                                                {isSubmitting ? <CircularProgress style={{ width: "18px", height: "18px" }} /> : "Sign in"}
                                             </Button>
                                         </Box>
 

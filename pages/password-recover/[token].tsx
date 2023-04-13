@@ -28,7 +28,7 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                         color={'gray.100'}
                         lineHeight={1.1}
                         fontSize="24px"
-                        sx={{ marginBottom: "4px" }}
+                        sx={{ marginBottom: "20px" }}
                         textAlign="center"
                     >
                         Create a new password
@@ -45,17 +45,17 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                             }
 
                             if (password.length < 8) {
-                                actions.setFieldError("password", "Password needs to be at least 8 characters long.");
+                                actions.setFieldError("password", "Password needs to be at least 8 characters long");
                                 return;
                             }
 
                             if (!confirm_password || confirm_password.length === 0) {
-                                actions.setFieldError("confirm_password", "Please confirm your password.");
+                                actions.setFieldError("confirm_password", "Please confirm your password");
                                 return;
                             }
 
                             if (password !== confirm_password) {
-                                actions.setFieldError("confirm_password", "The passwords don't match.");
+                                actions.setFieldError("confirm_password", "Passwords don't match!");
                                 return;
                             }
 
@@ -80,6 +80,10 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                                     )}
                                 </Field>
 
+                                <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                    <ErrorMessage name="password" />
+                                </Box>
+
                                 <Field name="confirm_password">
                                     {({ field }: FieldProps) => (
                                         <Box marginTop="14px">
@@ -88,21 +92,22 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                                     )}
                                 </Field>
 
-                                <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
-                                    <Box display={errors.password || errors.confirm_password ? "none" : "block"} paddingX="8px" fontSize="13px">
-                                        Use 8 or more characters. For extra security make sure to include numbers and symbols.
+                                <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                    <Box fontWeight="inherit" color="inherit">
+                                        <ErrorMessage name="confirm_password" />
                                     </Box>
-                                    <ErrorMessage name="confirm_password" />
-                                    <ErrorMessage name="password" />
+                                    <Box color="var(--exxpenses-unimportant-color)" marginTop="10px" fontSize="13px">
+                                        The password should have 8 or more characters. For extra security make sure to include capital letters, numbers and symbols.
+                                    </Box>
                                 </Box>
 
                                 <Box marginTop="20px" display="flex" justifyContent="space-between">
 
-                                    <Button className={styles.loginButton} sx={{ width: "100% !important" }} type="submit">
+                                    <Button className="fullButton" sx={{ width: "100% !important" }} type="submit">
                                         {
                                             isSubmitting ?
                                                 <CircularProgress style={{ marginTop: "2px", width: "20px", height: "20px" }} /> :
-                                                "OK"
+                                                "Set"
                                         }
                                     </Button>
                                 </Box>
@@ -135,7 +140,7 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Exxpenses</title>
+                <title>Reset your password - Exxpenses</title>
                 <meta
                     name="description"
                     content="Forgot your email? Let us send you an email, so you can create a new one."

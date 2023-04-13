@@ -5,13 +5,17 @@ import { Box } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import InputField from "../components/InputField";
-import { UserGetQuery, UserGetDocument, CategoriesGetDocument, CategoriesGetQuery, CategoryAddDocument, UserUpdatePreferredCurrencyDocument } from "../generated/graphql";
+import { UserGetQuery, UserGetDocument, CategoriesGetDocument, CategoriesGetQuery, CategoryAddDocument, UserUpdatePreferredCurrencyDocument, User } from "../generated/graphql";
 import apolloClient from "../utils/apollo-client";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import styles from "../styles/Setup.module.css";
 import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Head from "next/head";
+import userGet from "../gql/ssr/userGet";
+import Image from 'next/image'
+import useShowMobileView from "../utils/useShowMobileView";
+import categoriesGet from "../gql/ssr/categoriesGet";
 
 interface NumberBubbleProps {
     number: string;
@@ -22,17 +26,18 @@ function NumberBubble({ number }: NumberBubbleProps) {
         <Box
             width="40px"
             height="40px"
-            sx={{ background: "var(--exxpenses-main-bg-color)", borderRadius: "25px" }}
+            sx={{
+                borderRadius: "25px"
+            }}
             display="flex"
             alignItems="center"
             justifyContent="center"
-            marginBottom="10px"
             position="relative"
         >
             <Box fontSize="24px" color="#888888">
                 {number}
             </Box>
-        </Box>
+        </Box >
     )
 }
 
@@ -51,24 +56,24 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
             <Paper className={styles.cardBox}>
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <NumberBubble number="1" />
-                    <Box position="relative" sx={{ padding: "14px", borderRadius: "4px" }} border="1px solid var(--exxpenses-main-border-color)" maxWidth="270px">
-                        <Box marginBottom="8px" fontSize="15px">
+                    <Box position="relative" sx={{ padding: "14px", borderRadius: "6px" }} maxWidth="270px">
+                        <Box marginBottom="4px" fontSize="15px">
                             {grayed_out ?
                                 <b>
                                     Preferred currency
                                 </b> :
                                 <b>
-                                    Tell us your preferred currency
+                                    Choose your preferred currency
                                 </b>
                             }
                         </Box>
-                        <Box marginBottom="24px" fontSize="15px">
+                        <Box marginBottom="18px" fontSize="14px">
                             {grayed_out ?
                                 <Box>
                                     You can always change this setting in your user preference panel.
                                 </Box> :
                                 <Box>
-                                    This currency will be used as the default for every category you create.
+                                    This currency will be used as the default for every expense you create.
                                 </Box>
                             }
                         </Box>
@@ -78,7 +83,7 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                             onSubmit={async ({ currency }, actions) => {
 
                                 if (!currency || currency.length === 0) {
-                                    actions.setFieldError("currency", "The category's default currency is required!");
+                                    actions.setFieldError("currency", "Enter a default currency");
                                     return;
                                 }
 
@@ -93,9 +98,11 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                                     <Box>
                                         <Field name="currency">
                                             {({ field, form }: FieldProps) => (
-                                                <Box marginTop="12px">
-                                                    <InputField field={field} name="currency" label="Currency" />
-                                                    <ErrorMessage name="currency" component="div" />
+                                                <Box>
+                                                    <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-main-bg-color)" field={field} name="currency" label="Currency" />
+                                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                        <ErrorMessage name="currency" />
+                                                    </Box>
                                                 </Box>
                                             )}
                                         </Field>
@@ -103,7 +110,8 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                                     <Button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className={styles.submitButton}
+                                        sx={{ width: "100% !important" }}
+                                        className="fullButton"
                                     >
                                         {grayed_out ?
                                             <CheckRoundedIcon /> :
@@ -116,7 +124,7 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                             )}
                         </Formik>
                         <Backdrop
-                            sx={{ position: "absolute !important", zIndex: "999", background: "rgba(0, 0, 0, 0.3)" }}
+                            sx={{ position: "absolute !important", zIndex: "999", background: "rgba(0, 0, 0, 0.3)", borderRadius: "6px" }}
                             open={grayed_out}
                         />
                     </Box>
@@ -136,81 +144,88 @@ function AddFirstCategoryCard({ preferred_currency, grayed_out }: AddFirstCatego
     const router = useRouter();
     const [categoryAdd] = useMutation(CategoryAddDocument);
 
+    let content = (
+        <>
+            <Box marginBottom="18px">
+                Something you spend money on every month, like 'Takeaway'.
+            </Box>
+            <Formik
+                initialValues={{ name: "", default_curr: preferred_currency }}
+                onSubmit={async ({ name, default_curr }, actions) => {
+
+                    if (!name || name.length === 0) {
+                        actions.setFieldError("name", "Enter a name")
+                        return;
+                    }
+                    else if (name.length > 30) {
+                        actions.setFieldError("name", "Name can't be longer than 30 characters");
+                        return;
+                    }
+
+                    if (!default_curr || default_curr.length === 0) {
+                        actions.setFieldError("default_curr", "The category's default currency is required");
+                        return;
+                    }
+
+                    const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: default_curr } } });
+                    if (data.categoryAdd.error !== null) {
+                        actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
+                        return;
+                    }
+
+                    router.reload();
+                }}
+            >
+                {({ isSubmitting, errors }) => (
+                    <Form>
+                        <Field name="name">
+                            {({ field, form }: FieldProps) => (
+                                <Box>
+                                    <InputField is_error={errors.name !== undefined} bg="var(--exxpenses-main-bg-color)" field={field} name="name" label="Name" />
+                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                        <ErrorMessage name="name" />
+                                    </Box>
+                                </Box>
+                            )}
+                        </Field>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            sx={{ width: "100% !important" }}
+                            className="fullButton"
+                        >
+                            Add
+                        </Button>
+                    </Form>
+                )}
+            </Formik>
+        </>
+    )
+
+    if (grayed_out) {
+        content = (
+            <Box>
+                Setup your preferred currency before creating your first category.
+            </Box>
+        );
+    }
+
     return (
         <Grid item id="addFirstCategoryBox">
             <Paper className={styles.cardBox}>
                 <Box display="flex" flexDirection="column" alignItems="center">
                     <NumberBubble number="2" />
-                    <Box position="relative" sx={{ padding: "14px", borderRadius: "4px" }} border="1px solid var(--exxpenses-main-border-color)" maxWidth="270px">
-                        <Box marginBottom="8px" fontSize="15px">
+                    <Box position="relative" sx={{ padding: "14px", borderRadius: "6px" }} maxWidth="270px">
+                        <Box marginBottom="4px" fontSize="15px">
                             <b>
-                                Your first category
+                                Create your first category
                             </b>
                         </Box>
-                        <Box marginBottom="12px" fontSize="15px">
-                            Kickstart your Exxpenses account by creating your first expense category!
+                        <Box fontSize="14px">
+                            {content}
                         </Box>
-
-                        <Formik
-                            initialValues={{ name: "", default_curr: preferred_currency }}
-                            onSubmit={async ({ name, default_curr }, actions) => {
-
-                                if (!name || name.length === 0) {
-                                    actions.setFieldError("name", "The category name is required!")
-                                    return;
-                                }
-                                else if (name.length > 30) {
-                                    actions.setFieldError("name", "The category name can't be longer than 30 characters!");
-                                    return;
-                                }
-
-                                if (!default_curr || default_curr.length === 0) {
-                                    actions.setFieldError("default_curr", "The category's default currency is required!");
-                                    return;
-                                }
-
-                                const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: default_curr } } });
-                                if (data.categoryAdd.error !== null) {
-                                    actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
-                                    return;
-                                }
-
-                                router.reload();
-                            }}
-                        >
-                            {({ isSubmitting, errors }) => (
-                                <Form>
-                                    <Box display="flex">
-                                        <Field name="name">
-                                            {({ field, form }: FieldProps) => (
-                                                <Box marginTop="12px">
-                                                    <InputField field={field} name="name" label="Name" />
-                                                    <ErrorMessage name="name" component="div" />
-                                                </Box>
-                                            )}
-                                        </Field>
-                                        <Box marginLeft="5px" marginRight="5px" />
-                                        <Field name="default_curr">
-                                            {({ field }: FieldProps) => (
-                                                <Box marginTop="10px">
-                                                    <InputField field={field} name="default_curr" label="Currency" />
-                                                    <ErrorMessage name="default_curr" component="div" />
-                                                </Box>
-                                            )}
-                                        </Field>
-                                    </Box>
-                                    <Button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className={styles.submitButton}
-                                    >
-                                        Add
-                                    </Button>
-                                </Form>
-                            )}
-                        </Formik>
                         <Backdrop
-                            sx={{ position: "absolute !important", zIndex: "999", background: "rgba(0, 0, 0, 0.3)" }}
+                            sx={{ position: "absolute !important", zIndex: "999", background: "rgba(0, 0, 0, 0.3)", borderRadius: "6px" }}
                             open={grayed_out}
                         />
                     </Box>
@@ -224,8 +239,11 @@ type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export default function Setup({ ssr }: DashboardProps) {
 
-    const preferred_currency = ssr.userGet.user.preferred_currency;
-    const lastname = ssr.userGet.user.lastname;
+    const isMobileView = useShowMobileView();
+
+    const user = ssr.userGet.user as User;
+    const preferred_currency = user.preferred_currency;
+    const lastname = user.lastname;
     const router = useRouter();
 
     const scrollToTop = (pos: number) => {
@@ -237,13 +255,13 @@ export default function Setup({ ssr }: DashboardProps) {
 
     useEffect(() => {
         if (preferred_currency && router.asPath !== "/setup#addFirstCategoryBox") {
-            const pos = document.getElementById("addFirstCategoryBox").offsetTop;
+            const pos = document.getElementById("addFirstCategoryBox")!.offsetTop;
             scrollToTop(pos);
         }
     })
 
     return (
-        <Box position="relative" minHeight="100vh" display="flex" flexDirection="column" sx={{ height: "100vh", overflowY: "auto" }}>
+        <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
                 <title>Exxpenses - Track your day-to-day expenses</title>
                 <meta
@@ -252,31 +270,39 @@ export default function Setup({ ssr }: DashboardProps) {
                     key="desc"
                 />
             </Head>
-            <Box>
 
+            <Box height="70vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
                 <Box
-                    marginTop="60px"
-                    alignItems="center"
                     display="flex"
-                    flexDirection="column"
+                    justifyContent="center"
+                    marginX="auto"
+                    padding="50px"
+                    width="100%"
+                    borderRadius="8px"
                 >
-                    <Box textAlign="center" fontSize="18px" marginBottom="15px">
-                        <b>Setup your Exxpenses account</b>
-                        <Box fontSize="16px">
-                            Let&apos;s get the basic stuff out of the way
+                    <Box width="100%" display="flex" flexDirection="column" alignItems="center">
+                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                        <Box
+                            marginTop="20px"
+                            color={'gray.100'}
+                            lineHeight={1.1}
+                            fontSize="24px"
+                            sx={{ marginBottom: "8px" }}
+                        >
+                            Let's setup your account
                         </Box>
-                    </Box>
-                    <Box>
-                        <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
-                            <ConfigurePreferredCurrencyCard
-                                preferred_currency={preferred_currency ? preferred_currency : ""}
-                                grayed_out={preferred_currency !== null}
-                            />
-                            <AddFirstCategoryCard
-                                preferred_currency={preferred_currency ? preferred_currency : ""}
-                                grayed_out={preferred_currency === null}
-                            />
-                        </Grid>
+                        <Box>
+                            <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
+                                <ConfigurePreferredCurrencyCard
+                                    preferred_currency={preferred_currency ? preferred_currency : ""}
+                                    grayed_out={preferred_currency !== null}
+                                />
+                                <AddFirstCategoryCard
+                                    preferred_currency={preferred_currency ? preferred_currency : ""}
+                                    grayed_out={preferred_currency === null}
+                                />
+                            </Grid>
+                        </Box>
                     </Box>
                 </Box>
             </Box>
@@ -287,29 +313,19 @@ export default function Setup({ ssr }: DashboardProps) {
 }
 
 export async function getServerSideProps({ req }: any) {
-    const user_resp: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
-        query: UserGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
 
-    if (user_resp.data.userGet.user === undefined || user_resp.data.userGet.user === null) {
+    const userData = await userGet(req);
+    if (!userData.user) {
         return {
             redirect: {
                 permanent: false,
                 destination: "/login"
             },
-            props: {}
         }
     }
 
-    const category_resp: ApolloQueryResult<CategoriesGetQuery> = await apolloClient.query({
-        query: CategoriesGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
-
-    if (category_resp.data.categoriesGet?.categories?.length! > 0) {
+    const categoriesData = await categoriesGet(req);
+    if (userData.user.preferred_currency && categoriesData.categories?.length! > 0) {
         return {
             redirect: {
                 permanent: false,
@@ -321,7 +337,7 @@ export async function getServerSideProps({ req }: any) {
     return {
         props: {
             ssr: {
-                userGet: user_resp.data.userGet
+                userGet: userData
             }
         }
     }

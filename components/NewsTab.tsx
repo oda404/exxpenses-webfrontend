@@ -3,52 +3,63 @@ import { useState } from "react";
 import { User, UserSendVerificationEmailDocument } from "../generated/graphql";
 import CardBox from "./CardBox";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import { CircularProgress } from "@mui/material";
 import { useMutation } from "@apollo/client";
 
 interface NewTabProps {
     user: User;
 }
 
+type EmailSendStatus = "notsent" | "sending" | "sent";
+
 export default function NewsTab({ user }: NewTabProps) {
 
     const [userSendVerificationEmail] = useMutation(UserSendVerificationEmailDocument);
-    const [emailSent, setEmailSent] = useState(false);
+    const [emailSent, setEmailSent] = useState<EmailSendStatus>("notsent");
     let cards: any[] = [];
 
     if (!user.verified_email) {
 
         let text: string;
-        if (emailSent) {
+        if (emailSent == "sent") {
             text = "A verification email has been sent to your inbox.";
         }
         else {
             text = "Complete your Exxpenses account by verifying your email address.";
         }
 
+        let button_content = null;
+        if (emailSent == "notsent")
+            button_content = "Confirm";
+        else if (emailSent == "sending")
+            button_content = <CircularProgress style={{ width: "18px", height: "18px" }} />
+        else
+            button_content = <CheckRoundedIcon />;
+
         let content = (
             <CardBox key={1}>
                 <Box fontSize='.875rem'>
-                    <b>{emailSent ? "Verification email sent" : "Verify your email"}</b>
+                    <b>{emailSent == "sent" ? "Verification email sent" : "Verify your email"}</b>
                     <Box fontSize=".75rem">
                         {text}
                     </Box>
                 </Box>
                 <Button
                     sx={{
-                        height: "30px !important",
-                        padding: "3px !important",
-                        marginTop: "10px"
+                        width: "100% !important",
+                        height: "30px !important"
                     }}
-                    className="standardButton"
+                    className="fullButton"
                     onClick={async () => {
+                        setEmailSent("sending");
                         await userSendVerificationEmail();
-                        setEmailSent(true);
+                        setEmailSent("sent");
                     }}
-                    disabled={emailSent}
+                    disabled={emailSent != "notsent"}
                 >
-                    {emailSent ? <CheckRoundedIcon /> : "Confirm"}
+                    {button_content}
                 </Button>
-            </CardBox>
+            </CardBox >
         );
 
         cards.push(content);
@@ -70,7 +81,7 @@ export default function NewsTab({ user }: NewTabProps) {
     }
 
     return (
-        <Box borderRadius="8px" border="1px solid var(--exxpenses-main-border-color)" width="260px" height="fit-content">
+        <Box borderRadius="8px" width="260px" height="fit-content">
             {cards}
         </Box>
     )

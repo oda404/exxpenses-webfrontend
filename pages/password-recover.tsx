@@ -20,7 +20,7 @@ export default function PasswordRecover() {
     let header: any;
     if (sent) {
         header = (
-            "We've sent you an email"
+            "We've sent you an email!"
         )
     }
     else {
@@ -32,7 +32,7 @@ export default function PasswordRecover() {
     let content: any;
     if (sent) {
         content = (
-            "Follow the instructions in the email and create a new password."
+            "If this address has been registered on Exxpenses you will shortly receive an email from us. Make sure to check the spam folder if no email comes in a few minutes."
         )
     }
     else {
@@ -63,7 +63,7 @@ export default function PasswordRecover() {
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
-                        <Box marginBottom="8px" width="360px" marginTop="20px">
+                        <Box marginBottom="8px" width={isMobileView ? "100%" : "405px"} marginTop="20px">
                             <Box
                                 color={'gray.100'}
                                 lineHeight={1.1}
@@ -77,17 +77,17 @@ export default function PasswordRecover() {
                                 {content}
                             </Box>
                         </Box>
-                        <Box width={isMobileView ? "100%" : "320px"}>
+                        <Box width={isMobileView ? "100%" : "405px"}>
                             <Formik
                                 initialValues={{ email: "" }}
                                 onSubmit={async (values, actions) => {
 
                                     if (!values.email || values.email.length === 0) {
-                                        actions.setFieldError("email", "Enter your email address.")
+                                        actions.setFieldError("email", "Enter your email address")
                                         return;
                                     }
                                     else if (values.email.match(/^[a-zA-Z0-9.!#$&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === null) {
-                                        actions.setFieldError("email", "This email address is invalid.");
+                                        actions.setFieldError("email", "Invalid email address");
                                         return;
                                     }
 
@@ -107,7 +107,7 @@ export default function PasswordRecover() {
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="14px">
                                                     <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
-                                                    <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                    <Box marginBottom={errors.email ? "-8px" : "0"} fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="email" />
                                                     </Box>
                                                 </Box>
@@ -115,10 +115,10 @@ export default function PasswordRecover() {
                                         </Field>
 
                                         <Box marginTop="20px" display="flex" justifyContent="space-between">
-                                            <Button href="/login" className={styles.createAccountButton}>
+                                            <Button href="/login" className="emptyButton">
                                                 Back to login
                                             </Button>
-                                            <Button disabled={sent} className={styles.loginButton} type="submit">
+                                            <Button disabled={sent || isSubmitting} className="fullButton" type="submit">
                                                 {
                                                     sent ? <CheckRoundedIcon style={{ marginTop: "2px", width: "20px", height: "20px" }} /> :
                                                         isSubmitting ?

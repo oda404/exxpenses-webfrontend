@@ -35,8 +35,6 @@ export default function InputField({ bg, label, type, name, field, is_error, par
     let borderColor: string = "#444444";
     if (is_error)
         borderColor = "var(--exxpenses-main-error-color)";
-    else if (focused)
-        borderColor = "var(--exxpenses-dark-green)"
 
     return (
         <Box
@@ -54,7 +52,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
         >
             <Box
                 sx={{
-                    color: show ? "#797272 !important" : "#c3b2b2 !important",
+                    color: show ? "#797272 !important" : "#949997 !important",
                     transform: show ? "none !important" : "translate(-5px, -80%) !important",
                     background: bg ? bg : "var(--exxpenses-main-bg-color)"
                 }}
@@ -76,6 +74,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 onBlurCapture={() => { setFocused(false); }}
                 className={styles.inputField}
                 autoComplete="off"
+                spellCheck={false}
                 style={{ height: "35px", fontSize: "14px", background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
             />
             {type === "password" ?

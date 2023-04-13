@@ -19,11 +19,11 @@ function DrawerLink({ active, name, href }: DrawerLinkProps) {
                     borderRadius: "12px",
                     padding: "8px",
                     paddingX: "12px",
-                    background: active ? "var(--exxpenses-main-button-hover-bg-color)" : '',
+                    background: active ? "var(--exxpenses-second-bg-color)" : '',
                     textDecoration: "none",
                     width: "100%",
                     "&:hover": {
-                        background: active ? "var(--exxpenses-main-button-hover-bg-color)" : "var(--exxpenses-second-bg-color)",
+                        background: active ? "var(--exxpenses-second-bg-color)" : "var(--exxpenses-main-button-hover-bg-color)",
                         textDecoration: "none",
                         cursor: "pointer"
                     },

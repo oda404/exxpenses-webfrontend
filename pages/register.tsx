@@ -50,34 +50,34 @@ export default function Register({ }: RegisterProps) {
                                 Create your account
                             </Box>
                         </Box>
-                        <Box width={isMobileView ? "100%" : "380px"}>
+                        <Box width={isMobileView ? "100%" : "405px"}>
                             <Formik
                                 initialValues={{ firstname: "", lastname: "", email: "", password: "", confirm_password: "" }}
                                 onSubmit={async ({ firstname, lastname, email, password, confirm_password }, actions) => {
                                     if (!firstname || firstname.length === 0) {
-                                        actions.setFieldError("firstname", "Enter your firstname.");
+                                        actions.setFieldError("firstname", "Enter your firstname");
                                         return;
                                     }
                                     else if (firstname.length > 30) {
-                                        actions.setFieldError("firstname", "The firstname can't be longer than 30 characters.");
+                                        actions.setFieldError("firstname", "Firstname can't be longer than 30 characters");
                                         return;
                                     }
 
                                     if (!lastname || lastname.length === 0) {
-                                        actions.setFieldError("lastname", "Enter your lastname.");
+                                        actions.setFieldError("lastname", "Enter your lastname");
                                         return;
                                     }
                                     else if (lastname.length > 30) {
-                                        actions.setFieldError("lastname", "The lastname can't be longer than 30 characters.");
+                                        actions.setFieldError("lastname", "Lastname can't be longer than 30 characters");
                                         return;
                                     }
 
                                     if (!email || email.length === 0) {
-                                        actions.setFieldError("email", "Enter your email address.")
+                                        actions.setFieldError("email", "Enter your email address")
                                         return;
                                     }
                                     else if (email.match(/^[a-zA-Z0-9.!#$&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === null) {
-                                        actions.setFieldError("email", "Invalid email address.");
+                                        actions.setFieldError("email", "Invalid email address");
                                         return;
                                     }
 
@@ -87,17 +87,17 @@ export default function Register({ }: RegisterProps) {
                                     }
 
                                     if (password.length < 8) {
-                                        actions.setFieldError("password", "Password needs to be at least 8 characters long.");
+                                        actions.setFieldError("password", "Password needs to be at least 8 characters long");
                                         return;
                                     }
 
                                     if (!confirm_password || confirm_password.length === 0) {
-                                        actions.setFieldError("confirm_password", "Please confirm your password.");
+                                        actions.setFieldError("confirm_password", "Please confirm your password");
                                         return;
                                     }
 
                                     if (password !== confirm_password) {
-                                        actions.setFieldError("confirm_password", "The passwords don't match.");
+                                        actions.setFieldError("confirm_password", "Passwords don't match!");
                                         return;
                                     }
 
@@ -142,26 +142,28 @@ export default function Register({ }: RegisterProps) {
                                                 )}
                                             </Field>
                                         </Box>
-                                        <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                        <Box marginBottom={errors.firstname || errors.lastname ? "-8px" : "0"} fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                             <ErrorMessage name="firstname" />
-                                            <ErrorMessage name="lastname" />
+                                            <Box fontWeight="inherit" color="inherit" marginLeft="52%">
+                                                <ErrorMessage name="lastname" />
+                                            </Box>
                                         </Box>
 
                                         <Field name="email">
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="14px">
                                                     <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
-                                                    <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                    <Box marginBottom={errors.email ? "-8px" : "0"} fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="email" />
                                                     </Box>
                                                 </Box>
                                             )}
                                         </Field>
 
-                                        <Box display="flex">
+                                        <Box marginTop="14px" display="flex">
                                             <Field name="password">
                                                 {({ field }: FieldProps) => (
-                                                    <Box marginTop="18px">
+                                                    <Box>
                                                         <InputField is_error={errors.password !== undefined} field={field} type="password" label="Password" name="password" />
                                                     </Box>
                                                 )}
@@ -169,27 +171,30 @@ export default function Register({ }: RegisterProps) {
                                             <Box marginX="5px" />
                                             <Field name="confirm_password">
                                                 {({ field }: FieldProps) => (
-                                                    <Box marginTop="18px">
+                                                    <Box>
                                                         <InputField is_error={errors.confirm_password !== undefined} field={field} type="password" label="Confirm" name="confirm_password" />
                                                     </Box>
                                                 )}
                                             </Field>
                                         </Box>
-                                        <Box color="var(--exxpenses-main-error-color)" fontSize="14px">
-                                            <Box display={errors.password || errors.confirm_password ? "none" : "block"} paddingX="12px" fontSize="13px">
-                                                Use 8 or more characters. For extra security make sure to include numbers and symbols.
-                                            </Box>
-                                            <ErrorMessage name="confirm_password" />
+                                        <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                             <ErrorMessage name="password" />
+                                            <Box fontWeight="inherit" color="inherit" marginLeft="52%">
+                                                <ErrorMessage name="confirm_password" />
+                                            </Box>
+                                            <Box color="var(--exxpenses-unimportant-color)" marginTop="10px" fontSize="13px">
+                                                The password should have 8 or more characters. For extra security make sure to include capital letters, numbers and symbols.
+                                            </Box>
                                         </Box>
 
                                         <Box marginTop="20px" display="flex" justifyContent="space-between">
-                                            <Button href="/login" className={styles.createAccountButton}>
-                                                Already have an account?
+                                            <Button sx={{ fontWeight: "bold" }} href="/login" className="emptyButton">
+                                                <Box color="inherit" fontWeight="inherit">
+                                                    Already have an account?
+                                                </Box>
                                             </Button>
-
-                                            <Button className={styles.registerButton} type="submit">
-                                                {isSubmitting ? <CircularProgress style={{ width: "20px", height: "20px" }} /> : "Let's go!"}
+                                            <Button disabled={isSubmitting} className="fullButton" type="submit">
+                                                {isSubmitting ? <CircularProgress style={{ width: "18px", height: "18px" }} /> : "Let's go!"}
                                             </Button>
                                         </Box>
 

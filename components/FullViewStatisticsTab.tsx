@@ -33,7 +33,7 @@ function expensesToCategoryTotal(expenses: Expense[], category: Category, totalP
 
 function SideTab({ user, categoryTotals }: { user: User, categoryTotals: CategoryTotal[] }) {
     return (
-        <Box borderRadius="8px" border="1px solid var(--exxpenses-main-border-color)" width="260px" height="fit-content">
+        <Box borderRadius="8px" width="260px" height="fit-content">
             <CardBox>
                 <Box fontSize='.875rem'>
                     <b>Piechart</b>

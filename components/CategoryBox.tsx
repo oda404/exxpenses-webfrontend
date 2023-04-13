@@ -219,10 +219,7 @@ export default function CategoryBox({ since, until, preferred_currency, category
                     <Box display="flex" height="74px">
                         <Box minWidth="fit-content">
                             <Box alignItems="center" sx={{ overflowX: "hidden" }} display="flex">
-                                <ClassIcon
-                                    sx={{ width: "20px", height: "20px" }}
-                                />
-                                <Box sx={{ textTransform: "none", marginLeft: "8px", fontSize: ".875rem" }}><b>{category.name}</b></Box>
+                                <Box sx={{ textTransform: "none", fontSize: ".875rem" }}><b>{category.name}</b></Box>
                                 {warningIcon}
                             </Box>
 

@@ -25,11 +25,11 @@ function DrawerLink({ active, name, href, icon }: DrawerLinkProps) {
                     borderRadius: "8px",
                     padding: "8px",
                     paddingX: "12px",
-                    background: active ? "var(--exxpenses-main-button-hover-bg-color)" : '',
+                    background: active ? "var(--exxpenses-second-bg-color)" : '',
                     textDecoration: "none",
                     width: "auto",
                     "&:hover": {
-                        background: active ? "var(--exxpenses-main-button-hover-bg-color)" : "var(--exxpenses-second-bg-color)",
+                        background: active ? "var(--exxpenses-second-bg-color)" : "var(--exxpenses-main-button-hover-bg-color)",
                         textDecoration: "none",
                         cursor: "pointer"
                     },
@@ -166,7 +166,7 @@ export default function Sidenav({ firstname, lastname }: SidenavProps) {
     return (
         <Box borderRadius="8px" marginX="20px" width="170px" height="fit-content">
             <Stack spacing={1}>
-                <SidebarUserBox firstname={firstname} lastname={lastname} />
+                {/* <SidebarUserBox firstname={firstname} lastname={lastname} /> */}
                 <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
                 <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" icon={<ShowChartIcon sx={{ width: "20px", height: "20px" }} />} />
             </Stack>

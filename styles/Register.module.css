@@ -1,16 +1,23 @@
 .registerButton {
     width: 100px;
+    display: flex;
     margin-top: 10px;
     margin-bottom: 6px;
     background: var(--exxpenses-dark-green);
     /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
-    color: var(--exxpenses-main-color);
+    color: white;
     text-transform: none;
     height: 34px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
 
 .registerButton:hover {
     background: var(--exxpenses-light-green);
+}
+
+.registerButton:active {
+    transform: translateY(2px);
+    box-shadow: none;
 }
 
 .registerForgot {
@@ -19,18 +26,19 @@
 
 .createAccountButton {
     width: fit-content;
-    padding: 4px;
-    padding-left: 8px;
-    padding-right: 8px;
+    display: flex;
+    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
     margin-top: 10px;
     margin-bottom: 6px;
+    border-radius: 6px;
     /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
-    color: var(--exxpenses-dark-green);
+    color: var(--exxpenses-light-green);
     text-transform: none;
     height: 34px;
 }
 
 .createAccountButton:hover {
     background: var(--exxpenses-second-bg-color);
-    color: var(--exxpenses-light-green);
 }

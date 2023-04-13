@@ -1,7 +1,6 @@
 import { Box, Link } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import Footer from "../../components/Footer";
-import Topbar from "../../components/Topbar";
 import { UserVerifyEmailDocument } from "../../generated/graphql";
 import apolloClient from "../../utils/apollo-client";
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
@@ -34,7 +33,7 @@ export default function Verify({ ssr }: CategoryProps) {
                             <BigLogo />
                             <Box marginTop="20px" />
                             <CheckRoundedIcon sx={{ fill: "var(--exxpenses-light-green)", width: "40px", height: "40px" }} />
-                            <Box fontSize="18px">
+                            <Box marginTop="10px" fontSize="18px">
                                 <b>Your email has been successfully verified!</b>
                             </Box>
                         </Box>
@@ -63,7 +62,7 @@ export default function Verify({ ssr }: CategoryProps) {
                             <Box marginTop="20px" />
                             <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
                             <Box marginTop="10px" width="500px" fontSize="18px">
-                                <b>There was a problem verifying your email. The link you followed may have expired. Please try sending another email.</b>
+                                <b>There was a problem verifying your email. The link you followed may have expired. Please try sending another verification email.</b>
                             </Box>
                             <Box marginTop="5px" width="500px" fontSize="18px">
                                 <b>If the problem persists, please contact support.</b>
