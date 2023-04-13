@@ -306,7 +306,7 @@ export default function CategoryBox({ since, until, preferred_currency, category
                                     <b>Are you sure?</b>
                                 </Box>
                                 <Divider sx={{ width: "100%", background: "var(--exxpenses-main-border-color)", marginY: "5px" }} />
-                                Deleting this category will also delete all of it&apos;s expenses forever!
+                                Deleting this category will also delete all of it&#39;s expenses forever!
                                 <Button
                                     className={styles.categoryDeleteConfirmButton}
                                     onClick={async () => {

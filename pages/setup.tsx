@@ -147,7 +147,7 @@ function AddFirstCategoryCard({ preferred_currency, grayed_out }: AddFirstCatego
     let content = (
         <>
             <Box marginBottom="18px">
-                Something you spend money on every month, like 'Takeaway'.
+                Something you spend money on every month, like &#39;Takeaway&#39;.
             </Box>
             <Formik
                 initialValues={{ name: "", default_curr: preferred_currency }}
@@ -289,7 +289,7 @@ export default function Setup({ ssr }: DashboardProps) {
                             fontSize="24px"
                             sx={{ marginBottom: "8px" }}
                         >
-                            Let's setup your account
+                            Let&#39;s setup your account
                         </Box>
                         <Box>
                             <Grid spacing={4} justifyContent="center" padding="12px" height="fit-content" width="fit-content" container>
