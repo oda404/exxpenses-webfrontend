@@ -41,6 +41,7 @@ export default function Login({ }: LoginProps) {
                     marginX="auto"
                     padding="50px"
                     borderRadius="8px"
+                    width="100%"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <BigLogo />
