@@ -38,7 +38,6 @@ export default function Login({ }: LoginProps) {
                 <Box
                     display="flex"
                     justifyContent="center"
-                    marginX="auto"
                     padding="50px"
                     borderRadius="8px"
                     width="100%"
