@@ -6,11 +6,10 @@ import { UserGetDocument, UserGetQuery, UserRegisterDocument } from "../generate
 import apolloClient from "../utils/apollo-client";
 import { InferGetServerSidePropsType } from "next";
 import { Box, Button, CircularProgress, Stack } from "@mui/material";
-import styles from "../styles/Register.module.css";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 import Head from "next/head";
-import Image from 'next/image'
+import BigLogo from "../components/BigLogo";
 
 type RegisterProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -40,7 +39,7 @@ export default function Register({ }: RegisterProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                        <BigLogo />
                         <Box marginTop="20px" textAlign="center" marginBottom="20px">
                             <Box
                                 color={'gray.100'}

@@ -5,7 +5,6 @@ import { UserVerifyEmailDocument } from "../../generated/graphql";
 import apolloClient from "../../utils/apollo-client";
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import Image from 'next/image'
 import Head from "next/head";
 import useShowMobileView from "../../utils/useShowMobileView";
 import BigLogo from "../../components/BigLogo";
@@ -58,7 +57,7 @@ export default function Verify({ ssr }: CategoryProps) {
                 >
                     <Box display="flex" flexDirection="column">
                         <Box marginBottom="10px" flexDirection="column" display="flex" alignItems="center">
-                            <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                            <BigLogo />
                             <Box marginTop="20px" />
                             <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
                             <Box marginTop="10px" width="500px" fontSize="18px">

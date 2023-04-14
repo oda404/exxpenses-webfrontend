@@ -16,6 +16,7 @@ import userGet from "../gql/ssr/userGet";
 import Image from 'next/image'
 import useShowMobileView from "../utils/useShowMobileView";
 import categoriesGet from "../gql/ssr/categoriesGet";
+import BigLogo from "../components/BigLogo";
 
 interface NumberBubbleProps {
     number: string;
@@ -281,7 +282,7 @@ export default function Setup({ ssr }: DashboardProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                        <BigLogo />
                         <Box
                             marginTop="20px"
                             color={'gray.100'}

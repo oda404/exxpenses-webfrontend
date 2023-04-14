@@ -1,12 +1,10 @@
 
-import { ApolloQueryResult, useMutation } from "@apollo/client";
-import { UserGetDocument, UserGetQuery, UserLoginDocument } from "../generated/graphql";
+import { useMutation } from "@apollo/client";
+import { UserLoginDocument } from "../generated/graphql";
 import { ErrorMessage, Field, FieldProps, Formik } from "formik";
 import InputField from "../components/InputField";
-import apolloClient from "../utils/apollo-client";
 import { InferGetServerSidePropsType } from "next";
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import styles from "../styles/Login.module.css";
@@ -16,7 +14,7 @@ import Footer from "../components/Footer";
 import Head from "next/head";
 import Cookies from "universal-cookie";
 import userGet from "../gql/ssr/userGet";
-import Image from 'next/image'
+import BigLogo from "../components/BigLogo";
 
 type LoginProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -45,7 +43,7 @@ export default function Login({ }: LoginProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                        <BigLogo />
                         <Box
                             marginTop="20px"
                             color={'gray.100'}

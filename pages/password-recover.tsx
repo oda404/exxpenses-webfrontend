@@ -10,6 +10,7 @@ import { useState } from "react";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { useMutation } from "@apollo/client";
 import { UserRecoverPasswordDocument } from "../generated/graphql";
+import BigLogo from "../components/BigLogo";
 
 export default function PasswordRecover() {
 
@@ -62,7 +63,7 @@ export default function PasswordRecover() {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                        <BigLogo />
                         <Box marginBottom="8px" width={isMobileView ? "100%" : "405px"} marginTop="20px">
                             <Box
                                 color={'gray.100'}

@@ -11,6 +11,7 @@ import useShowMobileView from "../../utils/useShowMobileView";
 import apolloClient from "../../utils/apollo-client";
 import styles from "../../styles/PasswordRecoverNew.module.css"
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
+import BigLogo from "../../components/BigLogo";
 
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -158,7 +159,7 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <Image src="/exxpenses.svg" alt="peni" width={150} height={30} />
+                        <BigLogo />
                         {content}
                     </Box>
                 </Box>

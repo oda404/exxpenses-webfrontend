@@ -10,14 +10,13 @@ export default function Topbar() {
         <Box
             display="flex"
             justifyContent={isMobileView ? "normal" : "center"}
-            padding="5px"
+            padding="8px"
             paddingX="18px"
-            paddingTop="18px"
             width="auto"
             bgcolor="var(--exxpenses-second-bg-color)"
         >
             <Link style={{ marginLeft: isMobileView ? "0px" : "-850px" }} href="/dashboard">
-                <Image src="/exxpenses.svg" alt="Exxpenses" width={130} height={25} />
+                <Image src="/exxpenses.svg" alt="Exxpenses" width={130} height={32} />
             </Link>
         </Box >
     )
