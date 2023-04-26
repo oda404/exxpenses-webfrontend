@@ -1,12 +1,13 @@
 import { useMutation } from "@apollo/client";
 import { Box, Button, Link, Stack } from "@mui/material";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { UserLogoutDocument } from "../generated/graphql";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import styles from "../styles/Navbar.module.css"
+import ClassIcon from '@mui/icons-material/Class';
 
 interface DrawerLinkProps {
     icon: any;
@@ -155,20 +156,19 @@ function SidebarUserBox({ firstname, lastname }: { firstname: string; lastname: 
 }
 
 interface SidenavProps {
-    firstname: string;
-    lastname: string;
+    look_at_category?: string;
 }
 
-export default function Sidenav({ firstname, lastname }: SidenavProps) {
+export default function Sidenav({ look_at_category }: SidenavProps) {
 
     const router = useRouter();
 
     return (
         <Box borderRadius="8px" marginX="20px" width="170px" height="fit-content">
             <Stack spacing={1}>
-                {/* <SidebarUserBox firstname={firstname} lastname={lastname} /> */}
                 <DrawerLink active={router.pathname === "/dashboard"} name="Dashboard" href="/dashboard" icon={<DashboardIcon sx={{ width: "20px", height: "20px" }} />} />
                 <DrawerLink active={router.pathname === "/statistics"} name="Statistics" href="/statistics" icon={<ShowChartIcon sx={{ width: "20px", height: "20px" }} />} />
+                {look_at_category ? <DrawerLink active={true} name={look_at_category} href={`/category/${look_at_category}`} icon={<ClassIcon sx={{ width: "20px", height: "20px" }} />} /> : null}
             </Stack>
         </Box>
     )

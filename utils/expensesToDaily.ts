@@ -10,6 +10,7 @@ export interface DailyTotal {
 export interface DailyExpenses {
     date: Date;
     expense: DailyTotal;
+    expense_count: number;
 }
 
 export default function expensesToDailyTotals(expenses: Expense[], currency: string) {
@@ -22,13 +23,14 @@ export default function expensesToDailyTotals(expenses: Expense[], currency: str
         const idx = dailyExpenses.findIndex(d => d.date === e.date);
 
         if (idx === -1) {
-            dailyExpenses.push({ date: e.date, expense: { price: e.price, currency: e.currency } });
+            dailyExpenses.push({ date: e.date, expense: { price: e.price, currency: e.currency }, expense_count: 1 });
         }
         else {
             let x = new Decimal(dailyExpenses[idx].expense.price);
             let y = new Decimal(e.price);
 
             dailyExpenses[idx].expense.price = x.add(y).toNumber();
+            ++dailyExpenses[idx].expense_count;
         }
     })
 

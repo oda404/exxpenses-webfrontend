@@ -1,7 +1,6 @@
 
 
 import { Box } from "@mui/material";
-import Decimal from "decimal.js";
 import { Category, Expense, User } from "../generated/graphql";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
@@ -11,39 +10,22 @@ import CategoriesPiechart from "./CategoriesPiechart";
 import Sidenav from "./Sidenav";
 import OrderedCategories from "./OrderedCategories";
 import StatisticsThisMonth from "./StatisticsGeneral";
-
-function expensesToCategoryTotal(expenses: Expense[], category: Category, totalPrice: number) {
-    let categoryTotal: CategoryTotal;
-
-    let total = expensesToTotal(expenses, category.default_currency);
-
-    let percentage = 0;
-    if (total.price > 0)
-        percentage = Number(new Decimal(100 * total.price / totalPrice).toFixed(2));
-
-    categoryTotal = {
-        category: category.name,
-        price: total.price,
-        currency: total.currency,
-        percentage: percentage
-    }
-
-    return categoryTotal!;
-}
+import { get_working_expenses, get_categories_totals } from "../utils/statistics";
+import NewsTab from "./NewsTab";
 
 function SideTab({ user, categoryTotals }: { user: User, categoryTotals: CategoryTotal[] }) {
     return (
-        <Box borderRadius="8px" width="260px" height="fit-content">
+        <NewsTab user={user}>
             <CardBox>
                 <Box fontSize='.875rem'>
                     <b>Piechart</b>
                     <Box fontSize=".75rem">
-                        This month&#39;s expenses piechart
+                        This month&#39;s category piechart
                     </Box>
                 </Box>
                 <CategoriesPiechart preferred_currency={user.preferred_currency!} categoryTotals={categoryTotals} />
             </CardBox>
-        </Box>
+        </NewsTab>
     )
 }
 
@@ -51,59 +33,44 @@ interface StatisticsTabProps {
     user: User;
     categories: Category[];
     expensesMultipleCategories: MultiCategoryExpenses;
+    last_month_categories: MultiCategoryExpenses;
 }
 
-export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories }: StatisticsTabProps) {
+export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories, last_month_categories }: StatisticsTabProps) {
 
-    let workingExpenses: Expense[] = [];
-    expensesMultipleCategories.categories.forEach(category => {
+    let working_expenses = get_working_expenses(expensesMultipleCategories, categories, user);
+    let total = expensesToTotal(working_expenses, user.preferred_currency as string);
+    let categories_totals = get_categories_totals(expensesMultipleCategories, categories, total, user);
 
-        const tmp = categories?.find(c => c.name === category.name);
-        if (!tmp || tmp.default_currency !== user.preferred_currency)
-            return;
-
-        workingExpenses.push(...category.expenses);
-    });
-
-    let total = expensesToTotal(workingExpenses, user.preferred_currency as string);
-
-    let categoryTotals: CategoryTotal[] = [];
-    expensesMultipleCategories.categories.forEach(c => {
-        const category = categories.find(cat => cat.name === c.name)!;
-        if (category.default_currency !== user.preferred_currency)
-            return;
-
-        categoryTotals.push(expensesToCategoryTotal(c.expenses, category, total.price))
-    })
-
-    categoryTotals.sort((a, b) => {
-        return b.price - a.price;
-    });
+    let lm_working_expenses = get_working_expenses(last_month_categories, categories, user);
+    let lm_total = expensesToTotal(lm_working_expenses, user.preferred_currency as string);
+    // let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
 
     return (
         <Box display="flex" justifyContent="center" marginTop="40px">
-            <Sidenav firstname={user.firstname} lastname={user.lastname} />
+            <Sidenav />
             <Box width="540px" display="flex" flexDirection="column" alignItems="center">
                 <CardBox width="540px">
                     <StatisticsThisMonth
                         user={user}
-                        categoryTotals={categoryTotals}
-                        categories={categories}
-                        expensesMultipleCategories={expensesMultipleCategories}
+                        working_expenses={working_expenses}
                         total={total}
+                        categoryTotals={categories_totals}
+                        lm_total={lm_total}
+                        lm_working_expenses={lm_working_expenses}
                     />
                 </CardBox>
                 <Box marginY="5px" />
                 <CardBox width="540px">
                     <OrderedCategories
+                        total_price={total.price}
                         expensesMultipleCategories={expensesMultipleCategories}
-                        categoryTotals={categoryTotals}
+                        categoryTotals={categories_totals}
                     />
                 </CardBox>
             </Box>
             <Box marginX="10px" />
-            <SideTab user={user} categoryTotals={categoryTotals} />
-            {/* <NewsTab user={user} /> */}
+            <SideTab user={user} categoryTotals={categories_totals} />
         </Box>
     )
 }

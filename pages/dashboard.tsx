@@ -21,9 +21,9 @@ export default function Dashboard({ ssr }: DashboardProps) {
     const expensesMultipleCategories = ssr.expensesGetMultipleCategoriesGet as MultiCategoryExpenses;
 
     return (
-        <Box position="relative" minWidth="100%" minHeight="100vh">
+        <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Exxpenses - Track your day-to-day expenses</title>
+                <title>Dashboard - Exxpenses</title>
                 <meta
                     name="description"
                     content="Overview of your expenses."
@@ -31,7 +31,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Box sx={{ minHeight: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
+            <Box sx={{ minHeight: "100vh" }}>
                 <DashboardCategoriesTab
                     preferred_currency={user.preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}

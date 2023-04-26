@@ -14,11 +14,11 @@ interface InputFieldProps {
     params?: any;
     handleChange?: any;
     bg?: string;
+    readonly?: boolean;
 }
 
-export default function InputField({ bg, label, type, name, field, is_error, params, handleChange }: InputFieldProps) {
+export default function InputField({ bg, label, type, name, field, is_error, params, handleChange, readonly }: InputFieldProps) {
 
-    const [focused, setFocused] = useState(false);
     const [isLabelShown, setLabel] = useState(true);
     const [passwordType, setPasswordType] = useState<"password" | "text">("password");
 
@@ -70,11 +70,10 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 name={name}
                 {...field}
                 {...params}
-                onFocusCapture={() => { setFocused(true); }}
-                onBlurCapture={() => { setFocused(false); }}
                 className={styles.inputField}
                 autoComplete="off"
                 spellCheck={false}
+                readOnly={readonly}
                 style={{ height: "35px", fontSize: "14px", background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
             />
             {type === "password" ?

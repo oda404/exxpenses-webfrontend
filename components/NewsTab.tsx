@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { User, UserSendVerificationEmailDocument } from "../generated/graphql";
 import CardBox from "./CardBox";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
@@ -8,36 +8,35 @@ import { useMutation } from "@apollo/client";
 
 interface NewTabProps {
     user: User;
+    children?: ReactNode;
+    banner_mode?: boolean;
 }
 
 type EmailSendStatus = "notsent" | "sending" | "sent";
 
-export default function NewsTab({ user }: NewTabProps) {
-
+function EmailConfirmationTab({ banner_mode }: { banner_mode: boolean }) {
     const [userSendVerificationEmail] = useMutation(UserSendVerificationEmailDocument);
     const [emailSent, setEmailSent] = useState<EmailSendStatus>("notsent");
-    let cards: any[] = [];
 
-    if (!user.verified_email) {
+    let text: string;
+    if (emailSent == "sent") {
+        text = "A verification email has been sent to your inbox.";
+    }
+    else {
+        text = "Complete your account by verifying your email address.";
+    }
 
-        let text: string;
-        if (emailSent == "sent") {
-            text = "A verification email has been sent to your inbox.";
-        }
-        else {
-            text = "Complete your Exxpenses account by verifying your email address.";
-        }
+    let button_content = null;
+    if (emailSent == "notsent")
+        button_content = "Confirm";
+    else if (emailSent == "sending")
+        button_content = <CircularProgress style={{ width: "18px", height: "18px" }} />
+    else
+        button_content = <CheckRoundedIcon />;
 
-        let button_content = null;
-        if (emailSent == "notsent")
-            button_content = "Confirm";
-        else if (emailSent == "sending")
-            button_content = <CircularProgress style={{ width: "18px", height: "18px" }} />
-        else
-            button_content = <CheckRoundedIcon />;
-
-        let content = (
-            <CardBox key={1}>
+    return (
+        <CardBox key={1}>
+            <Box justifyContent="space-between" alignItems="center" display={banner_mode ? "flex" : "initial"}>
                 <Box fontSize='.875rem'>
                     <b>{emailSent == "sent" ? "Verification email sent" : "Verify your email"}</b>
                     <Box fontSize=".75rem">
@@ -46,8 +45,9 @@ export default function NewsTab({ user }: NewTabProps) {
                 </Box>
                 <Button
                     sx={{
-                        width: "100% !important",
-                        height: "30px !important"
+                        width: !banner_mode ? "100% !important" : "fit-content !important",
+                        height: !banner_mode ? "30px !important" : "100% !important",
+                        marginTop: !banner_mode ? "10px" : "0"
                     }}
                     className="fullButton"
                     onClick={async () => {
@@ -59,13 +59,38 @@ export default function NewsTab({ user }: NewTabProps) {
                 >
                     {button_content}
                 </Button>
-            </CardBox >
-        );
+            </Box>
+        </CardBox >
+    );
+}
 
-        cards.push(content);
+export default function NewsTab({ user, children, banner_mode }: NewTabProps) {
+
+    let cards: any[] = [];
+
+    if (!user.verified_email)
+        cards.push(<EmailConfirmationTab banner_mode={Boolean(banner_mode)} />);
+
+    if (Array.isArray(children)) {
+        cards.push(...children.map(c => {
+            return (
+                <>
+                    <Box marginTop="10px" />
+                    {c}
+                </>
+            )
+        }));
+    }
+    else if (children !== undefined && children !== null) {
+        cards.push(
+            <>
+                <Box marginTop="10px" />
+                {children}
+            </>
+        )
     }
 
-    if (cards.length === 0) {
+    if (cards.length === 0 && !banner_mode) {
         let content = (
             <CardBox key={1}>
                 <Box fontSize='.875rem'>
@@ -76,12 +101,12 @@ export default function NewsTab({ user }: NewTabProps) {
                 </Box>
             </CardBox>
         )
-
         cards.push(content);
     }
 
+
     return (
-        <Box borderRadius="8px" width="260px" height="fit-content">
+        <Box borderRadius="8px" width={banner_mode ? "100%" : "260px"} marginTop={banner_mode ? "10px" : "0"} height="fit-content">
             {cards}
         </Box>
     )

@@ -111,7 +111,7 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                                     <Button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        sx={{ width: "100% !important" }}
+                                        sx={{ width: "100% !important", marginTop: "10px" }}
                                         className="fullButton"
                                     >
                                         {grayed_out ?
@@ -192,7 +192,7 @@ function AddFirstCategoryCard({ preferred_currency, grayed_out }: AddFirstCatego
                         <Button
                             type="submit"
                             disabled={isSubmitting}
-                            sx={{ width: "100% !important" }}
+                            sx={{ width: "100% !important", marginTop: "10px" }}
                             className="fullButton"
                         >
                             Add
@@ -264,7 +264,7 @@ export default function Setup({ ssr }: DashboardProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Exxpenses - Track your day-to-day expenses</title>
+                <title>Setup your account - Exxpenses</title>
                 <meta
                     name="description"
                     content="Setup your Exxpenses account"
@@ -272,7 +272,7 @@ export default function Setup({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Box height="70vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
+            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "140px"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"

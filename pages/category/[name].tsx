@@ -36,7 +36,7 @@ export default function Category({ ssr }: CategoryProps) {
     return (
         <Box position="relative">
             <Head>
-                <title>{"Exxpenses - " + category.name}</title>
+                <title>{`${category.name} - Exxpenses`}</title>
                 <meta
                     name="description"
                     content={`Details about your ${category.name} expenses this month.`}
@@ -45,9 +45,9 @@ export default function Category({ ssr }: CategoryProps) {
             </Head>
             <Box sx={{ height: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
                 {content}
+                <Footer />
             </Box>
-            <Footer />
-        </Box>
+        </Box >
     )
 }
 
@@ -94,9 +94,9 @@ export async function getServerSideProps({ req, params }: any) {
 
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const lastMonthEnd = new Date(since);
-    lastMonthEnd.setDate(lastMonthEnd.getDate());
+    // lastMonthEnd.setDate(lastMonthEnd.getDate());
 
-    const lastMonthExpensesData = await expensesGet(req, params.name, lastMonthStart, lastMonthEnd)
+    const lastMonthExpensesData = await expensesGet(req, params.name, lastMonthStart, lastMonthEnd);
 
     return {
         props: {

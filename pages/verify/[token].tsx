@@ -79,17 +79,19 @@ export default function Verify({ ssr }: CategoryProps) {
     return (
         <Box>
             <Head>
-                <title>Exxpenses</title>
+                <title>Verify your email - Exxpenses</title>
                 <meta
                     name="description"
                     content="Email confirmation"
                     key="desc"
                 />
             </Head>
-            <Box sx={{ height: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
-                {content}
+            <Box sx={{ minHeight: "100vh", background: "var(--exxpenses-main-bg-color)" }}>
+                <Box sx={{ height: "100vh" }}>
+                    {content}
+                </Box>
+                <Footer />
             </Box>
-            <Footer />
         </Box>
     )
 }
@@ -119,5 +121,4 @@ export async function getServerSideProps({ req, params }: any) {
             }
         }
     }
-
 }

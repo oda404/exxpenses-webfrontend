@@ -5,7 +5,6 @@ import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories"
 import expensesToDailyTotals from "../utils/expensesToDaily";
 
 function CustomizedAxisTick({ x, y, stroke, payload }: any) {
-    console.log(payload)
     return (
         <g transform={`translate(${x},${y})`}>
             <text x={0} y={0} dy={16} textAnchor="end" fill="#666" fontSize="14px" transform="rotate(0)">

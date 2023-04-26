@@ -7,13 +7,17 @@ export interface TotalExpense {
     price: number;
 }
 
-export default function expensesToTotal(expenses: Expense[], currency: string) {
+export default function expensesToTotal(expenses: Expense[], currency: string, until?: Date) {
 
     let totalExpenses: TotalExpense | undefined = undefined;
 
     expenses.forEach(e => {
         if (e.currency !== currency)
             return;
+
+        if (until !== undefined && new Date(e.date) > until) {
+            return;
+        }
 
         if (totalExpenses === undefined) {
             totalExpenses = {

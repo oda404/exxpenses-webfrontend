@@ -11,17 +11,28 @@ const renderActiveShape = (props: any) => {
     const mx = cx + (outerRadius + 30) * cos;
     const my = cy + (outerRadius + 30) * sin;
 
+    let content = null;
+    let name_pos = 4;
+    if (currency !== undefined) {
+        content = (
+            <>
+                <text fontSize=".75rem" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+                    {currency} {value}
+                </text>
+                <text fontSize=".75rem" x={cx} y={cy} dy={24} textAnchor="middle" fill={fill}>
+                    {(percent * 100).toFixed(2)}%
+                </text>
+            </>
+        );
+        name_pos = -10;
+    }
+
     return (
         <g>
-            <text fontSize="1rem" x={cx} y={cy} dy={-10} textAnchor="middle" fill={fill}>
+            <text fontSize="1rem" x={cx} y={cy} dy={name_pos} textAnchor="middle" fill={fill}>
                 {payload.name}
             </text>
-            <text fontSize=".75rem" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-                {currency} {value}
-            </text>
-            <text fontSize=".75rem" x={cx} y={cy} dy={24} textAnchor="middle" fill={fill}>
-                {(percent * 100).toFixed(2)}%
-            </text>
+            {content}
             <Sector
                 cx={cx}
                 cy={cy}
@@ -36,8 +47,8 @@ const renderActiveShape = (props: any) => {
                 cy={cy}
                 startAngle={startAngle}
                 endAngle={endAngle}
-                innerRadius={outerRadius + 6}
-                outerRadius={outerRadius + 10}
+                innerRadius={outerRadius + 4}
+                outerRadius={outerRadius + 8}
                 fill={fill}
             />
         </g>
@@ -81,39 +92,42 @@ export default function CategoriesPiechart({ categoryTotals, preferred_currency 
         data.push({
             name: "N/A",
             value: 1,
-            currency: preferred_currency,
-        })
+            currency: undefined,
+        });
     }
     else {
-        colors = ['#00C49F', '#0088FE', '#FFBB28', '#FF8042'];
+        colors = ['var(--exxpenses-lighter-green)', '#0088FE', '#FFBB28', '#FF8042'];
     }
 
     return (
-        <Box>
-            <Box display="flex" alignItems="center" height="210px" width="100%">
-                <ResponsiveContainer>
-                    <PieChart margin={{}}>
-                        <Pie
-                            activeIndex={state}
-                            activeShape={renderActiveShape}
-                            data={data}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={62}
-                            outerRadius={80}
-                            fill="var(--exxpenses-light-green)"
-                            dataKey="value"
-                            onMouseEnter={onPieEnter}
-                            paddingAngle={data.length > 1 ? 5 : 0}
-                        >
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                            ))}
-                        </Pie>
-                    </PieChart>
-                </ResponsiveContainer>
-            </Box >
+        <Box display="flex" alignItems="center" height="210px" width="100%">
+            <ResponsiveContainer>
+                <PieChart margin={{}}>
+                    <Pie
+                        activeIndex={state}
+                        activeShape={renderActiveShape}
+                        data={data}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={67}
+                        outerRadius={85}
+                        fill="var(--exxpenses-light-green)"
+                        dataKey="value"
+                        onMouseEnter={onPieEnter}
+                        paddingAngle={data.length > 1 ? 5 : 0}
+                        stroke="none"
+                        animationDuration={1000}
+                        onMouseDown={(d, idx, e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                        }}
+                    >
+                        {data.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                        ))}
+                    </Pie>
+                </PieChart>
+            </ResponsiveContainer>
         </Box>
-
     )
 }

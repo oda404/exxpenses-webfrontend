@@ -1,22 +1,57 @@
-import { Box, Button, CircularProgress, Link } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import { Formik, Field, FieldProps, ErrorMessage } from "formik";
 import Head from "next/head";
-import Image from 'next/image'
 import Footer from "../components/Footer";
 import InputField from "../components/InputField";
 import useShowMobileView from "../utils/useShowMobileView";
-import styles from "../styles/PasswordRecover.module.css"
 import { useState } from "react";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import { useMutation } from "@apollo/client";
 import { UserRecoverPasswordDocument } from "../generated/graphql";
 import BigLogo from "../components/BigLogo";
+import Turnstile from "../components/Turnstile";
+import { TURNSTILE_MANAGED_KEY } from "../utils/turnstile";
 
 export default function PasswordRecover() {
 
-    const isMobileView = useShowMobileView();
     const [sent, setSent] = useState(false);
+    const [turnstile_payload, set_turnstile_payload] = useState<string | null>(null);
+    const [token_error, set_token_error] = useState<string | undefined>(undefined);
+
     const [userRecoverPassword] = useMutation(UserRecoverPasswordDocument);
+    const isMobileView = useShowMobileView();
+
+    const turnstile_verify = async (token: string) => {
+        if (turnstile_payload === null)
+            return;
+
+        const res = await userRecoverPassword({
+            variables: {
+                email: turnstile_payload,
+                token: token
+            }
+        });
+
+        if (res.data.userRecoverPassword)
+            setSent(true);
+        else
+            set_token_error("Server error, plase try again. If the error persists, please contact support.");
+
+        set_turnstile_payload(null);
+    }
+
+    const turnstile_fail = () => {
+        console.log('fail');
+    }
+
+    let turnstile = (<></>);
+    if (turnstile_payload !== null) {
+        turnstile = (
+            <Box display={turnstile_payload !== null ? "initial" : "none"} marginLeft="10px">
+                <Turnstile sitekey={TURNSTILE_MANAGED_KEY} onError={turnstile_fail} onVerify={turnstile_verify} />
+            </Box>
+        )
+    }
 
     let header: any;
     if (sent) {
@@ -45,7 +80,7 @@ export default function PasswordRecover() {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Exxpenses</title>
+                <title>Forgotten password - Exxpenses</title>
                 <meta
                     name="description"
                     content="Forgot your email? Let us send you an email, so you can create a new one."
@@ -53,7 +88,7 @@ export default function PasswordRecover() {
                 />
             </Head>
 
-            <Box height="70vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
+            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "140px"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -80,7 +115,9 @@ export default function PasswordRecover() {
                         </Box>
                         <Box width={isMobileView ? "100%" : "405px"}>
                             <Formik
-                                initialValues={{ email: "" }}
+                                initialValues={{ email: "", token: "" }}
+                                initialErrors={{ token: token_error }}
+                                enableReinitialize={true}
                                 onSubmit={async (values, actions) => {
 
                                     if (!values.email || values.email.length === 0) {
@@ -91,15 +128,7 @@ export default function PasswordRecover() {
                                         actions.setFieldError("email", "Invalid email address");
                                         return;
                                     }
-
-                                    await userRecoverPassword({
-                                        variables: {
-                                            email: values.email
-                                        }
-                                    });
-
-                                    setSent(true);
-                                    actions.setSubmitting(false);
+                                    set_turnstile_payload(values.email);
                                 }}
                             >
                                 {({ handleSubmit, isSubmitting, errors }) => (
@@ -107,19 +136,21 @@ export default function PasswordRecover() {
                                         <Field name="email">
                                             {({ field }: FieldProps) => (
                                                 <Box marginTop="14px">
-                                                    <InputField is_error={errors.email !== undefined} field={field} label="Email" name="email" />
-                                                    <Box marginBottom={errors.email ? "-8px" : "0"} fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                    <InputField readonly={sent} is_error={errors.email !== undefined} field={field} label="Email" name="email" />
+                                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="email" />
                                                     </Box>
                                                 </Box>
                                             )}
                                         </Field>
-
+                                        <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                            <ErrorMessage name="token" />
+                                        </Box>
                                         <Box marginTop="20px" display="flex" justifyContent="space-between">
                                             <Button href="/login" className="emptyButton">
                                                 Back to login
                                             </Button>
-                                            <Button disabled={sent || isSubmitting} className="fullButton" type="submit">
+                                            <Button sx={{ display: turnstile_payload === null ? "initial !important" : "none !important" }} disabled={sent || isSubmitting} className="fullButton" type="submit">
                                                 {
                                                     sent ? <CheckRoundedIcon style={{ marginTop: "2px", width: "20px", height: "20px" }} /> :
                                                         isSubmitting ?
@@ -127,8 +158,8 @@ export default function PasswordRecover() {
                                                             "Send"
                                                 }
                                             </Button>
+                                            {turnstile}
                                         </Box>
-
                                     </form>
                                 )}
                             </Formik>
@@ -140,4 +171,14 @@ export default function PasswordRecover() {
             <Footer />
         </Box >
     )
+}
+
+export async function getServerSideProps() {
+    return {
+        props: {
+            ssr: {
+
+            }
+        }
+    }
 }

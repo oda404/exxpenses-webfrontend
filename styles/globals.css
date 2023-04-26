@@ -12,11 +12,12 @@
 
   font-family: 'Roboto', sans-serif;
 
-  --exxpenses-main-bg-color: #222222;
+  --exxpenses-main-bg-color: #242424;
   --exxpenses-second-bg-color: #161616;
+  --exxpenses-dark-highlight: #101010;
   --exxpenses-main-color: #c7c9c8;
   --exxpenses-unimportant-color: #949997;
-  --exxpenses-main-button-hover-bg-color: #24262b;
+  --exxpenses-main-button-hover-bg-color: #303030;
   --exxpenses-main-divider-bg: var(--exxpenses-main-color);
   --exxpenses-main-border-color: #444444;
   --exxpenses-main-error-color: #df473f;
@@ -77,17 +78,15 @@ a:hover {
 .emptyButton {
   width: fit-content;
   display: flex;
-  padding: 10px;
+  padding: 8px;
   padding-left: 10px;
   padding-right: 10px;
-  margin-top: 10px;
-  margin-bottom: 6px;
   border-radius: 6px;
   /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
   color: var(--exxpenses-light-green);
   text-transform: none;
   font-weight: bold;
-  height: 34px;
+  /* height: 34px; */
 }
 
 .emptyButton:hover {
@@ -101,8 +100,6 @@ a:hover {
   padding: 4px;
   padding-left: 20px;
   padding-right: 20px;
-  margin-top: 10px;
-  margin-bottom: 6px;
   background: var(--exxpenses-dark-green);
   /* background: linear-gradient(to right, var(--exxpenses-dark-green), var(--exxpenses-light-green)); */
   color: white;

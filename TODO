@@ -1,0 +1,19 @@
+before-launch:
+    display notices (that existing expenses will keep their currency?) when changing currencies for categories/users.
+    add extra fields to statistics table
+    tidy up dashboard
+    add delete button for categories
+    add user page
+    add free-account info apge
+    add landing page
+    tos
+    ads
+    add list of predefined selectable currencies
+    check to see if email confirmation is required where it's suppesed to be on the backend.
+
+after-launch:
+    premium memberships
+    fix user timezones
+    look at expenses in specific months/time frames (both categories and overall)
+    ? add incomes.
+

@@ -1,0 +1,3 @@
+
+const TURNSTILE_DEV_MANAGED_KEY = "0x4AAAAAAAEK5ipDQf08Grp5";
+export const TURNSTILE_MANAGED_KEY = process.env.NODE_ENV === "development" ? TURNSTILE_DEV_MANAGED_KEY : process.env.TURNSTILE_MANAGED_KEY!;

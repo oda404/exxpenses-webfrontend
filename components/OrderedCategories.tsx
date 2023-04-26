@@ -1,16 +1,19 @@
 import { Box, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
+import { tableCellClasses } from "@mui/material/TableCell";
 
 interface OrderedCategoriesProps {
     expensesMultipleCategories: MultiCategoryExpenses;
-    categoryTotals: CategoryTotal[]
+    categoryTotals: CategoryTotal[];
+    total_price: number;
 }
 
-export default function OrderedCategories({ categoryTotals, expensesMultipleCategories }: OrderedCategoriesProps) {
+export default function OrderedCategories({ total_price, categoryTotals, expensesMultipleCategories }: OrderedCategoriesProps) {
 
     let content: any;
     if (categoryTotals.length === 0) {
+        // should not happen
         content = (
             <Box fontSize=".875rem" paddingY="10px" paddingX="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
                 <Box>
@@ -28,7 +31,7 @@ export default function OrderedCategories({ categoryTotals, expensesMultipleCate
     else {
         content = (
             <TableContainer component={Paper} sx={{ background: "var(--exxpenses-second-bg-color)" }}>
-                <Table size="small" aria-label="a dense table">
+                <Table padding="normal" size="small">
                     <TableHead >
                         <TableRow>
                             <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }}>Category</TableCell>
@@ -37,15 +40,21 @@ export default function OrderedCategories({ categoryTotals, expensesMultipleCate
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {categoryTotals.map((c, idx) => (
-                            <TableRow key={idx}>
-                                <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} component="th" scope="row">
-                                    <b>{c.category}</b>
-                                </TableCell>
-                                <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right"><b>{c.currency} {c.price}</b></TableCell>
-                                <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right"><b>{c.percentage}%</b></TableCell>
-                            </TableRow>
-                        ))}
+                        {categoryTotals.map((c, idx) => {
+                            let perc_string = `${c.percentage}%`;
+                            if (total_price == 0)
+                                perc_string = "-";
+
+                            return (
+                                <TableRow key={idx}>
+                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} component="th" scope="row">
+                                        <b>{c.category}</b>
+                                    </TableCell>
+                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right"><b>{c.currency} {c.price}</b></TableCell>
+                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right"><b>{perc_string}</b></TableCell>
+                                </TableRow>
+                            )
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -75,7 +84,7 @@ export default function OrderedCategories({ categoryTotals, expensesMultipleCate
 
     return (
         <Box>
-            <Box marginBottom="10px" fontSize="22px">
+            <Box marginBottom="10px" fontSize="20px">
                 Categories
             </Box>
             {content}

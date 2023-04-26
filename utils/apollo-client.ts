@@ -28,21 +28,21 @@ const apolloClient = new ApolloClient({
     ssrMode: typeof (window) === "undefined",
     cache: cache,
     link: from([beforeLink, afterLink, createHttpLink({
-        uri: api_uri,
+        uri: "http://localhost:8888",
         credentials: "include"
     })]),
 
     /* Don't cache shit */
-    // defaultOptions: {
-    //     watchQuery: {
-    //         fetchPolicy: "no-cache",
-    //         errorPolicy: "ignore"
-    //     },
-    //     query: {
-    //         fetchPolicy: "no-cache",
-    //         errorPolicy: "all"
-    //     }
-    // }
+    defaultOptions: {
+        watchQuery: {
+            fetchPolicy: "no-cache",
+            errorPolicy: "ignore"
+        },
+        query: {
+            fetchPolicy: "no-cache",
+            errorPolicy: "all"
+        }
+    }
 });
 
 export default apolloClient;

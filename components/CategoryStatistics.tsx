@@ -6,6 +6,7 @@ import addFloats from "../utils/addFloats";
 import daysBetweenDates from "../utils/daysBetweenDates";
 import { DailyExpenses } from "../utils/expensesToDaily";
 import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
+import last_month_today from "../utils/lastMonthToday";
 
 /* What in the living fuck ?!:)dwdA!@W! */
 const FullBarExpenseChart = dynamic(
@@ -15,7 +16,7 @@ const FullBarExpenseChart = dynamic(
 
 function FullViewStatistic({ title, content }: { title: string; content: string }) {
     return (
-        <Box width="fit-content" borderBottom="1px solid var(--exxpenses-main-border-color)" marginTop="20px">
+        <Box width="fit-content" marginTop="12px">
             <Box fontSize="14px">
                 {title}
             </Box>
@@ -31,11 +32,15 @@ interface StatisticsTabProps {
     dailyTotals: DailyExpenses[];
     lastMonthExpenses: Expense[];
     category: Category;
-    since: Date;
-    until: Date;
 }
 
-export default function CategoryStatistics({ lastMonthExpenses, category, since, until, totalExpenses, dailyTotals }: StatisticsTabProps) {
+export default function CategoryStatistics({ lastMonthExpenses, category, totalExpenses, dailyTotals }: StatisticsTabProps) {
+
+    let now = new Date();
+    let since = new Date(now.getFullYear(), now.getMonth(), 1);
+    let until = new Date(now);
+
+    let daycount = Math.ceil((now.getTime() - since.getTime()) / (1000 * 3600 * 24));
 
     let mostExpensiveDay: DailyExpenses | undefined = undefined;
     for (let i = 0; i < dailyTotals.length; ++i) {
@@ -53,6 +58,8 @@ export default function CategoryStatistics({ lastMonthExpenses, category, since,
         lastMonthExpenses = [];
     let lastMonthTotal = expensesToTotal(lastMonthExpenses, category.default_currency);
 
+    let lastMonthTotalUntilToday = expensesToTotal(lastMonthExpenses, category.default_currency, last_month_today(until));
+
     let diffPerc = String(totalExpenses.price);
     if (lastMonthTotal.price > 0)
         diffPerc = (Math.abs(lastMonthTotal.price - totalExpenses.price) / lastMonthTotal.price * 100).toFixed(2).replace(/\.0+$/, '');
@@ -60,26 +67,32 @@ export default function CategoryStatistics({ lastMonthExpenses, category, since,
     let sign = lastMonthTotal.price > totalExpenses.price ? "-" : "+";
     let diffPrice = Math.abs(lastMonthTotal.price - totalExpenses.price);
 
+    let diffPercToday = String(totalExpenses.price);
+    if (lastMonthTotalUntilToday.price > 0)
+        diffPercToday = (Math.abs(lastMonthTotalUntilToday.price - totalExpenses.price) / lastMonthTotalUntilToday.price * 100).toFixed(2).replace(/\.0+$/, '');
+
+    let signToday = lastMonthTotalUntilToday.price > totalExpenses.price ? "-" : "+";
+    let diffPriceToday = Math.abs(lastMonthTotalUntilToday.price - totalExpenses.price);
+
     return (
         <Box sx={{ height: "100%" }}>
-            <Box marginBottom="15px" fontSize="22px">
+            <Box fontSize="20px">
                 Statistics
             </Box>
-            <FullBarExpenseChart dailyTotals={dailyTotals} since={since} until={until} />
-            <Divider sx={{ marginTop: "10px", width: "100%", backgroundColor: "var(--exxpenses-main-border-color)", height: "1px" }} />
-
+            <Box marginBottom="15px" fontSize=".875rem">
+                {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
+            </Box>
+            <FullBarExpenseChart currency={category.default_currency} dailyTotals={dailyTotals} since={since} until={until} />
             <Box>
                 <FullViewStatistic title="Total spent" content={`${totalExpenses.currency} ${totalExpenses.price}`} />
-                <Box marginX="10px" />
                 <FullViewStatistic title="Most expensive day" content={
                     mostExpensiveDay !== undefined ?
                         `${mostExpensiveDay.expense.currency} ${mostExpensiveDay.expense.price} on ${new Date(mostExpensiveDay.date).toDateString()}` :
                         `N/A`}
                 />
-                <Box marginX="10px" />
-                <FullViewStatistic title="Average per day" content={`${category.default_currency} ${averageString}`} />
-                <Box marginX="10px" />
-                <FullViewStatistic title="Compared to last month" content={`${sign}${diffPerc}% (${sign}${totalExpenses.currency}${diffPrice})`} />
+                <FullViewStatistic title={`Average per day (${daycount} days)`} content={`${category.default_currency} ${averageString}`} />
+                <FullViewStatistic title="Compared to last month (whole)" content={`${sign}${diffPerc}% (${sign}${totalExpenses.currency} ${diffPrice})`} />
+                <FullViewStatistic title="Compared to last month (today)" content={`${signToday}${diffPercToday}% (${sign}${totalExpenses.currency} ${diffPriceToday})`} />
             </Box>
         </Box>
     )

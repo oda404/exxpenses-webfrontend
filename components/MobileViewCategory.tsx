@@ -1,10 +1,9 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Stack, Typography, Box } from "@mui/material";
+import { Button, IconButton, Typography, Box } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { User, Expense, CategoryEditDocument, Category, ExpenseAddDocument } from "../generated/graphql";
 import expensesToTotal from "../utils/expensesToTotal";
-import CategoryTabExpense from "./CategoryTabExpense";
 import InputField from "./InputField";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
@@ -16,6 +15,7 @@ import expensesToDailyTotals from "../utils/expensesToDaily";
 import CategoryStatistics from "./CategoryStatistics";
 import Topbar from "./Topbar";
 import FullViewCategoryExpensesTab from "./CategoryExpenses";
+import NewsTab from "./NewsTab";
 
 interface AddNewExpenseCardProps {
     default_category: string;
@@ -24,7 +24,7 @@ interface AddNewExpenseCardProps {
     width?: string;
 }
 
-function AddNewExpenseCard({ width, isMobileView, default_category, default_currency }: AddNewExpenseCardProps) {
+function AddNewExpenseCard({ default_category, default_currency }: AddNewExpenseCardProps) {
 
     const [expenseAdd] = useMutation(ExpenseAddDocument);
     const router = useRouter();
@@ -42,7 +42,7 @@ function AddNewExpenseCard({ width, isMobileView, default_category, default_curr
             }}>
             <Box marginBottom="5px" display="flex">
                 <Typography fontSize="17px" marginLeft="6px">
-                    Add a new expense to {default_category}
+                    New {default_category} expense
                 </Typography>
             </Box>
             <Formik
@@ -93,7 +93,6 @@ function AddNewExpenseCard({ width, isMobileView, default_category, default_curr
                         actions.setFieldError(field, data.expenseAdd.error.name)
                     }
                     else {
-                        // actions.resetForm();
                         router.reload();
                     }
                 }}
@@ -143,7 +142,8 @@ function AddNewExpenseCard({ width, isMobileView, default_category, default_curr
                             type="submit"
                             disabled={isSubmitting}
                             fullWidth={true}
-                            className={styles.dashboardSubmitButton}
+                            className="fullButton"
+                            sx={{ width: "100% !important", marginTop: "10px" }}
                         >
                             Add
                         </Button>
@@ -162,7 +162,7 @@ interface CategoryViewsProps {
     category: Category;
 }
 
-export default function MobileViewCategory({ lastMonthExpenses, user, expenses, category }: CategoryViewsProps) {
+export default function MobileViewCategory({ lastMonthExpenses, expenses, category, user }: CategoryViewsProps) {
 
     const [categoryEdit] = useMutation(CategoryEditDocument);
 
@@ -180,7 +180,6 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
     if (editCategory) {
         categoryHeader = (
             <Box width="auto" display="flex">
-
                 <Formik
                     enableReinitialize
                     initialValues={{ name: category.name, currency: category.default_currency }}
@@ -220,10 +219,10 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                 >
                     {({ setFieldValue, isSubmitting, errors }) => (
                         <Form style={{ width: "100%" }}>
-                            <Box display="flex">
+                            <Box paddingTop="5px" alignItems="center" display="flex">
                                 <Field name="name">
                                     {({ field }: FieldProps) => (
-                                        <Box width="120px" marginTop="10px">
+                                        <Box>
                                             <InputField
                                                 is_error={errors.name !== undefined}
                                                 bg="var(--exxpenses-second-bg-color)"
@@ -238,12 +237,13 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                                 <Box marginX="5px" />
                                 <Field name="currency">
                                     {({ field }: FieldProps) => (
-                                        <Box width="90px" marginTop="10px">
+                                        <Box>
                                             <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
                                             <ErrorMessage name="currency" component="div" />
                                         </Box>
                                     )}
                                 </Field>
+                                <Box marginX="5px" />
                                 <Button
                                     sx={{
                                         marginLeft: "auto"
@@ -251,7 +251,7 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                                     type="submit"
                                     disabled={isSubmitting}
                                 >
-                                    <CheckRoundedIcon sx={{ width: "20px", height: "20px" }} />
+                                    <CheckRoundedIcon sx={{}} />
                                 </Button>
                             </Box>
                         </Form>
@@ -262,30 +262,35 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
     }
     else {
         categoryHeader = (
-            <Box display="flex">
-                <Box fontSize="22px">
-                    <b>{category.name}</b>
+            <Box>
+                <Box alignItems="center" display="flex">
+                    <Box fontSize="20px">
+                        <b>{category.name}</b>
+                    </Box>
+                    <Box fontSize="16px" marginTop="5px" marginLeft="8px">
+                        {category.default_currency}
+                    </Box>
+                    <IconButton
+                        sx={{
+                            marginLeft: "auto"
+                        }}
+                        onClick={() => {
+                            setEditCategory(true);
+                        }}
+                    >
+                        <ModeEditIcon sx={{ width: "20px", height: "20px" }} />
+                    </IconButton>
                 </Box>
-                <Box fontSize=".875rem" marginTop="10px" marginLeft="8px">
-                    {category.default_currency}
+                <Box fontSize="16px">
+                    {totalExpenses.currency} {totalExpenses.price} this month
                 </Box>
-                <IconButton
-                    sx={{
-                        marginLeft: "auto"
-                    }}
-                    onClick={() => {
-                        setEditCategory(true);
-                    }}
-                >
-                    <ModeEditIcon sx={{ width: "20px", height: "20px" }} />
-                </IconButton>
-            </Box>
+            </Box >
         )
     }
 
     return (
         <Box position="relative" minHeight="100vh">
-            <Topbar />
+            <Topbar user={user} />
             <Box padding="15px" paddingTop="40px">
                 <Box display="flex">
                     <Button
@@ -309,17 +314,19 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     </Button>
                     <Box marginX="5px" />
                     <Button
-                        className={tabHeaderButtonStyles.tabHeaderButton}
+                        className="fullButton"
                         sx={{
                             background: "var(--exxpenses-second-bg-color)",
 
                             "&:hover": {
-                                background: "var( --exxpenses-main-button-hover-bg-color)",
-                                textDecoration: "none"
+                                textDecoration: "none !important"
                             },
-                            paddingX: "10px",
-                            textDecoration: "none",
-                            width: "100%"
+                            padding: "0px !important",
+                            textDecoration: "none !important",
+                            width: "100% !important",
+                            margin: "0 !important",
+                            borderRadius: "10px !important",
+                            height: "32px !important",
                         }}
                         onClick={() => setSShowNewExpenseAdd(!showNewExpenseAdd)}
                     >
@@ -337,6 +344,7 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                 >
                     <AddNewExpenseCard default_category={category.name} default_currency={category.default_currency} />
                 </Box>
+                <NewsTab user={user} banner_mode />
                 <Box
                     sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
                     padding="10px"
@@ -347,16 +355,7 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     marginTop="15px"
                 >
                     {categoryHeader}
-
-                    <Box fontSize="1.250rem">
-                        <b>{totalExpenses.currency} {totalExpenses.price}</b>
-                    </Box>
-
-                    <Box fontSize=".875rem">
-                        Showing {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
-                    </Box>
                 </Box >
-
                 <Box
                     sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
                     padding="10px"
@@ -366,7 +365,7 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     height="fit-content"
                     marginTop="15px"
                 >
-                    <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} since={since} until={now} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                    <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
                 </Box>
 
                 <Box
@@ -378,7 +377,7 @@ export default function MobileViewCategory({ lastMonthExpenses, user, expenses, 
                     height="fit-content"
                     marginTop="15px"
                 >
-                    <Box fontSize="22px" marginBottom="10px">
+                    <Box fontSize="20px">
                         Expenses
                     </Box>
                     <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />

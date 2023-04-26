@@ -1,10 +1,8 @@
 import { useMutation } from "@apollo/client";
-import { Box, Button, Stack, Grid, Paper, Typography, Autocomplete, Modal } from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { useRouter } from "next/router";
-import { Category, CategoryAddDocument, ExpenseAddDocument, User } from "../generated/graphql";
+import { Category, CategoryAddDocument, User } from "../generated/graphql";
 import { useState } from "react";
-import styles from "../styles/Dashboard.module.css";
-import Tooltip from '@mui/material/Tooltip';
 import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import InputField from "./InputField";
 import ClearIcon from '@mui/icons-material/Clear';
@@ -42,8 +40,9 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                     "&:hover": {
                         background: "var(--exxpenses-main-button-hover-bg-color)"
                     },
+                    width: "fit-content !important"
                 }}
-                className={styles.categoryActionButton}
+                className="fullButton"
                 onClick={() => setShowAddCategory(true)}
             >
                 + New category
@@ -68,8 +67,8 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                     </Box>
 
                     <Formik
-                        initialValues={{ name: "", default_curr: default_currency }}
-                        onSubmit={async ({ name, default_curr }, actions) => {
+                        initialValues={{ name: "", currency: default_currency, generic: "" }}
+                        onSubmit={async ({ name, currency, generic }, actions) => {
 
                             if (!name || name.length === 0) {
                                 actions.setFieldError("name", "The category name is required!")
@@ -80,14 +79,20 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                                 return;
                             }
 
-                            if (!default_curr || default_curr.length === 0) {
-                                actions.setFieldError("default_curr", "The category's default currency is required!");
+                            if (!currency || currency.length === 0) {
+                                actions.setFieldError("currency", "The category's default currency is required!");
                                 return;
                             }
 
-                            const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: default_curr } } });
+                            const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: currency } } });
                             if (data.categoryAdd.error !== null) {
-                                actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
+                                if (data.categoryAdd.error.field === null) {
+                                    console.log(data.categoryAdd.error.name);
+                                    actions.setFieldError("generic", data.categoryAdd.error.name);
+                                }
+                                else {
+                                    actions.setFieldError(data.categoryAdd.error.field, data.categoryAdd.error.name);
+                                }
                                 return;
                             }
 
@@ -96,21 +101,34 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                     >
                         {({ isSubmitting, errors }) => (
                             <Form>
-                                <Box display="flex">
-                                    <Field name="name">
-                                        {({ field, form }: FieldProps) => (
-                                            <Box width="75%" marginTop="12px">
-                                                <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="name" label="Name" />
-                                                <ErrorMessage name="name" component="div" />
-                                            </Box>
-                                        )}
-                                    </Field>
-                                    <Box marginX="10px" />
-                                    <Field name="default_curr">
-                                        {({ field }: FieldProps) => (
-                                            <Box width="25%" marginTop="10px">
-                                                <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="default_curr" label="Currency" />
-                                                <ErrorMessage name="default_curr" component="div" />
+                                <Box>
+                                    <Box display="flex">
+                                        <Field name="name">
+                                            {({ field, form }: FieldProps) => (
+                                                <Box width="75%" marginTop="12px">
+                                                    <InputField is_error={errors.name !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="name" label="Name" />
+                                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                        <ErrorMessage name="name" />
+                                                    </Box>
+                                                </Box>
+                                            )}
+                                        </Field>
+                                        <Box marginX="10px" />
+                                        <Field name="currency">
+                                            {({ field }: FieldProps) => (
+                                                <Box width="25%" marginTop="10px">
+                                                    <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                        <ErrorMessage name="currency" />
+                                                    </Box>
+                                                </Box>
+                                            )}
+                                        </Field>
+                                    </Box>
+                                    <Field name="generic">
+                                        {() => (
+                                            <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                                <ErrorMessage name="generic" />
                                             </Box>
                                         )}
                                     </Field>
@@ -119,7 +137,8 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                                     type="submit"
                                     disabled={isSubmitting}
                                     fullWidth={true}
-                                    className={styles.dashboardSubmitButton}
+                                    className="fullButton"
+                                    sx={{ marginTop: "10px", width: "100% !important" }}
                                 >
                                     Add
                                 </Button>
@@ -127,7 +146,6 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                         )}
                     </Formik>
                 </Box>
-
             </Box>
         </Box>
     )
@@ -153,7 +171,6 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
                 preferred_currency={preferred_currency!}
                 expensesMultipleCategories={expensesMultipleCategories}
                 categories={categories}
-                isMobileView={true}
             />
 
             <MobileViewDashboardButtons default_currency={preferred_currency!} />
@@ -191,6 +208,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         content = (
             <Box padding="10px" paddingTop="40px" justifyContent="center" display="flex" flexDirection="column">
                 <MobileViewNavigationBar />
+                <NewsTab user={props.user} banner_mode />
                 <Box marginY='5px' />
                 <CardBox>
                     <DashboardFullView {...props} />
@@ -200,7 +218,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
     else
         content = (
             <Box padding="20px" paddingY="40px" justifyContent="center" display="flex">
-                <Sidenav firstname={props.user.firstname} lastname={props.user.lastname} />
+                <Sidenav />
                 <CardBox width="540px">
                     <DashboardFullView {...props} />
                 </CardBox>
@@ -211,7 +229,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
 
     return (
         <Box>
-            <Topbar />
+            <Topbar user={props.user} />
             {content}
         </Box>
     )

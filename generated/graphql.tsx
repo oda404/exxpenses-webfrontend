@@ -186,6 +186,7 @@ export type MutationUserLoginArgs = {
 
 export type MutationUserRecoverPasswordArgs = {
   email: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -269,6 +270,7 @@ export type User = {
 export type UserLoginInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type UserRegisterInput = {
@@ -276,6 +278,7 @@ export type UserRegisterInput = {
   firstname: Scalars['String'];
   lastname: Scalars['String'];
   password: Scalars['String'];
+  token: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -340,6 +343,7 @@ export type UserLogoutMutation = { __typename?: 'Mutation', userLogout: boolean 
 
 export type UserRecoverPasswordMutationVariables = Exact<{
   email: Scalars['String'];
+  token: Scalars['String'];
 }>;
 
 
@@ -708,8 +712,8 @@ export type UserLogoutMutationHookResult = ReturnType<typeof useUserLogoutMutati
 export type UserLogoutMutationResult = Apollo.MutationResult<UserLogoutMutation>;
 export type UserLogoutMutationOptions = Apollo.BaseMutationOptions<UserLogoutMutation, UserLogoutMutationVariables>;
 export const UserRecoverPasswordDocument = gql`
-    mutation UserRecoverPassword($email: String!) {
-  userRecoverPassword(email: $email)
+    mutation UserRecoverPassword($email: String!, $token: String!) {
+  userRecoverPassword(email: $email, token: $token)
 }
     `;
 export type UserRecoverPasswordMutationFn = Apollo.MutationFunction<UserRecoverPasswordMutation, UserRecoverPasswordMutationVariables>;
@@ -728,6 +732,7 @@ export type UserRecoverPasswordMutationFn = Apollo.MutationFunction<UserRecoverP
  * const [userRecoverPasswordMutation, { data, loading, error }] = useUserRecoverPasswordMutation({
  *   variables: {
  *      email: // value for 'email'
+ *      token: // value for 'token'
  *   },
  * });
  */

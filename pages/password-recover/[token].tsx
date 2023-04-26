@@ -9,7 +9,6 @@ import Footer from "../../components/Footer";
 import InputField from "../../components/InputField";
 import useShowMobileView from "../../utils/useShowMobileView";
 import apolloClient from "../../utils/apollo-client";
-import styles from "../../styles/PasswordRecoverNew.module.css"
 import HeartBrokenIcon from '@mui/icons-material/HeartBroken';
 import BigLogo from "../../components/BigLogo";
 
@@ -141,15 +140,15 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Reset your password - Exxpenses</title>
+                <title>Create a new password - Exxpenses</title>
                 <meta
                     name="description"
-                    content="Forgot your email? Let us send you an email, so you can create a new one."
+                    content="Create a new password"
                     key="desc"
                 />
             </Head>
 
-            <Box height="70vh" display="flex" marginTop={isMobileView ? "20px" : "0px"} alignItems={isMobileView ? "unset" : "center"} justifyContent="center">
+            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "140px"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
