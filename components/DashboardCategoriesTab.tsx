@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Modal, Stack, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { Category, CategoryAddDocument, User } from "../generated/graphql";
 import { useState } from "react";
@@ -20,56 +20,51 @@ interface MobileViewDashboardButtonsProps {
     default_currency: string;
 }
 
-function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardButtonsProps) {
+function AddNewCategoryButton({ default_currency }: MobileViewDashboardButtonsProps) {
 
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [categoryAdd] = useMutation(CategoryAddDocument);
     const router = useRouter();
 
     return (
-        <Box>
+        <Box marginTop="10px">
             <Button
                 sx={{
-                    color: "var(--exxpenses-lighter-green)",
-                    fontSize: "14px",
-                    textTransform: "none",
-                    paddingX: "6px",
-                    paddingY: "2px",
-                    borderRadius: "8px",
-                    display: showAddCategory ? "none" : "initial",
-                    "&:hover": {
-                        background: "var(--exxpenses-main-button-hover-bg-color)"
-                    },
-                    width: "fit-content !important"
+                    width: "100% !important"
                 }}
                 className="fullButton"
                 onClick={() => setShowAddCategory(true)}
             >
                 + New category
             </Button>
-            <Box display={showAddCategory ? "initial" : "none"}>
+            <Modal
+                open={showAddCategory}
+                onClose={() => { setShowAddCategory(false) }}
+                sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center", backdropFilter: "blur(5px)" }}
+            >
                 <Box
-                    width={"auto"}
-                    height="fit-content"
+                    width="320px"
                     display="flex"
                     flexDirection="column"
-                    paddingY="2px"
-                    border={"none"}
-                    sx={{ borderRadius: "5px" }}
-                >
-                    <Box display="flex">
-                        <Box sx={{ fontSize: "14px", color: "var(--exxpenses-lighter-green)" }} marginLeft="6px">
-                            + New category
-                        </Box>
-                        <Button onClick={() => setShowAddCategory(false)} sx={{ width: "20px", height: "20px", marginLeft: "auto" }}>
-                            <ClearIcon sx={{ width: "20px", height: "20px" }} />
-                        </Button>
+                    height="fit-content"
+                    padding="12px"
+                    sx={{
+                        background: "var(--exxpenses-second-bg-color)", borderRadius: "5px", boxShadow: "rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px"
+                    }}>
+                    <Box marginBottom="15px" display="flex">
+                        <Typography fontSize="16px">
+                            New category
+                        </Typography>
+                        <Tooltip title="Close">
+                            <Button onClick={() => setShowAddCategory(false)} sx={{ width: "24px", height: "24px", marginLeft: "auto" }}>
+                                <ClearIcon />
+                            </Button>
+                        </Tooltip>
                     </Box>
-
                     <Formik
+                        enableReinitialize
                         initialValues={{ name: "", currency: default_currency, generic: "" }}
                         onSubmit={async ({ name, currency, generic }, actions) => {
-
                             if (!name || name.length === 0) {
                                 actions.setFieldError("name", "The category name is required!")
                                 return;
@@ -99,54 +94,47 @@ function MobileViewDashboardButtons({ default_currency }: MobileViewDashboardBut
                             router.reload();
                         }}
                     >
-                        {({ isSubmitting, errors }) => (
+                        {({ setFieldValue, isSubmitting, errors }) => (
                             <Form>
-                                <Box>
+                                <Stack>
                                     <Box display="flex">
                                         <Field name="name">
-                                            {({ field, form }: FieldProps) => (
-                                                <Box width="75%" marginTop="12px">
-                                                    <InputField is_error={errors.name !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="name" label="Name" />
-                                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
-                                                        <ErrorMessage name="name" />
-                                                    </Box>
-                                                </Box>
+                                            {({ field }: FieldProps) => (
+                                                <InputField is_error={errors.name !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="name" label="Name" />
                                             )}
                                         </Field>
-                                        <Box marginX="10px" />
+                                        <Box marginLeft="5px" marginRight="5px" />
                                         <Field name="currency">
                                             {({ field }: FieldProps) => (
-                                                <Box width="25%" marginTop="10px">
-                                                    <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
-                                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
-                                                        <ErrorMessage name="currency" />
-                                                    </Box>
-                                                </Box>
+                                                <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
                                             )}
                                         </Field>
                                     </Box>
-                                    <Field name="generic">
-                                        {() => (
-                                            <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
-                                                <ErrorMessage name="generic" />
-                                            </Box>
-                                        )}
-                                    </Field>
-                                </Box>
+                                    <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                        <ErrorMessage name="name" />
+                                        <ErrorMessage name="currency" />
+                                    </Box>
+                                </Stack>
+                                <Field name="generic">
+                                    {() => (
+                                        <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                            <ErrorMessage name="generic" />
+                                        </Box>
+                                    )}
+                                </Field>
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
-                                    fullWidth={true}
                                     className="fullButton"
-                                    sx={{ marginTop: "10px", width: "100% !important" }}
+                                    sx={{ width: "100% !important", marginTop: "10px" }}
                                 >
                                     Add
                                 </Button>
                             </Form>
                         )}
                     </Formik>
-                </Box>
-            </Box>
+                </Box >
+            </Modal>
         </Box>
     )
 }
@@ -155,6 +143,7 @@ function findExpenses(expenses: MultiCategoryExpenses, name: string) {
     let cat = expenses.categories.find(c => c.name === name);
     return cat!.expenses;
 }
+
 interface DashboardCategoriesTabProps {
     categories: Category[];
     expensesMultipleCategories: MultiCategoryExpenses;
@@ -167,31 +156,35 @@ function DashboardFullView({ since, until, expensesMultipleCategories, preferred
 
     return (
         <Box>
-            <Stats
-                preferred_currency={preferred_currency!}
-                expensesMultipleCategories={expensesMultipleCategories}
-                categories={categories}
-            />
-
-            <MobileViewDashboardButtons default_currency={preferred_currency!} />
-
-            <Box marginTop="15px">
-                <Box style={{ fontSize: ".875rem", marginBottom: "10px" }}>
-                    Categories
+            <CardBox>
+                <Box justifyContent="space-between" display="flex">
+                    <Stats
+                        preferred_currency={preferred_currency!}
+                        expensesMultipleCategories={expensesMultipleCategories}
+                        categories={categories}
+                    />
                 </Box>
-                <Grid container spacing={2}>
-                    {categories.map((cat, idx) =>
-                        <CategoryBox
-                            category={cat}
-                            expenses={findExpenses(expensesMultipleCategories, cat.name)}
-                            preferred_currency={preferred_currency!}
-                            isMobileView={true}
-                            since={since}
-                            until={until}
-                            key={idx}
-                        />
-                    )}
-                </Grid>
+            </CardBox>
+            <Box marginTop="15px">
+                <CardBox>
+                    <Box style={{ fontSize: "16px", marginBottom: "10px" }}>
+                        Categories
+                    </Box>
+                    <Grid container spacing={2}>
+                        {categories.map((cat, idx) =>
+                            <CategoryBox
+                                category={cat}
+                                expenses={findExpenses(expensesMultipleCategories, cat.name)}
+                                preferred_currency={preferred_currency!}
+                                isMobileView={true}
+                                since={since}
+                                until={until}
+                                key={idx}
+                            />
+                        )}
+                    </Grid>
+                    <AddNewCategoryButton default_currency={preferred_currency!} />
+                </CardBox>
             </Box>
         </Box>
     )
@@ -210,18 +203,16 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
                 <MobileViewNavigationBar />
                 <NewsTab user={props.user} banner_mode />
                 <Box marginY='5px' />
-                <CardBox>
-                    <DashboardFullView {...props} />
-                </CardBox>
+                <DashboardFullView {...props} />
             </Box>
         )
     else
         content = (
             <Box padding="20px" paddingY="40px" justifyContent="center" display="flex">
                 <Sidenav />
-                <CardBox width="540px">
+                <Box width="540px">
                     <DashboardFullView {...props} />
-                </CardBox>
+                </Box>
                 <Box marginX="10px" />
                 <NewsTab user={props.user} />
             </Box>

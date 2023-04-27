@@ -1,7 +1,6 @@
 before-launch:
     display notices (that existing expenses will keep their currency?) when changing currencies for categories/users.
     add extra fields to statistics table
-    tidy up dashboard
     add delete button for categories
     add user page
     add free-account info apge

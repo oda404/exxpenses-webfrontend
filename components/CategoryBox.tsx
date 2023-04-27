@@ -85,11 +85,17 @@ export default function CategoryBox({ since, until, preferred_currency, category
                         <Box>
                             <Tooltip title="New expense" placement="top" arrow>
                                 <Button
-                                    className={stylesNew.categoryActionButton}
+                                    className="fullButton"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         e.preventDefault();
                                         setOpen(true);
+                                    }}
+                                    sx={{
+                                        height: "100% !important",
+                                        width: "fit-content !important",
+                                        margin: "0 !important",
+                                        padding: "0 !important",
                                     }}
                                 >
                                     <AddIcon sx={{ padding: "0", width: "20px", height: "20px" }} />
