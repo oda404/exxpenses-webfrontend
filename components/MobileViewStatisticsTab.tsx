@@ -40,7 +40,7 @@ export default function MobileViewStatisticsTab({ user, categories, expensesMult
 
     let lm_working_expenses = get_working_expenses(last_month_categories, categories, user);
     let lm_total = expensesToTotal(lm_working_expenses, user.preferred_currency as string);
-    // let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
+    let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
 
     return (
         <Box padding="10px" marginTop="28px">
@@ -67,6 +67,7 @@ export default function MobileViewStatisticsTab({ user, categories, expensesMult
                     total_price={total.price}
                     expensesMultipleCategories={expensesMultipleCategories}
                     categoryTotals={categories_totals}
+                    lm_category_totals={lm_categories_totals}
                 />
             </CardBox>
         </Box>

@@ -44,7 +44,7 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
 
     let lm_working_expenses = get_working_expenses(last_month_categories, categories, user);
     let lm_total = expensesToTotal(lm_working_expenses, user.preferred_currency as string);
-    // let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
+    let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
 
     return (
         <Box display="flex" justifyContent="center" marginTop="40px">
@@ -66,6 +66,7 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
                         total_price={total.price}
                         expensesMultipleCategories={expensesMultipleCategories}
                         categoryTotals={categories_totals}
+                        lm_category_totals={lm_categories_totals}
                     />
                 </CardBox>
             </Box>

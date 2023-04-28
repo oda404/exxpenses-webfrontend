@@ -76,8 +76,8 @@ export default function Stats({ preferred_currency, expensesMultipleCategories, 
                 This month
             </Box>
             <Grid direction="column" container >
+                {/* <StatCard content={expense_count_this_month} /> */}
                 <StatCard content={totalThisMonth} />
-                <StatCard content={expense_count_this_month} />
             </Grid>
         </Box>
     )

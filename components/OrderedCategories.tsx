@@ -1,15 +1,15 @@
 import { Box, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
-import { tableCellClasses } from "@mui/material/TableCell";
 
 interface OrderedCategoriesProps {
     expensesMultipleCategories: MultiCategoryExpenses;
     categoryTotals: CategoryTotal[];
+    lm_category_totals: CategoryTotal[];
     total_price: number;
 }
 
-export default function OrderedCategories({ total_price, categoryTotals, expensesMultipleCategories }: OrderedCategoriesProps) {
+export default function OrderedCategories({ total_price, categoryTotals, expensesMultipleCategories, lm_category_totals }: OrderedCategoriesProps) {
 
     let content: any;
     if (categoryTotals.length === 0) {
@@ -35,7 +35,8 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                     <TableHead >
                         <TableRow>
                             <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }}>Category</TableCell>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Total</TableCell>
+                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Last month total</TableCell>
+                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">This month total</TableCell>
                             <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">% of total</TableCell>
                         </TableRow>
                     </TableHead>
@@ -45,15 +46,36 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                             if (total_price == 0)
                                 perc_string = "-";
 
+                            let lm_cat = lm_category_totals.find(cat => cat.category === c.category);
+                            let lm_total_content: any;
+                            if (lm_cat === undefined) {
+                                // should not happen
+                                lm_total_content = "-";
+                            }
+                            else {
+                                lm_total_content = (
+                                    <Box>
+                                        {lm_cat.currency} {lm_cat.price}
+                                    </Box>
+                                )
+                            }
+
                             return (
                                 <TableRow key={idx}>
                                     <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} component="th" scope="row">
-                                        <b>{c.category}</b>
+                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.category}</b></Link>
                                     </TableCell>
-                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right"><b>{c.currency} {c.price}</b></TableCell>
-                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right"><b>{perc_string}</b></TableCell>
+                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
+                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{lm_total_content}</b></Link>
+                                    </TableCell>
+                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
+                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.currency} {c.price}</b></Link>
+                                    </TableCell>
+                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
+                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{perc_string}</b></Link>
+                                    </TableCell>
                                 </TableRow>
-                            )
+                            );
                         })}
                     </TableBody>
                 </Table>

@@ -14,7 +14,7 @@ interface NewTabProps {
 
 type EmailSendStatus = "notsent" | "sending" | "sent";
 
-function EmailConfirmationTab({ banner_mode }: { banner_mode: boolean }) {
+function EmailConfirmationTab({ banner_mode, key }: { banner_mode: boolean; key: number }) {
     const [userSendVerificationEmail] = useMutation(UserSendVerificationEmailDocument);
     const [emailSent, setEmailSent] = useState<EmailSendStatus>("notsent");
 
@@ -35,7 +35,7 @@ function EmailConfirmationTab({ banner_mode }: { banner_mode: boolean }) {
         button_content = <CheckRoundedIcon />;
 
     return (
-        <CardBox key={1}>
+        <CardBox key={key}>
             <Box justifyContent="space-between" alignItems="center" display={banner_mode ? "flex" : "initial"}>
                 <Box fontSize='.875rem'>
                     <b>{emailSent == "sent" ? "Verification email sent" : "Verify your email"}</b>
@@ -67,32 +67,31 @@ function EmailConfirmationTab({ banner_mode }: { banner_mode: boolean }) {
 export default function NewsTab({ user, children, banner_mode }: NewTabProps) {
 
     let cards: any[] = [];
+    let key = 1;
 
     if (!user.verified_email)
-        cards.push(<EmailConfirmationTab banner_mode={Boolean(banner_mode)} />);
+        cards.push(<EmailConfirmationTab key={key++} banner_mode={Boolean(banner_mode)} />);
 
     if (Array.isArray(children)) {
         cards.push(...children.map(c => {
             return (
-                <>
-                    <Box marginTop="10px" />
+                <Box key={key++} marginTop="10px">
                     {c}
-                </>
+                </Box >
             )
         }));
     }
     else if (children !== undefined && children !== null) {
         cards.push(
-            <>
-                <Box marginTop="10px" />
+            <Box key={key++} marginTop="10px">
                 {children}
-            </>
-        )
+            </Box>
+        );
     }
 
     if (cards.length === 0 && !banner_mode) {
-        let content = (
-            <CardBox key={1}>
+        cards.push(
+            <CardBox key={key++}>
                 <Box fontSize='.875rem'>
                     <b>Nothing new</b>
                     <Box fontSize=".75rem">
@@ -100,10 +99,8 @@ export default function NewsTab({ user, children, banner_mode }: NewTabProps) {
                     </Box>
                 </Box>
             </CardBox>
-        )
-        cards.push(content);
+        );
     }
-
 
     return (
         <Box borderRadius="8px" width={banner_mode ? "100%" : "260px"} marginTop={banner_mode ? "10px" : "0"} height="fit-content">
