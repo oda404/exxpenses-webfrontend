@@ -1,8 +1,5 @@
-
-
-import { Box, Link } from "@mui/material";
-import Decimal from "decimal.js";
-import { Category, Expense, User } from "../generated/graphql";
+import { Box } from "@mui/material";
+import { Category, User } from "../generated/graphql";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
 import expensesToTotal from "../utils/expensesToTotal";

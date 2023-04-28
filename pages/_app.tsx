@@ -1,21 +1,14 @@
 
 import '../styles/globals.css'
-import type { AppProps } from 'next/app'
 import apolloClient from "../utils/apollo-client";
 import { ApolloProvider } from '@apollo/client';
-import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import PropTypes from 'prop-types';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from '../utils/theme';
-import { useEffect, useState } from 'react';
-import { Router, useRouter } from 'next/router';
-import Cookies from "universal-cookie";
 import Head from 'next/head';
 import { CssBaseline } from '@mui/material';
 import createEmotionCache from '../utils/createEmotionCache';
-
-const isBrowser = typeof document !== 'undefined';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

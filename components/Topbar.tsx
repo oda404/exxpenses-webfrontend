@@ -5,7 +5,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useState } from "react";
 import { User, UserLogoutDocument } from "../generated/graphql";
 import LogoutIcon from '@mui/icons-material/Logout';
-import CardBox from "./CardBox";
 import { useMutation } from "@apollo/client";
 
 export interface TopbarProps {

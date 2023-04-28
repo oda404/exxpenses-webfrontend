@@ -2,16 +2,18 @@ import { Box } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Cookies from "universal-cookie";
-import Footer from "../components/Footer";
-import FullViewStatisticsTab from "../components/FullViewStatisticsTab";
-import MobileViewStatisticsTab from "../components/MobileViewStatisticsTab";
-import Topbar from "../components/Topbar";
 import { Category, User } from "../generated/graphql";
 import categoriesGet from "../gql/ssr/categoriesGet";
 import expensesGetMultipleCategories from "../gql/ssr/expensesGetMultipleCategories";
 import userGet from "../gql/ssr/userGet";
 import getNowUserOffset from "../utils/getNowWithUserOffset";
 import useShowMobileView from "../utils/useShowMobileView";
+
+import dynamic from "next/dynamic";
+const FullViewStatisticsTab = dynamic(import("../components/FullViewStatisticsTab"), { ssr: false });
+const MobileViewStatisticsTab = dynamic(import("../components/MobileViewStatisticsTab"), { ssr: false });
+const Topbar = dynamic(import("../components/Topbar"));
+const Footer = dynamic(import("../components/Footer"));
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 

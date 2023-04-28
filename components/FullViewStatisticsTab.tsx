@@ -1,17 +1,17 @@
-
-
 import { Box } from "@mui/material";
 import { Category, Expense, User } from "../generated/graphql";
 import { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
 import CategoryTotal from "../utils/CategoryTotal";
 import expensesToTotal from "../utils/expensesToTotal";
 import CardBox from "./CardBox";
-import CategoriesPiechart from "./CategoriesPiechart";
 import Sidenav from "./Sidenav";
 import OrderedCategories from "./OrderedCategories";
 import StatisticsThisMonth from "./StatisticsGeneral";
 import { get_working_expenses, get_categories_totals } from "../utils/statistics";
 import NewsTab from "./NewsTab";
+
+import dynamic from "next/dynamic";
+const CategoriesPiechart = dynamic(import("./CategoriesPiechart"));
 
 function SideTab({ user, categoryTotals }: { user: User, categoryTotals: CategoryTotal[] }) {
     return (

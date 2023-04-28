@@ -8,10 +8,13 @@ import expensesGet from "../../gql/ssr/expensesGet";
 import Cookies from "universal-cookie";
 import getNowUserOffset from "../../utils/getNowWithUserOffset";
 import useShowMobileView from "../../utils/useShowMobileView";
-import FullViewCategory from "../../components/CategoryFullView";
-import MobileViewCategory from "../../components/MobileViewCategory";
-import Head from "next/head";
+
+import dynamic from "next/dynamic";
+const FullViewCategory = dynamic(import("../../components/CategoryFullView"), { ssr: false });
+const MobileViewCategory = dynamic(import("../../components/MobileViewCategory"), { ssr: false });
+
 import Footer from "../../components/Footer";
+import Head from "next/head";
 
 type CategoryProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 

@@ -178,6 +178,8 @@ export default function Turnstile({
         refreshExpired,
         appearance,
         execution,
+        inplaceState,
+        ref
     ]);
     useEffect(() => {
         inplaceState.onVerify = onVerify;
@@ -185,7 +187,7 @@ export default function Turnstile({
         inplaceState.onError = onError;
         inplaceState.onExpire = onExpire;
         inplaceState.onTimeout = onTimeout;
-    }, [onVerify, onLoad, onError, onExpire, onTimeout]);
+    }, [onVerify, onLoad, onError, onExpire, onTimeout, inplaceState]);
 
     return <div ref={ref} id={id} className={className} style={style} />;
 }
