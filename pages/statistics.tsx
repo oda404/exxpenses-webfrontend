@@ -46,8 +46,8 @@ export default function Statistics({ ssr }: DashboardProps) {
             <Box sx={{ height: "100vh" }}>
                 <Topbar user={user} />
                 {content}
+                <Footer />
             </Box>
-            <Footer />
         </Box>
     )
 }

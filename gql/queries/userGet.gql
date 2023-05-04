@@ -6,8 +6,10 @@ query UserGet
         user {
             lastname
             firstname
+            email
             preferred_currency
             verified_email
+            plan
         }
 
         error {

@@ -5,7 +5,7 @@ import { ApolloQueryResult, useMutation } from "@apollo/client";
 import { UserGetDocument, UserGetQuery, UserRegisterDocument } from "../generated/graphql";
 import apolloClient from "../utils/apollo-client";
 import { InferGetServerSidePropsType } from "next";
-import { Box, Button, CircularProgress, Stack } from "@mui/material";
+import { Box, Button, CircularProgress, Link, Stack } from "@mui/material";
 import useShowMobileView from "../utils/useShowMobileView";
 import Footer from "../components/Footer";
 import Head from "next/head";
@@ -100,7 +100,7 @@ export default function Register({ }: RegisterProps) {
                 />
             </Head>
 
-            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "140px"} justifyContent="center">
+            <Box minHeight="100vh" display="flex" marginTop={isMobileView ? "20px" : "100px"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -110,8 +110,10 @@ export default function Register({ }: RegisterProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <BigLogo />
-                        <Box marginTop="20px" textAlign="center" marginBottom="20px">
+                        <Link href="/">
+                            <BigLogo />
+                        </Link>
+                        <Box marginTop="0px" textAlign="center" marginBottom="20px">
                             <Box
                                 color={'gray.100'}
                                 lineHeight={1.1}

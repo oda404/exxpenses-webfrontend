@@ -15,9 +15,10 @@ interface InputFieldProps {
     handleChange?: any;
     bg?: string;
     readonly?: boolean;
+    oninput?: (e: any) => void;
 }
 
-export default function InputField({ bg, label, type, name, field, is_error, params, handleChange, readonly }: InputFieldProps) {
+export default function InputField({ oninput, bg, label, type, name, field, is_error, params, handleChange, readonly }: InputFieldProps) {
 
     const [isLabelShown, setLabel] = useState(true);
     const [passwordType, setPasswordType] = useState<"password" | "text">("password");
@@ -74,6 +75,7 @@ export default function InputField({ bg, label, type, name, field, is_error, par
                 autoComplete="off"
                 spellCheck={false}
                 readOnly={readonly}
+                onInput={oninput}
                 style={{ height: "35px", fontSize: "14px", background: bg ? bg : "var(--exxpenses-main-bg-color)" }}
             />
             {type === "password" ?

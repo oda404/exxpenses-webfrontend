@@ -1,8 +1,8 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Box, Modal } from "@mui/material";
+import { Button, IconButton, Box, Modal, Popover, Link } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
-import { Category, CategoryEditDocument, Expense, User } from "../generated/graphql";
+import { Category, CategoryDeleteDocument, CategoryEditDocument, Expense, User } from "../generated/graphql";
 import expensesToDailyTotals from "../utils/expensesToDaily";
 import expensesToTotal from "../utils/expensesToTotal";
 import FullViewCategoryExpensesTab from "./CategoryExpenses";
@@ -15,6 +15,10 @@ import Sidenav from "./Sidenav";
 import Topbar from "./Topbar";
 import NewsTab from "./NewsTab";
 import AddNewExpenseCard from "./AddNewExpenseCard";
+import DangerZone from "./DangerZone";
+import DropdownInputField from "./DropdownInputField";
+import { currencies } from "../utils/currency";
+import ReplayIcon from '@mui/icons-material/Replay';
 
 interface CategoryFullViewProps {
     user: User;
@@ -35,6 +39,11 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
     let totalExpenses = expensesToTotal(expenses, category.default_currency);
 
     const [editCategory, setEditCategory] = useState(false);
+    const [dirtyCurrency, setDirtyCurrency] = useState(false);
+
+    let currency_input_changed = (e: string) => {
+        setDirtyCurrency(e !== category.default_currency);
+    }
 
     let categoryHeader: any;
     if (editCategory) {
@@ -98,20 +107,40 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                                 <Field name="currency">
                                     {({ field }: FieldProps) => (
                                         <Box>
-                                            <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                            <DropdownInputField
+                                                bg="var(--exxpenses-second-bg-color)"
+                                                field={field}
+                                                is_error={errors.currency !== undefined}
+                                                elements={currencies}
+                                                oninput={currency_input_changed}
+                                            />
                                             <ErrorMessage name="currency" component="div" />
                                         </Box>
                                     )}
                                 </Field>
+                                <Box marginLeft="auto" />
+                                <Button
+                                    sx={{ marginX: "10px" }}
+                                    onClick={() => {
+                                        setFieldValue("name", category.name);
+                                        setFieldValue("currency", category.default_currency);
+                                    }}
+                                >
+                                    <ReplayIcon />
+                                </Button>
                                 <Button
                                     sx={{
-                                        marginLeft: "auto",
+                                        marginRight: "5px"
                                     }}
                                     type="submit"
                                     disabled={isSubmitting}
                                 >
-                                    <CheckRoundedIcon />
+                                    <CheckRoundedIcon sx={{}} />
                                 </Button>
+                            </Box>
+                            <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
+                                Changing the currency of a category will not change the curencies of existing expenses for that category, when using a free plan.
+                                Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
                             </Box>
                         </Form>
                     )}
@@ -148,8 +177,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                         {totalExpenses.currency} {totalExpenses.price} this month
                     </Box>
                 </Box>
-            </Box >
-
+            </Box>
         )
     }
 
@@ -190,12 +218,16 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                     <Box marginY="10px" />
 
                     <CardBox>
-                        <Box fontSize="20px">
+                        <Box fontSize="18px">
                             Expenses
                         </Box>
                         <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
                     </CardBox>
+                    <Box marginY="10px" />
 
+                    <CardBox>
+                        <DangerZone name={category.name} />
+                    </CardBox>
                 </Box>
                 <Box marginX="10px" />
                 <NewsTab user={user} />

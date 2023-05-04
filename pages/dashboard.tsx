@@ -11,7 +11,7 @@ import Cookies from "universal-cookie";
 import Head from "next/head";
 
 import dynamic from "next/dynamic";
-const DashboardCategoriesTab = dynamic(import("../components/DashboardCategoriesTab"), { ssr: false });
+import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -32,7 +32,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
                 />
             </Head>
 
-            <Box sx={{ minHeight: "100vh" }}>
+            <Box>
                 <DashboardCategoriesTab
                     preferred_currency={user.preferred_currency!}
                     expensesMultipleCategories={expensesMultipleCategories}
@@ -42,7 +42,6 @@ export default function Dashboard({ ssr }: DashboardProps) {
                     user={user}
                 />
             </Box>
-            <Footer />
         </Box>
     );
 }

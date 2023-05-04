@@ -14,7 +14,7 @@ interface NewTabProps {
 
 type EmailSendStatus = "notsent" | "sending" | "sent";
 
-function EmailConfirmationTab({ banner_mode, key }: { banner_mode: boolean; key: number }) {
+function EmailConfirmationTab({ banner_mode }: { banner_mode: boolean; }) {
     const [userSendVerificationEmail] = useMutation(UserSendVerificationEmailDocument);
     const [emailSent, setEmailSent] = useState<EmailSendStatus>("notsent");
 
@@ -35,7 +35,7 @@ function EmailConfirmationTab({ banner_mode, key }: { banner_mode: boolean; key:
         button_content = <CheckRoundedIcon />;
 
     return (
-        <CardBox key={key}>
+        <CardBox>
             <Box justifyContent="space-between" alignItems="center" display={banner_mode ? "flex" : "initial"}>
                 <Box fontSize='.875rem'>
                     <b>{emailSent == "sent" ? "Verification email sent" : "Verify your email"}</b>

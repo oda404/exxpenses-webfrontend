@@ -1,10 +1,13 @@
 import { useMutation } from "@apollo/client";
-import { Typography, Button, Stack, Box, Tooltip } from "@mui/material";
+import { Typography, Button, Stack, Box, Tooltip, Link } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useRouter } from "next/router";
 import { Category, ExpenseAddDocument } from "../generated/graphql";
 import InputField from "./InputField";
 import ClearIcon from '@mui/icons-material/Clear';
+import DropdownInputField from "./DropdownInputField";
+import { currencies } from "../utils/currency";
+import { useState } from "react";
 
 export interface AddNewExpenseCardProps {
     category: Category;
@@ -17,9 +20,14 @@ export default function AddNewExpenseCard({ close, category }: AddNewExpenseCard
 
     const date = new Date().toISOString().slice(0, 10);
 
+    const [dirtyCurrency, setDirtyCurrency] = useState(false);
+    let currency_input_changed = (e: string) => {
+        setDirtyCurrency(e !== category.default_currency);
+    }
+
     return (
         <Box
-            width="320px"
+            width="360px"
             display="flex"
             flexDirection="column"
             height="fit-content"
@@ -108,7 +116,15 @@ export default function AddNewExpenseCard({ close, category }: AddNewExpenseCard
                                     <Box marginLeft="5px" marginRight="5px" />
                                     <Field name="currency">
                                         {({ field }: FieldProps) => (
-                                            <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                            <Box>
+                                                <DropdownInputField
+                                                    bg="var(--exxpenses-second-bg-color)"
+                                                    field={field}
+                                                    is_error={errors.currency !== undefined}
+                                                    elements={currencies}
+                                                    oninput={currency_input_changed}
+                                                />
+                                            </Box>
                                         )}
                                     </Field>
                                 </Box>
@@ -148,6 +164,10 @@ export default function AddNewExpenseCard({ close, category }: AddNewExpenseCard
                             )}
                         </Field>
 
+                        <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
+                            Expenses with different currencies will not be counted towards the total when using a free plan.
+                            Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
+                        </Box>
                         <Button
                             type="submit"
                             disabled={isSubmitting}

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { ResponsiveContainer, Tooltip, Area, AreaChart, YAxis } from "recharts";
+import { ResponsiveContainer, Tooltip, Area, AreaChart, YAxis, XAxis } from "recharts";
 import { DailyExpenses } from "../utils/expensesToDaily";
 import { useEffect, useState } from "react";
 import last_month_today from "../utils/lastMonthToday";
@@ -41,17 +41,6 @@ function CustomTooltip({ active, payload }: any) {
     }, [payload, active]);
 
     return null;
-}
-
-function CustomTick(...args: any) {
-    const { x, y, stroke, payload } = args[0];
-    return (
-        <g transform={`translate(${x},${y})`}>
-            <text fontSize="14px" x={0} y={0} fill="#666" textAnchor="start">
-                {payload.value}
-            </text>
-        </g>
-    );
 }
 
 interface PayloadData {
@@ -154,21 +143,7 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
         )
     }
 
-    let name_content = (
-        <>
-            <Box display="flex" fontWeight="bold">
-                <Box>
-                    {currency} {cur_payload!.pv}
-                </Box>
-                <Box fontWeight="initial" display={cur_payload!.count > 0 ? "initial" : "none"}>
-                    &nbsp; {cur_payload!.count} expenses
-                </Box>
-            </Box>
-            <Box>
-                {cur_payload!.name}
-            </Box>
-        </>
-    );
+    let name_content: any;
     if (lm_daily_totals) {
         let lm_date = name_to_lm_date(cur_payload!.name);
         let lm_date_str = `${lm_date.getDate()}.${lm_date.getMonth() + 1}.${lm_date.getFullYear()}`;
@@ -204,6 +179,23 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
             </>
         )
     }
+    else {
+        name_content = (
+            <>
+                <Box display="flex" fontWeight="bold">
+                    <Box>
+                        {currency} {cur_payload!.pv}
+                    </Box>
+                    <Box fontWeight="initial" display={cur_payload!.count > 0 ? "initial" : "none"}>
+                        &nbsp; {cur_payload!.count} expenses
+                    </Box>
+                </Box>
+                <Box>
+                    {cur_payload!.name}
+                </Box>
+            </>
+        );
+    }
 
     return (
         <Box position="relative" bgcolor="var(--exxpenses-dark-highlight)" borderRadius="6px" padding="10px">
@@ -224,7 +216,8 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
                     }}
                     onMouseLeave={() => cur_payload_changed(last_payload)}
                 >
-                    <YAxis tickMargin={8} fontSize="14px" orientation="right" width={maxval_digcnt * 14.5} tickLine={false} axisLine={false} />
+                    <XAxis height={1} tick={false} axisLine={{ strokeDasharray: 10 }} />
+                    <YAxis tickMargin={0} fontSize="14px" orientation="right" width={maxval_digcnt * 14.5} tickLine={false} axisLine={false} />
                     <Tooltip content={<CustomTooltip />} cursorStyle={{ background: "black" }} />
                     <Area strokeWidth={2} type="monotone" dataKey="uv" stroke="#0088FE" fillOpacity={1} fill="url(#colorUv)" />
                     <Area strokeWidth={2} type="monotone" dataKey="pv" stroke="var(--exxpenses-dark-green)" fillOpacity={1} fill="url(#colorPv)" />

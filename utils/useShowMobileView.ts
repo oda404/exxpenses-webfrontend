@@ -22,35 +22,24 @@ const useShowMobileView = () => {
         width: undefined,
         height: undefined,
     });
-
-    const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent
-    const device = getMobileDetect(userAgent);
-
-    if (device.isMobile())
-        return true;
+    const [device, setDevice] = useState(getMobileDetect("SSR"));
 
     useEffect(() => {
-        // only execute all the code below in client side
-        // Handler to call on window resize
+        const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
+        setDevice(getMobileDetect(userAgent));
+
         function handleResize() {
-            // Set window width/height to state
             setWindowSize({
                 width: window.innerWidth,
                 height: window.innerHeight,
             });
         }
-
-        // Add event listener
         window.addEventListener("resize", handleResize);
-
-        // Call handler right away so state gets updated with initial window size
         handleResize();
-
-        // Remove event listener on cleanup
         return () => window.removeEventListener("resize", handleResize);
     }, []); // Empty array ensures that effect is only run on mount
 
-    return windowSize.width! < 700;
+    return device.isMobile() || windowSize.width! < 700;
 }
 
 export default useShowMobileView;

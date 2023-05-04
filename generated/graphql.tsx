@@ -260,6 +260,8 @@ export type User = {
   lastname: Scalars['String'];
   /** The user's phone number */
   phone_number: Scalars['String'];
+  /** The user's plan */
+  plan: Scalars['Float'];
   /** The user's preferred currency */
   preferred_currency?: Maybe<Scalars['String']>;
   signup_date: Scalars['DateTime'];
@@ -419,7 +421,7 @@ export type ExpensesTotalCostGetMultipleQuery = { __typename?: 'Query', expenses
 export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string, firstname: string, preferred_currency?: string | null, verified_email: boolean } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
+export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string, firstname: string, email: string, preferred_currency?: string | null, verified_email: boolean, plan: number } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
 
 export type UserIsPasswordResetTokenValidQueryVariables = Exact<{
   token: Scalars['String'];
@@ -1128,8 +1130,10 @@ export const UserGetDocument = gql`
     user {
       lastname
       firstname
+      email
       preferred_currency
       verified_email
+      plan
     }
     error {
       name

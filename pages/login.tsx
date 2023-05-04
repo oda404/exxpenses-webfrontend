@@ -76,7 +76,7 @@ export default function Login({ }: LoginProps) {
                 />
             </Head>
 
-            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "140px"} justifyContent="center">
+            <Box minHeight="100vh" display="flex" marginTop={isMobileView ? "20px" : "100px"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -85,9 +85,10 @@ export default function Login({ }: LoginProps) {
                     width="100%"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <BigLogo />
+                        <Link href="/">
+                            <BigLogo />
+                        </Link>
                         <Box
-                            marginTop="20px"
                             color={'gray.100'}
                             lineHeight={1.1}
                             fontSize="24px"

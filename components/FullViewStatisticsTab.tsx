@@ -69,6 +69,7 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
                         lm_category_totals={lm_categories_totals}
                     />
                 </CardBox>
+                <Box marginY="5px" />
             </Box>
             <Box marginX="10px" />
             <SideTab user={user} categoryTotals={categories_totals} />

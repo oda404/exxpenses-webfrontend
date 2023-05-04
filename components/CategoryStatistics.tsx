@@ -76,7 +76,7 @@ export default function CategoryStatistics({ lastMonthExpenses, category, totalE
 
     return (
         <Box sx={{ height: "100%" }}>
-            <Box fontSize="20px">
+            <Box fontSize="18px">
                 Statistics
             </Box>
             <Box marginBottom="15px" fontSize=".875rem">

@@ -35,8 +35,8 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                     <TableHead >
                         <TableRow>
                             <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }}>Category</TableCell>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Last month total</TableCell>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">This month total</TableCell>
+                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Last month</TableCell>
+                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">This month</TableCell>
                             <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">% of total</TableCell>
                         </TableRow>
                     </TableHead>
@@ -96,7 +96,7 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                             textDecoration: "none"
                         }
                     }}
-                    href="/free-account"
+                    href="/plans"
                 >
                     Some categories are missing. Click to learn more.
                 </Link>

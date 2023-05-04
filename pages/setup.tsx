@@ -1,22 +1,22 @@
-import { ApolloQueryResult, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { Button, Backdrop, Grid, Paper } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { Box } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import InputField from "../components/InputField";
-import { UserGetQuery, UserGetDocument, CategoriesGetDocument, CategoriesGetQuery, CategoryAddDocument, UserUpdatePreferredCurrencyDocument, User } from "../generated/graphql";
-import apolloClient from "../utils/apollo-client";
+import { CategoryAddDocument, UserUpdatePreferredCurrencyDocument, User } from "../generated/graphql";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import styles from "../styles/Setup.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Head from "next/head";
 import userGet from "../gql/ssr/userGet";
-import Image from 'next/image'
 import useShowMobileView from "../utils/useShowMobileView";
 import categoriesGet from "../gql/ssr/categoriesGet";
 import BigLogo from "../components/BigLogo";
+import DropdownInputField from "../components/DropdownInputField";
+import { currencies } from "../utils/currency";
 
 interface NumberBubbleProps {
     number: string;
@@ -84,7 +84,7 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                             onSubmit={async ({ currency }, actions) => {
 
                                 if (!currency || currency.length === 0) {
-                                    actions.setFieldError("currency", "Enter a default currency");
+                                    actions.setFieldError("currency", "Invalid currency");
                                     return;
                                 }
 
@@ -100,7 +100,11 @@ function ConfigurePreferredCurrencyCard({ preferred_currency, grayed_out }: Conf
                                         <Field name="currency">
                                             {({ field, form }: FieldProps) => (
                                                 <Box>
-                                                    <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-main-bg-color)" field={field} name="currency" label="Currency" />
+                                                    <DropdownInputField
+                                                        field={field}
+                                                        is_error={errors.currency !== undefined}
+                                                        elements={currencies}
+                                                    />
                                                     <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="currency" />
                                                     </Box>

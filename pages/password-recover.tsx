@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, Link } from "@mui/material";
 import { Formik, Field, FieldProps, ErrorMessage } from "formik";
 import Head from "next/head";
 import Footer from "../components/Footer";
@@ -88,7 +88,7 @@ export default function PasswordRecover() {
                 />
             </Head>
 
-            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "140px"} justifyContent="center">
+            <Box height="100vh" display="flex" marginTop={isMobileView ? "20px" : "100px"} justifyContent="center">
                 <Box
                     display="flex"
                     justifyContent="center"
@@ -98,8 +98,10 @@ export default function PasswordRecover() {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <BigLogo />
-                        <Box marginBottom="8px" width={isMobileView ? "100%" : "405px"} marginTop="20px">
+                        <Link href="/">
+                            <BigLogo />
+                        </Link>
+                        <Box marginBottom="8px" width={isMobileView ? "100%" : "405px"}>
                             <Box
                                 color={'gray.100'}
                                 lineHeight={1.1}

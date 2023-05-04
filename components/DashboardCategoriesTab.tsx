@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Box, Button, Grid, Modal, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Grid, Link, Modal, Stack, Tooltip, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { Category, CategoryAddDocument, User } from "../generated/graphql";
 import { useState } from "react";
@@ -15,6 +15,9 @@ import MobileViewNavigationBar from "./MobileViewNavigationBar";
 import Sidenav from "./Sidenav";
 import Topbar from "./Topbar";
 import NewsTab from "./NewsTab";
+import DropdownInputField from "./DropdownInputField";
+import { currencies } from "../utils/currency";
+import Footer from "./Footer";
 
 interface MobileViewDashboardButtonsProps {
     default_currency: string;
@@ -25,6 +28,11 @@ function AddNewCategoryButton({ default_currency }: MobileViewDashboardButtonsPr
     const [showAddCategory, setShowAddCategory] = useState(false);
     const [categoryAdd] = useMutation(CategoryAddDocument);
     const router = useRouter();
+
+    const [dirtyCurrency, setDirtyCurrency] = useState(false);
+    let currency_input_changed = (e: string) => {
+        setDirtyCurrency(e !== default_currency);
+    }
 
     return (
         <Box marginTop="10px">
@@ -43,7 +51,7 @@ function AddNewCategoryButton({ default_currency }: MobileViewDashboardButtonsPr
                 sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center", backdropFilter: "blur(5px)" }}
             >
                 <Box
-                    width="320px"
+                    width="360px"
                     display="flex"
                     flexDirection="column"
                     height="fit-content"
@@ -106,7 +114,15 @@ function AddNewCategoryButton({ default_currency }: MobileViewDashboardButtonsPr
                                         <Box marginLeft="5px" marginRight="5px" />
                                         <Field name="currency">
                                             {({ field }: FieldProps) => (
-                                                <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                                <Box>
+                                                    <DropdownInputField
+                                                        bg="var(--exxpenses-second-bg-color)"
+                                                        field={field}
+                                                        is_error={errors.currency !== undefined}
+                                                        elements={currencies}
+                                                        oninput={currency_input_changed}
+                                                    />
+                                                </Box>
                                             )}
                                         </Field>
                                     </Box>
@@ -122,6 +138,10 @@ function AddNewCategoryButton({ default_currency }: MobileViewDashboardButtonsPr
                                         </Box>
                                     )}
                                 </Field>
+                                <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
+                                    Categories with different currencies will not count towards the total when using a free plan.
+                                    Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
+                                </Box>
                                 <Button
                                     type="submit"
                                     disabled={isSubmitting}
@@ -222,6 +242,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         <Box>
             <Topbar user={props.user} />
             {content}
+            <Footer />
         </Box>
     )
 }

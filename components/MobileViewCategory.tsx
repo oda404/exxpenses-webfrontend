@@ -1,12 +1,11 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Typography, Box } from "@mui/material";
+import { Button, IconButton, Typography, Box, Link, Modal } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
 import { User, Expense, CategoryEditDocument, Category, ExpenseAddDocument } from "../generated/graphql";
 import expensesToTotal from "../utils/expensesToTotal";
 import InputField from "./InputField";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import styles from "../styles/Category.module.css"
 import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
@@ -16,144 +15,12 @@ import CategoryStatistics from "./CategoryStatistics";
 import Topbar from "./Topbar";
 import FullViewCategoryExpensesTab from "./CategoryExpenses";
 import NewsTab from "./NewsTab";
-
-interface AddNewExpenseCardProps {
-    default_category: string;
-    default_currency: string;
-    isMobileView?: boolean;
-    width?: string;
-}
-
-function AddNewExpenseCard({ default_category, default_currency }: AddNewExpenseCardProps) {
-
-    const [expenseAdd] = useMutation(ExpenseAddDocument);
-    const router = useRouter();
-
-    const date = new Date().toISOString().slice(0, 10);
-
-    return (
-        <Box
-            width={"auto"}
-            display="flex"
-            flexDirection="column"
-            key={default_category}
-            sx={{
-                animation: default_category !== undefined ? `${styles.blink} .5s linear` : "", borderRadius: "5px"
-            }}>
-            <Box marginBottom="5px" display="flex">
-                <Typography fontSize="17px" marginLeft="6px">
-                    New {default_category} expense
-                </Typography>
-            </Box>
-            <Formik
-                enableReinitialize
-                initialValues={{ category: default_category, price: "", description: "", currency: default_currency, date: date }}
-                onSubmit={async (values, actions) => {
-
-                    if (!values.category || values.category.length === 0) {
-                        actions.setFieldError("category", "The category name is required!")
-                        return;
-                    }
-
-                    if (!values.price) {
-                        actions.setFieldError("price", "The price is required!")
-                        return;
-                    }
-
-                    let number_price = Number(values.price);
-                    if (number_price <= 0) {
-                        actions.setFieldError("price", "Price needs to be bigger than 0!");
-                        return;
-                    }
-
-                    if (!values.currency || values.currency.length === 0) {
-                        actions.setFieldError("currency", "The currency name is required!")
-                        return;
-                    }
-
-                    if (!values.date || values.date.length === 0) {
-                        actions.setFieldError("date", "The date is required!")
-                        return;
-                    }
-
-                    let { data } = await expenseAdd({
-                        variables: {
-                            addData: {
-                                category_name: values.category,
-                                price: number_price,
-                                description: values.description,
-                                currency: values.currency,
-                                date: values.date
-                            }
-                        }
-                    });
-
-                    if (data.expenseAdd.error) {
-                        const field = data.expenseAdd.error.field === "category_name" ? "category" : data.expenseAdd.error.field;
-                        actions.setFieldError(field, data.expenseAdd.error.name)
-                    }
-                    else {
-                        router.reload();
-                    }
-                }}
-            >
-                {({ setFieldValue, isSubmitting, errors }) => (
-                    <Form>
-
-                        <Box display="flex">
-                            <Field name="price">
-                                {({ field }: FieldProps) => (
-                                    <Box marginTop="10px">
-                                        <InputField is_error={errors.price !== undefined} bg="var(--exxpenses-second-bg-color)" type="number" field={field} name="price" label="Price" />
-                                        <ErrorMessage name="price" component="div" />
-                                    </Box>
-                                )}
-                            </Field>
-                            <Box marginX="5px" />
-                            <Field name="currency">
-                                {({ field }: FieldProps) => (
-                                    <Box marginTop="10px">
-                                        <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
-                                        <ErrorMessage name="currency" component="div" />
-                                    </Box>
-                                )}
-                            </Field>
-                            <Box marginX="5px" />
-                            <Field name="date">
-                                {({ field }: FieldProps) => (
-                                    <Box width="145px" marginTop="10px">
-                                        <InputField is_error={errors.date !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} type="date" name="date" label="Date" />
-                                        <ErrorMessage name="date" component="div" />
-                                    </Box>
-                                )}
-                            </Field>
-                        </Box>
-
-                        <Field name="description">
-                            {({ field }: FieldProps) => (
-                                <Box marginTop="10px">
-                                    <InputField bg="var(--exxpenses-second-bg-color)" field={field} name="description" label="Description" />
-                                    <ErrorMessage name="description" component="div" />
-                                </Box>
-                            )}
-                        </Field>
-
-                        <Button
-                            type="submit"
-                            disabled={isSubmitting}
-                            fullWidth={true}
-                            className="fullButton"
-                            sx={{ width: "100% !important", marginTop: "10px" }}
-                        >
-                            Add
-                        </Button>
-                    </Form >
-                )
-                }
-            </Formik >
-        </Box >
-    )
-}
+import CardBox from "./CardBox";
+import DangerZone from "./DangerZone";
+import DropdownInputField from "./DropdownInputField";
+import { currencies } from "../utils/currency";
+import ReplayIcon from '@mui/icons-material/Replay';
+import AddNewExpenseCard from "./AddNewExpenseCard";
 
 interface CategoryViewsProps {
     user: User;
@@ -175,6 +42,11 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
 
     const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
+
+    const [dirtyCurrency, setDirtyCurrency] = useState(false);
+    let currency_input_changed = (e: string) => {
+        setDirtyCurrency(e !== category.default_currency);
+    }
 
     let categoryHeader: any;
     if (editCategory) {
@@ -238,21 +110,40 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                                 <Field name="currency">
                                     {({ field }: FieldProps) => (
                                         <Box>
-                                            <InputField is_error={errors.currency !== undefined} bg="var(--exxpenses-second-bg-color)" field={field} name="currency" label="Currency" />
+                                            <DropdownInputField
+                                                bg="var(--exxpenses-second-bg-color)"
+                                                field={field}
+                                                is_error={errors.currency !== undefined}
+                                                elements={currencies}
+                                                oninput={currency_input_changed}
+                                            />
                                             <ErrorMessage name="currency" component="div" />
                                         </Box>
                                     )}
                                 </Field>
-                                <Box marginX="5px" />
+                                <Box marginLeft="auto" />
+                                <Button
+                                    sx={{ marginX: "10px" }}
+                                    onClick={() => {
+                                        setFieldValue("name", category.name);
+                                        setFieldValue("currency", category.default_currency);
+                                    }}
+                                >
+                                    <ReplayIcon />
+                                </Button>
                                 <Button
                                     sx={{
-                                        marginLeft: "auto"
+                                        marginRight: "5px"
                                     }}
                                     type="submit"
                                     disabled={isSubmitting}
                                 >
                                     <CheckRoundedIcon sx={{}} />
                                 </Button>
+                            </Box>
+                            <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
+                                Changing the currency of a category will not change the curencies of existing expenses for that category.
+                                Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
                             </Box>
                         </Form>
                     )}
@@ -272,14 +163,17 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                     </Box>
                     <IconButton
                         sx={{
-                            marginLeft: "auto"
+                            marginLeft: "20px"
                         }}
                         onClick={() => {
                             setEditCategory(true);
                         }}
                     >
-                        <ModeEditIcon sx={{ width: "20px", height: "20px" }} />
+                        <ModeEditIcon sx={{ width: "18px", height: "18px" }} />
                     </IconButton>
+                    <Button onClick={() => setNewCategoryOpen(true)} className="fullButton" sx={{ margin: "0 !important", marginLeft: "auto !important", width: "fit-content !important" }} >
+                        + New expense
+                    </Button>
                 </Box>
                 <Box fontSize="16px">
                     {totalExpenses.currency} {totalExpenses.price} this month
@@ -288,10 +182,29 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
         )
     }
 
+    const [newCategoryOpen, setNewCategoryOpen] = useState(false);
+
     return (
         <Box position="relative" minHeight="100vh">
             <Topbar user={user} />
             <Box padding="15px" paddingTop="40px">
+                <Modal
+                    open={newCategoryOpen}
+                    onClose={() => {
+                        setNewCategoryOpen(false);
+                    }}
+                    sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center", backdropFilter: "blur(5px)" }}
+                >
+                    <Box>
+                        <AddNewExpenseCard
+                            close={() => {
+                                setNewCategoryOpen(false);
+                            }}
+                            category={category}
+                        />
+                    </Box>
+                </Modal>
+
                 <Box display="flex">
                     <Button
                         className={tabHeaderButtonStyles.tabHeaderButton}
@@ -313,7 +226,27 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                         Dashboard
                     </Button>
                     <Box marginX="5px" />
+
                     <Button
+                        className={tabHeaderButtonStyles.tabHeaderButton}
+                        sx={{
+                            background: "var(--exxpenses-second-bg-color)",
+
+                            "&:hover": {
+                                background: "var( --exxpenses-main-button-hover-bg-color)",
+                                textDecoration: "none"
+                            },
+                            paddingX: "10px",
+                            textDecoration: "none",
+                            width: "100%"
+                        }}
+                        onClick={() => {
+                            window.location.assign("/statistics");
+                        }}
+                    >
+                        Statistics
+                    </Button>
+                    {/* <Button
                         className="fullButton"
                         sx={{
                             background: "var(--exxpenses-second-bg-color)",
@@ -331,18 +264,7 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                         onClick={() => setSShowNewExpenseAdd(!showNewExpenseAdd)}
                     >
                         {showNewExpenseAdd ? "Close" : "+ New expense"}
-                    </Button>
-                </Box>
-                <Box
-                    sx={{ background: "var(--exxpenses-second-bg-color)", overflowY: "auto" }}
-                    padding="10px"
-                    flexDirection="column"
-                    borderRadius="8px"
-                    height={showNewExpenseAdd ? "fit-content !important" : "0 !important"}
-                    marginTop="15px"
-                    display={showNewExpenseAdd ? "flex" : "none"}
-                >
-                    <AddNewExpenseCard default_category={category.name} default_currency={category.default_currency} />
+                    </Button> */}
                 </Box>
                 <NewsTab user={user} banner_mode />
                 <Box
@@ -352,7 +274,7 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                     flexDirection="column"
                     borderRadius="8px"
                     height="fit-content"
-                    marginTop="15px"
+                    marginTop="10px"
                 >
                     {categoryHeader}
                 </Box >
@@ -363,7 +285,7 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                     flexDirection="column"
                     borderRadius="8px"
                     height="fit-content"
-                    marginTop="15px"
+                    marginTop="10px"
                 >
                     <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
                 </Box>
@@ -375,17 +297,19 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                     flexDirection="column"
                     borderRadius="8px"
                     height="fit-content"
-                    marginTop="15px"
+                    marginTop="10px"
                 >
-                    <Box fontSize="20px">
+                    <Box fontSize="18px">
                         Expenses
                     </Box>
                     <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
-
-                    <AccessibleForwardIcon sx={{ marginTop: "20px", marginLeft: "auto", marginRight: "auto" }} />
                 </Box>
-            </Box>
-        </Box >
 
+                <Box marginTop="10px" />
+                <CardBox>
+                    <DangerZone name={category.name} />
+                </CardBox>
+            </Box>
+        </Box>
     )
 }

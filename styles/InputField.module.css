@@ -12,10 +12,8 @@ autoComplete="off"
 className={styles.inputField} */
 
 .inputField {
-    font-size: 15px;
     color: var(--exxpenses-main-color);
     border: none;
-    height: 22px;
     width: 100%;
     padding: 8px;
     padding-left: 16px;

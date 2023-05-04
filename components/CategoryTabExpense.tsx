@@ -30,7 +30,7 @@ export default function CategoryTabExpense({ category_name, category_currency, e
     let leadingIcon: any;
     if (true && currency !== category_currency) { // free account
         leadingIcon = (
-            <Link href="/free-account">
+            <Link href="/plans">
                 <Tooltip title="This expense is not counted towards the total. Click to learn more.">
                     <HelpIcon
                         sx={{

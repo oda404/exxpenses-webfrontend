@@ -37,7 +37,7 @@ export default function CategoryBox({ since, until, preferred_currency, category
     let warningIcon: any = null;
     if (preferred_currency !== category.default_currency) {
         warningIcon = (
-            <IconButton onClick={() => { window.location.assign("/free-account") }} sx={{ padding: "0", marginLeft: "10px" }}>
+            <IconButton href="/plans" sx={{ padding: "0", marginLeft: "10px" }}>
                 <Tooltip title="This category is not counted towards the total. Click to learn more.">
                     <WarningIcon
                         sx={{ width: "20px", height: "20px", fill: "var(--exxpenses-warning-color)" }}
