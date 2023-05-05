@@ -71,6 +71,9 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
     if (isMobileView)
         hotMargin = "0";
 
+    if (hot)
+        hot = false;
+
     return (
         <CardBox sx={{ borderTopWidth: "30px", marginTop: hot ? hotMargin : "0" }} height="auto" padding="0 !important" border={hot ? "3px solid var(--exxpenses-light-green)" : "none"} width="100%">
             <Box display={hot ? "block" : "none"} fontFamily="'Work Sans', sans-serif" textAlign="center" sx={{ top: "-28px" }} position="relative">MOST POPULAR</Box>
@@ -83,15 +86,17 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
                 </Box>
                 <Box justifyContent="center" display="flex">
                     <Box marginRight="2px" marginTop="10px">$</Box>
-                    <Box fontSize="32px">{price}</Box>
+                    <Box fontSize="32px">{price > -1 ? price : "-"}</Box>
                     <Box marginLeft="4px" marginTop="14px">/month</Box>
                 </Box>
                 <Button
                     className="fullButton"
-                    disabled={active}
+                    // disabled={active}
+                    disabled={true}
                     sx={{
                         width: "100% !important",
-                        background: active ? "var(--exxpenses-main-button-hover-bg-color) !important" : "var(--exxpenses-dark-green) !important",
+                        // background: active ? "var(--exxpenses-main-button-hover-bg-color) !important" : "var(--exxpenses-dark-green) !important",
+                        background: "var(--exxpenses-main-button-hover-bg-color) !important",
                         color: "white !important"
                     }}
                     onClick={() => {
@@ -99,7 +104,8 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
                             window.location.assign("/register");
                     }}
                 >
-                    {active ? "Current plan" : "Get"}
+                    {/* {active ? "Current plan" : "Get"} */}
+                    {active ? "Current plan" : "Unavailable"}
                 </Button>
             </Box>
             <Box height="100%" padding="8px" bgcolor="var(--exxpenses-dark-highlight)">
@@ -117,6 +123,9 @@ function PlansContent({ user }: { user?: User; }) {
 
     return (
         <Box sx={{ minHeight: "100vh", width: "990px" }}>
+            <Box color="var(--exxpenses-warning-color)" textAlign="center" fontWeight="900">
+                The only account plan available at the moment is the Free plan. Thank you for understanding!
+            </Box>
             <Box fontFamily="'Work Sans', sans-serif" textAlign="center" fontWeight="900" fontSize="40px">Choose the right plan four your needs.</Box>
             <Box justifyContent="center">
                 <Box fontSize="18px" textAlign="center" marginTop="10px"><b>How often do you want to pay?</b></Box>
@@ -143,7 +152,7 @@ function PlansContent({ user }: { user?: User; }) {
                 <PlanBox
                     name="Premium"
                     description="The advanced plan for the power user"
-                    price={4.99}
+                    price={-1}
                     active={user?.plan === 1}
                     hot={true}
                     is_signed_in={!!user}
@@ -160,7 +169,7 @@ function PlansContent({ user }: { user?: User; }) {
                 <PlanBox
                     name="Pro"
                     description="The professional plan for the entrepreneur"
-                    price={9.99}
+                    price={-1}
                     active={user?.plan === 2}
                     is_signed_in={!!user}
                     descriptions={[
