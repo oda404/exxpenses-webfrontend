@@ -68,7 +68,7 @@ export default function StatisticsThisMonth({ user, categoryTotals, total, worki
     if (lm_total.price > 0)
         diff_perc = (Math.abs(lm_total.price - total.price) / lm_total.price * 100).toFixed(2).replace(/\.0+$/, '');
     let sign = lm_total.price > total.price ? "-" : "+";
-    let diff_price = new Decimal(lm_total.price).sub(new Decimal(total.price)).toNumber();
+    let diff_price = new Decimal(lm_total.price).sub(new Decimal(total.price)).abs().toNumber();
 
     let lm_total_today = expensesToTotal(lm_working_expenses, user.preferred_currency as string, last_month_today(now));
 
@@ -77,7 +77,7 @@ export default function StatisticsThisMonth({ user, categoryTotals, total, worki
         diff_perc_today = (Math.abs(lm_total_today.price - total.price) / lm_total_today.price * 100).toFixed(2).replace(/\.0+$/, '');
 
     let sign_today = lm_total_today.price > total.price ? "-" : "+";
-    let diff_price_today = new Decimal(lm_total_today.price).sub(new Decimal(total.price)).toNumber();
+    let diff_price_today = new Decimal(lm_total_today.price).sub(new Decimal(total.price)).abs().toNumber();
 
     return (
         <Box>
