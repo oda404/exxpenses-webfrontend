@@ -22,13 +22,17 @@ const afterLink = new ApolloLink((op: Operation, forward: NextLink) => {
     });
 })
 
+const DEV_API_URI = "http://localhost:8888";
+const PROD_API_URI = "https://api.exxpenses.com";
+const API_URI = process.env.NODE_ENV === "production" ? PROD_API_URI : DEV_API_URI;
+
 export const cache = new InMemoryCache();
 
 const apolloClient = new ApolloClient({
     ssrMode: typeof (window) === "undefined",
     cache: cache,
     link: from([beforeLink, afterLink, createHttpLink({
-        uri: "http://localhost:8888",
+        uri: API_URI,
         credentials: "include"
     })]),
 
