@@ -6,6 +6,7 @@ WORKDIR /usr/src/exxpenses-website
 COPY package.json ./
 COPY yarn.lock ./
 
+RUN yarn add @mui/icons-material --network-timeout 500000
 RUN yarn install
 
 COPY . .
