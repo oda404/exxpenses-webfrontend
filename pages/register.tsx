@@ -1,9 +1,8 @@
 
 import { ErrorMessage, Field, FieldProps, Formik } from "formik";
 import InputField from "../components/InputField";
-import { ApolloQueryResult, useMutation } from "@apollo/client";
-import { UserGetDocument, UserGetQuery, UserRegisterDocument } from "../generated/graphql";
-import apolloClient from "../utils/apollo-client";
+import { useMutation } from "@apollo/client";
+import { UserRegisterDocument } from "../generated/graphql";
 import { InferGetServerSidePropsType } from "next";
 import { Box, Button, CircularProgress, Link, Stack } from "@mui/material";
 import useShowMobileView from "../utils/useShowMobileView";
@@ -13,6 +12,7 @@ import BigLogo from "../components/BigLogo";
 import Turnstile from "../components/Turnstile";
 import { useState } from "react";
 import { TURNSTILE_MANAGED_KEY } from "../utils/turnstile";
+import userGet from "../gql/ssr/userGet";
 
 interface UserInfo {
     lastname: string;
@@ -277,13 +277,8 @@ export default function Register({ }: RegisterProps) {
 }
 
 export async function getServerSideProps({ req, res }: any) {
-    const { data: { userGet } }: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
-        query: UserGetDocument,
-        context: { cookie: req.headers.cookie },
-        fetchPolicy: "no-cache"
-    });
-
-    if (userGet.user !== undefined && userGet.user !== null) {
+    const userData = await userGet(req);
+    if (userData.user !== undefined && userData.user !== null) {
         return {
             redirect: {
                 permanent: false,
@@ -295,8 +290,6 @@ export async function getServerSideProps({ req, res }: any) {
     return {
         props: {
             ssr: {
-                userResponse: userGet
-
             }
         }
     }

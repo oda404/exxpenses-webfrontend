@@ -1,12 +1,10 @@
-import { ApolloQueryResult } from '@apollo/client'
 import { Box, Button } from '@mui/material'
 import type { InferGetServerSidePropsType } from 'next'
 import Head from 'next/head'
 import Topbar from '../components/Topbar'
-import { User, UserGetDocument, UserGetQuery } from '../generated/graphql'
-import apolloClient from '../utils/apollo-client'
 import Footer from '../components/Footer'
 import BigLogo from '../components/BigLogo'
+import userGet from '../gql/ssr/userGet'
 
 type HomeProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -120,7 +118,7 @@ function IndexContent() {
   )
 }
 
-export default function Home({ ssr }: HomeProps) {
+export default function Home({ }: HomeProps) {
 
   return (
     <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
@@ -134,7 +132,7 @@ export default function Home({ ssr }: HomeProps) {
       </Head>
 
       <Box>
-        <Topbar user={ssr.userGet.user ? ssr.userGet.user as User : undefined} />
+        <Topbar user={undefined} />
         <Box>
           <IndexContent />
           <Footer />
@@ -145,13 +143,9 @@ export default function Home({ ssr }: HomeProps) {
 }
 
 export async function getServerSideProps({ req }: any) {
-  const { data: { userGet } }: ApolloQueryResult<UserGetQuery> = await apolloClient.query({
-    query: UserGetDocument,
-    context: { cookie: req.headers.cookie },
-    fetchPolicy: "no-cache"
-  });
+  const userData = await userGet(req);
 
-  if (userGet.user) {
+  if (userData.user) {
     return {
       redirect: {
         permanent: false,
@@ -163,7 +157,6 @@ export async function getServerSideProps({ req }: any) {
   return {
     props: {
       ssr: {
-        userGet: userGet
       }
     }
   }

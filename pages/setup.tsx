@@ -8,7 +8,7 @@ import InputField from "../components/InputField";
 import { CategoryAddDocument, UserUpdatePreferredCurrencyDocument, User } from "../generated/graphql";
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import styles from "../styles/Setup.module.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Footer from "../components/Footer";
 import Head from "next/head";
 import userGet from "../gql/ssr/userGet";

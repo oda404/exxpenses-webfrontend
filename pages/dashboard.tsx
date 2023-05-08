@@ -2,7 +2,6 @@ import { InferGetServerSidePropsType } from "next";
 import "../styles/Dashboard.module.css"
 import { Box } from "@mui/material";
 import { Category, User } from "../generated/graphql";
-import Footer from "../components/Footer";
 import userGet from "../gql/ssr/userGet";
 import categoriesGet from "../gql/ssr/categoriesGet";
 import expensesGetMultipleCategories, { MultiCategoryExpenses } from "../gql/ssr/expensesGetMultipleCategories";
@@ -10,7 +9,6 @@ import getNowUserOffset from "../utils/getNowWithUserOffset";
 import Cookies from "universal-cookie";
 import Head from "next/head";
 
-import dynamic from "next/dynamic";
 import DashboardCategoriesTab from "../components/DashboardCategoriesTab";
 
 type DashboardProps = InferGetServerSidePropsType<typeof getServerSideProps>;
