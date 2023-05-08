@@ -219,7 +219,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
     // XSS vulnerability ? i dont think so....
     if (mobileView)
         content = (
-            <Box padding="10px" paddingTop="40px" justifyContent="center" display="flex" flexDirection="column">
+            <Box minHeight="100vh" padding="10px" paddingTop="40px" display="flex" flexDirection="column">
                 <MobileViewNavigationBar />
                 <NewsTab user={props.user} banner_mode />
                 <Box marginY='5px' />
@@ -228,7 +228,7 @@ export default function DashboardCategoriesTab(props: DashboardCategoriesTabProp
         )
     else
         content = (
-            <Box padding="20px" paddingY="40px" justifyContent="center" display="flex">
+            <Box minHeight="100vh" padding="20px" paddingY="40px" justifyContent="center" display="flex">
                 <Sidenav />
                 <Box width="540px">
                     <DashboardFullView {...props} />

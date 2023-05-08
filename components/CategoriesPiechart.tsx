@@ -8,18 +8,16 @@ const renderActiveShape = (props: any) => {
     const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value, currency } = props;
     const sin = Math.sin(-RADIAN * midAngle);
     const cos = Math.cos(-RADIAN * midAngle);
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
 
     let content = null;
     let name_pos = 4;
     if (currency !== undefined) {
         content = (
             <>
-                <text fontSize=".75rem" x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+                <text fontSize=".75rem" x={cx} y={cy} dy={8} textAnchor="middle" fill={"var(--exxpenses-main-color)"}>
                     {currency} {value}
                 </text>
-                <text fontSize=".75rem" x={cx} y={cy} dy={24} textAnchor="middle" fill={fill}>
+                <text fontSize=".75rem" x={cx} y={cy} dy={24} textAnchor="middle" fill={"var(--exxpenses-main-color)"}>
                     {(percent * 100).toFixed(2)}%
                 </text>
             </>
@@ -29,7 +27,7 @@ const renderActiveShape = (props: any) => {
 
     return (
         <g>
-            <text fontSize="1rem" x={cx} y={cy} dy={name_pos} textAnchor="middle" fill={fill}>
+            <text fontSize="1rem" x={cx} y={cy} dy={name_pos} textAnchor="middle" fill={"var(--exxpenses-main-color)"}>
                 {payload.name}
             </text>
             {content}
@@ -96,7 +94,7 @@ export default function CategoriesPiechart({ categoryTotals, preferred_currency 
         });
     }
     else {
-        colors = ['var(--exxpenses-lighter-green)', '#0088FE', '#FFBB28', '#FF8042'];
+        colors = ['var(--exxpenses-dark-green)', '#0077FE', '#FFBB28', '#FF8042'];
     }
 
     return (
