@@ -85,7 +85,7 @@ function IndexContent() {
               <b>Track your expenses</b>
             </Box>
             <Box marginLeft="20px">
-              After spending money, track that expenses in it&#39;s category. Tracking your expenses also helps create a stronger conscience about what you spend your money on!
+              After spending money, track that expenses in it&#39;s category. Tracking your expenses also helps create a stronger conscience about your spendings!
             </Box>
           </Box>
         </Box>
@@ -97,7 +97,7 @@ function IndexContent() {
               <b>Get insight</b>
             </Box>
             <Box marginLeft="20px">
-              At any point you can get insight on your monthly spendings and compare them with last month&#39;s.
+              At any point you can get insight on your monthly spendings and compare them.
             </Box>
           </Box>
         </Box>

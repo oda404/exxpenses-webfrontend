@@ -264,6 +264,10 @@ export default function Register({ }: RegisterProps) {
                                             </Button>
                                             {turnstile}
                                         </Box>
+                                        <Box marginY="10px" width="100%" height="1px" bgcolor="var(--exxpenses-main-button-hover-bg-color)" />
+                                        <Box marginTop="5px" fontSize="12px">
+                                            By creating an account you agree to the <Link href="/tos">terms of service</Link>.
+                                        </Box>
                                     </form>
                                 )}
                             </Formik>
