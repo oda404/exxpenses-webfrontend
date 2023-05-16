@@ -46,7 +46,7 @@
 
 .loginForgot {
   text-decoration: none;
-  color: #3391ff;
+  color: #5f5fe0 !important;
   font-size: 14px;
   margin-top: 10px;
   margin-bottom: 5px;
@@ -54,6 +54,5 @@
 }
 
 .loginForgot:hover {
-  text-decoration: underline;
-  color: #7070db;
+  text-decoration: none;
 }

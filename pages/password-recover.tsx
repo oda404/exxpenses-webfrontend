@@ -99,7 +99,7 @@ export default function PasswordRecover() {
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <Link href="/">
-                            <BigLogo />
+                            <BigLogo width={120} height={40} />
                         </Link>
                         <Box marginBottom="8px" width={isMobileView ? "100%" : "405px"}>
                             <Box

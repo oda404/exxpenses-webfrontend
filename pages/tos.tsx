@@ -6,11 +6,12 @@ import Footer from "../components/Footer";
 import { InferGetServerSidePropsType } from "next";
 import { User } from "../generated/graphql";
 import CardBox from "../components/CardBox";
+import Link from "next/link";
 
 function TOSContent() {
     return (
         <Box>
-            <p><strong>Terms of Service</strong></p>
+            <div><strong><span style={{ fontSize: "26px" }}><span data-custom-class="title">TERMS OF SERVICE</span></span></strong></div>
             <p>Our Terms of Service were last updated on 08.05.2023.</p>
             <p>Please read these terms and conditions carefully before using Our Service.</p>
 
@@ -65,15 +66,14 @@ function TOSContent() {
                 We will provide these services to you, which are subject to the conditions stated below in this document. Every time you visit this website, use its services or make a purchase, you accept the following conditions. This is why we urge you to read them carefully.
             </p>
 
-            {/* <p>
+            <p>
                 <strong>
                     Privacy Policy
-
                 </strong>
             </p>
             <p>
-                Before you continue using our website we advise you to read our privacy policy x regarding our user data collection. It will help you better understand our practices.
-            </p> */}
+                Before you continue using our website we advise you to read our <Link style={{ color: "#4285F4" }} href="/privacy">privacy policy</Link> regarding our user data collection. It will help you better understand our practices.
+            </p>
 
             <p>
                 <strong>
@@ -155,7 +155,7 @@ export default function TOS({ ssr }: TOSProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Plans - Exxpenses</title>
+                <title>Terms of service - Exxpenses</title>
                 <meta
                     name="description"
                     content="Exxpenses terms of service."

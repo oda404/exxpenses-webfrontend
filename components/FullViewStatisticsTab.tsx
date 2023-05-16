@@ -47,7 +47,7 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
     let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
 
     return (
-        <Box display="flex" justifyContent="center" marginTop="40px">
+        <Box minHeight="100vh" display="flex" justifyContent="center" marginTop="40px">
             <Sidenav />
             <Box width="540px" display="flex" flexDirection="column" alignItems="center">
                 <CardBox width="540px">

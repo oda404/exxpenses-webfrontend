@@ -62,8 +62,12 @@ html {
   background: #555;
 }
 
+a {
+  text-decoration: none !important;
+}
+
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .standardButton {

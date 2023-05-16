@@ -86,7 +86,7 @@ export default function Login({ }: LoginProps) {
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <Link href="/">
-                            <BigLogo />
+                            <BigLogo width={120} height={40} />
                         </Link>
                         <Box
                             color={'gray.100'}

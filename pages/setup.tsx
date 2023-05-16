@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { Button, Backdrop, Grid, Paper } from "@mui/material";
+import { Button, Backdrop, Grid, Paper, Link } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { Box } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
@@ -286,9 +286,10 @@ export default function Setup({ ssr }: DashboardProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <BigLogo />
+                        <Link href="/">
+                            <BigLogo width={120} height={40} />
+                        </Link>
                         <Box
-                            marginTop="20px"
                             color={'gray.100'}
                             lineHeight={1.1}
                             fontSize="24px"

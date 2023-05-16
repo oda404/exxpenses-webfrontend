@@ -7,7 +7,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 interface InputFieldProps {
     name?: string;
-    label: string;
+    label?: string;
     type?: React.HTMLInputTypeAttribute;
     field: any;
     is_error?: boolean;
@@ -58,6 +58,7 @@ export default function InputField({ oninput, bg, label, type, name, field, is_e
                     background: bg ? bg : "var(--exxpenses-main-bg-color)"
                 }}
                 className={styles.inputFieldLabel}
+                display={label !== undefined ? "block" : "none"}
             >
                 {label}
             </Box>

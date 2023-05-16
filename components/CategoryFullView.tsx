@@ -1,8 +1,8 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Box, Modal, Popover, Link } from "@mui/material";
+import { Button, IconButton, Box, Modal, Link } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
-import { Category, CategoryDeleteDocument, CategoryEditDocument, Expense, User } from "../generated/graphql";
+import { Category, CategoryEditDocument, Expense, User } from "../generated/graphql";
 import expensesToDailyTotals from "../utils/expensesToDaily";
 import expensesToTotal from "../utils/expensesToTotal";
 import FullViewCategoryExpensesTab from "./CategoryExpenses";

@@ -65,10 +65,13 @@ function IndexContent() {
             </Box>
           </Box>
           <Box fontSize="20px">
-            &#34;If you don&#39;t get serious about your money, you will never have serious money.&#34;
+            Exxpenses is a new platform for helping people track their day-to-day expenses, and improve spending habits.
           </Box>
-          <Button sx={{ marginTop: "20px" }} href="/register" className="fullButton">
-            Sign up
+          {/* <Box fontSize="20px">
+            &#34;If you don&#39;t get serious about your money, you will never have serious money.&#34;
+          </Box> */}
+          <Button sx={{ width: "fit-content !important", marginTop: "20px" }} href="/register" className="fullButton">
+            Get started!
           </Button>
         </Box>
       </Box>
@@ -85,7 +88,7 @@ function IndexContent() {
               <b>Track your expenses</b>
             </Box>
             <Box marginLeft="20px">
-              After spending money, track that expenses in it&#39;s category. Tracking your expenses also helps create a stronger conscience about your spendings!
+              After spending money, count it in it&#39;s category. Tracking your expenses also helps create a stronger conscience about your spendings!
             </Box>
           </Box>
         </Box>
@@ -97,7 +100,7 @@ function IndexContent() {
               <b>Get insight</b>
             </Box>
             <Box marginLeft="20px">
-              At any point you can get insight on your monthly spendings and compare them.
+              At any point you can get insight on your monthly spendings and compare them with last month&#39;s.
             </Box>
           </Box>
         </Box>
@@ -109,7 +112,7 @@ function IndexContent() {
               <b>Cut down on unnedeed expenses</b>
             </Box>
             <Box marginLeft="20px">
-              Identify and cut down on unneeded or otherwise excesive monthly spendings.
+              Identify and cut down on unneeded or otherwise excesive spendings.
             </Box>
           </Box>
         </Box>

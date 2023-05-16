@@ -1,0 +1,6 @@
+mutation UserDeleteAccount(
+    $password: String!,
+)
+{
+    userDeleteAccount(password: $password)
+}

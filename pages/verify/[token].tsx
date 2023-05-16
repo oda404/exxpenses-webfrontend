@@ -1,4 +1,4 @@
-import { Box, Link } from "@mui/material";
+import { Box, Button, Link } from "@mui/material";
 import { InferGetServerSidePropsType } from "next";
 import Footer from "../../components/Footer";
 import { UserVerifyEmailDocument } from "../../generated/graphql";
@@ -29,8 +29,10 @@ export default function Verify({ ssr }: CategoryProps) {
                 >
                     <Box display="flex" flexDirection="column">
                         <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
-                            <BigLogo />
-                            <Box marginTop="20px" />
+                            <Link href="/">
+                                <BigLogo width={120} height={40} />
+                            </Link>
+                            <Box marginTop="0px" />
                             <CheckRoundedIcon sx={{ fill: "var(--exxpenses-light-green)", width: "40px", height: "40px" }} />
                             <Box marginTop="10px" fontSize="18px">
                                 <b>Your email has been successfully verified!</b>
@@ -57,19 +59,20 @@ export default function Verify({ ssr }: CategoryProps) {
                 >
                     <Box display="flex" flexDirection="column">
                         <Box marginBottom="10px" flexDirection="column" display="flex" alignItems="center">
-                            <BigLogo />
-                            <Box marginTop="20px" />
+                            <Link href="/">
+                                <BigLogo width={120} height={40} />
+                            </Link>
                             <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
                             <Box marginTop="10px" width="500px" fontSize="18px">
                                 <b>There was a problem verifying your email. The link you followed may have expired. Please try sending another verification email.</b>
                             </Box>
                             <Box marginTop="5px" width="500px" fontSize="18px">
-                                <b>If the problem persists, please contact support.</b>
+                                If the problem persists, please contact support.
                             </Box>
                         </Box>
-                        <Link sx={{ color: "var(--exxpenses-main-color)", textDecoration: "none" }} href="/dashboard">
+                        <Button className="emptyButton" sx={{ width: "fit-content !important", color: "var(--exxpenses-main-color)", textDecoration: "none" }} href="/dashboard">
                             Back to the dashboard
-                        </Link>
+                        </Button>
                     </Box>
                 </Box>
             </Box >

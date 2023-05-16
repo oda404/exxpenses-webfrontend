@@ -111,7 +111,7 @@ export default function Register({ }: RegisterProps) {
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
                         <Link href="/">
-                            <BigLogo />
+                            <BigLogo width={120} height={40} />
                         </Link>
                         <Box marginTop="0px" textAlign="center" marginBottom="20px">
                             <Box
@@ -124,10 +124,10 @@ export default function Register({ }: RegisterProps) {
                         </Box>
                         <Box width={isMobileView ? "100%" : "405px"}>
                             <Formik
-                                initialValues={{ firstname: "", lastname: "", email: "", password: "", confirm_password: "", token: "" }}
-                                initialErrors={{ firstname: firstname_error, lastname: lastname_error, email: email_error, password: password_error, token: token_error }}
+                                initialValues={{ firstname: "", lastname: "", email: "", password: "", confirm_password: "", token: "", accept_priv: false, accept_tos: false }}
+                                initialErrors={{ firstname: firstname_error, lastname: lastname_error, email: email_error, password: password_error, token: token_error, }}
                                 enableReinitialize={true}
-                                onSubmit={async ({ firstname, lastname, email, password, confirm_password }, actions) => {
+                                onSubmit={async ({ firstname, lastname, email, password, confirm_password, accept_tos, accept_priv }, actions) => {
                                     if (!firstname || firstname.length === 0) {
                                         actions.setFieldError("firstname", "Enter your firstname");
                                         return;
@@ -173,6 +173,11 @@ export default function Register({ }: RegisterProps) {
                                     if (password !== confirm_password) {
                                         actions.setFieldError("confirm_password", "Passwords don't match!");
                                         return;
+                                    }
+
+                                    if (!accept_priv || !accept_tos) {
+                                        actions.setFieldError("accept_priv", "You must accept the Privacy policy and Terms of Service.");
+                                        return
                                     }
 
                                     set_firstname_error(undefined);
@@ -253,7 +258,18 @@ export default function Register({ }: RegisterProps) {
                                         <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                             <ErrorMessage name="token" />
                                         </Box>
-                                        <Box marginTop="20px" display="flex" alignItems="center" justifyContent="space-between">
+                                        <Box fontSize="14px" marginTop="10px">
+                                            <Box display="flex">
+                                                <Box marginRight="10px"><Field type="checkbox" name="accept_tos" /></Box> I have read and accept the <Link marginLeft="4px" color="#4285F4" href="/tos">terms of service</Link>.
+                                            </Box>
+                                            <Box display="flex">
+                                                <Box marginRight="10px"><Field type="checkbox" name="accept_priv" /></Box> I have read and accept the <Link marginLeft="4px" color="#4285F4" href="/privacy">privacy policy</Link>.
+                                            </Box>
+                                        </Box>
+                                        <Box fontSize="14px" fontWeight="bold" color="var(--exxpenses-main-error-color)">
+                                            <ErrorMessage name="accept_priv" />
+                                        </Box>
+                                        <Box marginTop="10px" display="flex" alignItems="center" justifyContent="space-between">
                                             <Button sx={{ fontWeight: "bold" }} href="/login" className="emptyButton">
                                                 <Box color="inherit" fontWeight="inherit">
                                                     Already a member?
@@ -264,10 +280,10 @@ export default function Register({ }: RegisterProps) {
                                             </Button>
                                             {turnstile}
                                         </Box>
-                                        <Box marginY="10px" width="100%" height="1px" bgcolor="var(--exxpenses-main-button-hover-bg-color)" />
+                                        {/* <Box marginY="10px" width="100%" height="1px" bgcolor="var(--exxpenses-main-button-hover-bg-color)" />
                                         <Box marginTop="5px" fontSize="12px">
                                             By creating an account you agree to the <Link href="/tos">terms of service</Link>.
-                                        </Box>
+                                        </Box> */}
                                     </form>
                                 )}
                             </Formik>

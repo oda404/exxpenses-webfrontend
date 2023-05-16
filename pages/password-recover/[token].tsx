@@ -23,7 +23,7 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
     if (ssr?.success) {
         content = (
             <Box>
-                <Box marginBottom="8px" marginTop="20px">
+                <Box marginBottom="8px" marginTop="0px">
                     <Box
                         color={'gray.100'}
                         lineHeight={1.1}
@@ -121,17 +121,17 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
     }
     else {
         content = (
-            <Box marginBottom="8px" marginTop="20px">
+            <Box marginBottom="8px">
                 <Box display="flex" flexDirection="column">
-                    <Box marginBottom="10px" marginTop="20px" flexDirection="column" display="flex" alignItems="center">
+                    <Box marginBottom="10px" flexDirection="column" display="flex" alignItems="center">
                         <HeartBrokenIcon sx={{ fill: "var(--exxpenses-main-error-color)", width: "40px", height: "40px" }} />
                         <Box marginTop="10px" width="400px" fontSize="18px">
                             <b>This link has expired, please create another password reset request!</b>
                         </Box>
                     </Box>
-                    <Link sx={{ color: "var(--exxpenses-main-color)", textDecoration: "none" }} href="/password-recover">
+                    <Button className="emptyButton" sx={{ width: "fit-content !important", color: "var(--exxpenses-main-color)", textDecoration: "none" }} href="/password-recover">
                         Take me to the password recovery page
-                    </Link>
+                    </Button>
                 </Box>
             </Box>
         )
@@ -158,7 +158,9 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
                     borderRadius="8px"
                 >
                     <Box width="100%" display="flex" flexDirection="column" alignItems="center">
-                        <BigLogo />
+                        <Link href="/">
+                            <BigLogo width={120} height={40} />
+                        </Link>
                         {content}
                     </Box>
                 </Box>

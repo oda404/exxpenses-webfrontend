@@ -43,7 +43,7 @@ export default function MobileViewStatisticsTab({ user, categories, expensesMult
     let lm_categories_totals = get_categories_totals(last_month_categories, categories, lm_total, user);
 
     return (
-        <Box padding="10px" marginTop="28px">
+        <Box minHeight="100vh" padding="10px" marginTop="28px">
             <MobileViewNavigationBar />
             <NewsTab user={user} banner_mode />
             <Box marginY='10px' />
