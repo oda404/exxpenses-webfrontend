@@ -115,6 +115,7 @@ export default function Topbar({ user }: TopbarProps) {
                     sx={{
                         height: "34px !important",
                         color: "var(--exxpenses-main-color) !important",
+                        fontSize: "14px"
 
                     }}
                     className="emptyButton"
@@ -127,7 +128,7 @@ export default function Topbar({ user }: TopbarProps) {
                         color: "var(--exxpenses-unimportant-color) !important"
                     }, width: "fit-content !important", border: "1px solid var(--exxpenses-main-bg-color)", bgcolor: "var(--exxpenses-second-bg-color) !important"
                 }} className="fullButton">
-                    Create an account
+                    Sign up
                 </Button>
             </Box>
         )

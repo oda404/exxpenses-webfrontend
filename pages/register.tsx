@@ -251,7 +251,7 @@ export default function Register({ }: RegisterProps) {
                                             <Box fontWeight="inherit" color="inherit" marginLeft="52%">
                                                 <ErrorMessage name="confirm_password" />
                                             </Box>
-                                            <Box color="var(--exxpenses-unimportant-color)" marginTop="10px" fontSize="13px">
+                                            <Box color="var(--exxpenses-unimportant-color)" marginTop="10px" fontSize="12px">
                                                 The password should have 8 or more characters. For extra security make sure to include capital letters, numbers and symbols.
                                             </Box>
                                         </Box>
@@ -259,11 +259,23 @@ export default function Register({ }: RegisterProps) {
                                             <ErrorMessage name="token" />
                                         </Box>
                                         <Box fontSize="14px" marginTop="10px">
-                                            <Box display="flex">
-                                                <Box marginRight="10px"><Field type="checkbox" name="accept_tos" /></Box> I have read and accept the <Link marginLeft="4px" color="#4285F4" href="/tos">terms of service</Link>.
+                                            <Box fontSize="12px" display="flex">
+                                                <Box marginRight="10px">
+                                                    <Field type="checkbox" name="accept_tos" />
+                                                </Box>
+                                                I have read and accept the
+                                                <Link marginLeft="4px" color="#4285F4" href="/tos">
+                                                    terms of service
+                                                </Link>.
                                             </Box>
-                                            <Box display="flex">
-                                                <Box marginRight="10px"><Field type="checkbox" name="accept_priv" /></Box> I have read and accept the <Link marginLeft="4px" color="#4285F4" href="/privacy">privacy policy</Link>.
+                                            <Box fontSize="12px" display="flex">
+                                                <Box marginRight="10px">
+                                                    <Field type="checkbox" name="accept_priv" />
+                                                </Box>
+                                                I have read and accept the
+                                                <Link marginLeft="4px" color="#4285F4" href="/privacy">
+                                                    privacy policy
+                                                </Link>.
                                             </Box>
                                         </Box>
                                         <Box fontSize="14px" fontWeight="bold" color="var(--exxpenses-main-error-color)">

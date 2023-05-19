@@ -38,29 +38,124 @@ function IndexContent() {
 
   const isMobileView = useShowMobileView();
 
+  let wfcont: any;
+  if (isMobileView) {
+    wfcont = (
+      <Box>
+        <Box alignItems="center" display="flex" marginTop="20px">
+          <NumberCircle n={1} />
+          <Box>
+            <Box fontWeight="bold" color="var(--exxpenses-light-green)" fontSize="18px" width="100%">
+              Set Up Categories
+            </Box>
+            <Box width="100%">
+              Customize your expense categories based on your spending habits. Create categories like groceries, bills, entertainment, etc.
+            </Box>
+          </Box>
+        </Box>
+
+        <Box marginLeft="32px" height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
+
+        <Box display="flex" alignItems="center" marginTop="20px">
+          <NumberCircle n={2} />
+          <Box>
+            <Box fontWeight="bold" color="var(--exxpenses-light-green)" fontSize="18px" width="100%">
+              Record Expenses
+            </Box>
+            <Box width="100%">
+              Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category!
+            </Box>
+          </Box>
+        </Box>
+
+        <Box marginLeft="32px" height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
+
+        <Box alignItems="center" display="flex" marginTop="20px">
+          <NumberCircle n={3} />
+          <Box>
+            <Box fontWeight="bold" color="var(--exxpenses-light-green)" fontSize="18px" width="100%">
+              Analyze Spending Patterns
+            </Box>
+            <Box width="100%">
+              Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more!
+            </Box>
+          </Box>
+        </Box>
+
+        <Box marginLeft="32px" height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
+
+        <Box alignItems="center" display="flex" marginTop="20px">
+          <NumberCircle n={4} />
+          <Box>
+            <Box fontWeight="bold" color="var(--exxpenses-light-green)" fontSize="18px" width="100%">
+              Set Budgets
+            </Box>
+            <Box width="100%">
+              Take control of your finances by setting monthly or weekly budgets for different expense categories.
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    )
+  }
+  else {
+    wfcont = (
+      <>
+        <Box alignItems="center" display="flex" marginTop="20px">
+          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="right" fontSize="18px" width="100%">
+            Set Up Categories
+          </Box>
+          <NumberCircle n={1} />
+          <Box width="100%">
+            Customize your expense categories based on your spending habits. Create categories like groceries, bills, entertainment, etc.
+          </Box>
+        </Box>
+
+        <Box height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
+
+        <Box display="flex" alignItems="center" marginTop="20px">
+          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="right" fontSize="18px" width="100%">
+            Record Expenses
+          </Box>
+          <NumberCircle n={2} />
+          <Box width="100%">
+            Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category!
+          </Box>
+        </Box>
+
+        <Box height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
+
+        <Box alignItems="center" display="flex" marginTop="20px">
+          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="right" fontSize="18px" width="100%">
+            Analyze Spending Patterns
+          </Box>
+          <NumberCircle n={3} />
+          <Box width="100%">
+            Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more!
+          </Box>
+        </Box>
+
+        <Box height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
+
+        <Box alignItems="center" display="flex" marginTop="20px">
+          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="right" fontSize="18px" width="100%">
+            Set Budgets
+          </Box>
+          <NumberCircle n={4} />
+          <Box width="100%">
+            Take control of your finances by setting monthly or weekly budgets for different expense categories.
+          </Box>
+        </Box>
+      </>
+    )
+  }
+
   let mobcont: any;
   if (isMobileView) {
     mobcont = (
       <Box marginBottom="20px" width="100%" position="relative" display="flex" flexDirection="column" alignItems="center">
         <Image style={{ zIndex: "4" }} src="/pix5.png" width={246} height={456} alt="Phone" />
         <Box borderRadius="10px" zIndex="0" top="228px" position="absolute" bgcolor="var(--exxpenses-second-bg-color)" width="100%" height="505px" />
-        {/* <Box zIndex="4">
-          <Box fontWeight="bold" fontSize="16px" color="var(--exxpenses-light-green)">
-            
-          </Box>
-          <Box fontSize="14px">
-            
-          </Box>
-        </Box> */}
-        {/* <Box marginY="20px" /> */}
-        {/* <Box zIndex="4">
-          <Box fontWeight="bold" fontSize="16px" color="var(--exxpenses-light-green)">
-            
-          </Box>
-          <Box fontSize="14px">
-            
-          </Box>
-        </Box> */}
         <Box zIndex="4">
           <Box >
             <Box fontWeight="bold" fontSize="16px" color="var(--exxpenses-light-green)">
@@ -97,7 +192,6 @@ function IndexContent() {
               Get immediate statistics on every expense.
             </Box>
           </Box>
-
         </Box>
       </Box>
     )
@@ -161,12 +255,12 @@ function IndexContent() {
         bgcolor="var(--exxpenses-second-bg-color)"
         color="white"
         fontFamily="'Work Sans', sans-serif"
-        fontSize="38px"
+        fontSize="34px"
         display="flex"
         alignItems="center"
         flexDirection="column"
         width="100%"
-        paddingY="70px"
+        paddingY="50px"
       >
         <Box paddingX="20px" maxWidth="990px" width="100%">
           <Box fontWeight="bold" color="#eeeeee">
@@ -174,13 +268,13 @@ function IndexContent() {
           </Box>
           <Box display="flex">
             <Box>
-              <BigLogo />
+              <BigLogo width={160} height={50} />
             </Box>
             <Box fontWeight="bold" color="#eeeeee">
               &nbsp;like a pro
             </Box>
           </Box>
-          <Box fontSize="20px">
+          <Box fontSize="16px">
             Welcome to Exxpenses, your ultimate platform for effortless expense tracking, management, and valuable insights. With Exxpenses, you can take control of your day-to-day spending like never before.
           </Box>
           <Button sx={{ width: "fit-content !important", marginTop: "20px" }} href="/register" className="fullButton">
@@ -198,52 +292,7 @@ function IndexContent() {
         <Box fontFamily="'Work Sans', sans-serif" fontSize="24px">
           The Exxpenses workflow
         </Box>
-
-        <Box alignItems="center" display="flex" marginTop="20px">
-          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="right" fontSize="18px" width="100%">
-            Set Up Categories
-          </Box>
-          <NumberCircle n={1} />
-          <Box width="100%">
-            Customize your expense categories based on your spending habits. Create categories like groceries, bills, entertainment, etc.
-          </Box>
-        </Box>
-
-        <Box height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
-
-        <Box display="flex" alignItems="center" marginTop="20px">
-          <Box width="100%">
-            Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category!
-          </Box>
-          <NumberCircle n={2} />
-          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="left" fontSize="18px" width="100%">
-            Record Expenses
-          </Box>
-        </Box>
-
-        <Box height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
-
-        <Box alignItems="center" display="flex" marginTop="20px">
-          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="right" fontSize="18px" width="100%">
-            Analyze Spending Patterns
-          </Box>
-          <NumberCircle n={3} />
-          <Box width="100%">
-            Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more!
-          </Box>
-        </Box>
-
-        <Box height="30px" width="1px" bgcolor="var(--exxpenses-light-green)" />
-
-        <Box alignItems="center" display="flex" marginTop="20px">
-          <Box width="100%">
-            Take control of your finances by setting monthly or weekly budgets for different expense categories.
-          </Box>
-          <NumberCircle n={4} />
-          <Box fontWeight="bold" color="var(--exxpenses-light-green)" textAlign="left" fontSize="18px" width="100%">
-            Set Budgets
-          </Box>
-        </Box>
+        {wfcont}
       </Box>
     </Box >
   )

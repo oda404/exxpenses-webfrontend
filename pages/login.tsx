@@ -152,7 +152,7 @@ export default function Login({ }: LoginProps) {
                                                     <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
                                                         <ErrorMessage name="password" />
                                                     </Box>
-                                                    <Link href="/password-recover" className={styles.loginForgot}>Forgot password?</Link>
+                                                    <Link href="/password-recover" sx={{ fontSize: "12px !important" }} className={styles.loginForgot}>Forgot password?</Link>
                                                 </Box>
                                             )}
                                         </Field>
