@@ -80,10 +80,10 @@ export default function PasswordRecover() {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Forgotten password - Exxpenses</title>
+                <title>Forgot password? | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Forgot your email? Let us send you an email, so you can create a new one."
+                    content="Forgot your password? Create a new one!"
                     key="desc"
                 />
             </Head>

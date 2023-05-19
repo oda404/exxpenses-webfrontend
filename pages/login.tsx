@@ -68,10 +68,10 @@ export default function Login({ }: LoginProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Sign in - Exxpenses</title>
+                <title>Sign in | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Login to your Exxpenses account."
+                    content="Sign in to your Exxpenses account."
                     key="desc"
                 />
             </Head>

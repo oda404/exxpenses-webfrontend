@@ -192,10 +192,10 @@ export default function Plans({ ssr }: PlansProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Plans - Exxpenses</title>
+                <title>Plans | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Pricing plans for your Exxpenses account."
+                    content="Check out the available Exxpenses account plans and see which one fits your spending needs best!"
                     key="desc"
                 />
             </Head>

@@ -22,7 +22,7 @@ export default function Dashboard({ ssr }: DashboardProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Dashboard - Exxpenses</title>
+                <title>Dashboard | Exxpenses</title>
                 <meta
                     name="description"
                     content="Overview of your expenses."

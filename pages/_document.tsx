@@ -4,6 +4,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import theme from '../utils/theme';
 import createEmotionCache from '../utils/createEmotionCache';
 export default class MyDocument extends Document {
+
     render() {
         return (
             <Html lang="en">
@@ -13,6 +14,7 @@ export default class MyDocument extends Document {
                     <link rel="shortcut icon" href="/favicon.ico" />
                     <meta name="emotion-insertion-point" content="" />
                     {this.props.emotionStyleTags}
+                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2642185202374593" crossOrigin="anonymous"></script>
                 </Head>
                 <body>
                     <Main />

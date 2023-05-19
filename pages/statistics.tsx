@@ -35,10 +35,10 @@ export default function Statistics({ ssr }: DashboardProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minHeight="100vh">
             <Head>
-                <title>Statistics - Exxpenses</title>
+                <title>Statistics | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Monthly statistics."
+                    content="Statistics for your expenses."
                     key="desc"
                 />
             </Head>

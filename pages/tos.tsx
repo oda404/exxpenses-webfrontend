@@ -155,7 +155,7 @@ export default function TOS({ ssr }: TOSProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Terms of service - Exxpenses</title>
+                <title>Terms of service | Exxpenses</title>
                 <meta
                     name="description"
                     content="Exxpenses terms of service."

@@ -95,7 +95,7 @@ export default function Disclaimer({ ssr }: DisclaimerProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Disclaimer - Exxpenses</title>
+                <title>Disclaimer | Exxpenses</title>
                 <meta
                     name="description"
                     content="Exxpenses disclaimer."

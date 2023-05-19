@@ -39,7 +39,7 @@ export default function Category({ ssr }: CategoryProps) {
     return (
         <Box position="relative">
             <Head>
-                <title>{`${category.name} - Exxpenses`}</title>
+                <title>{`${category.name} | Exxpenses`}</title>
                 <meta
                     name="description"
                     content={`Details about your ${category.name} expenses this month.`}

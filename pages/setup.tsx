@@ -268,10 +268,10 @@ export default function Setup({ ssr }: DashboardProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Setup your account - Exxpenses</title>
+                <title>Setup your account | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Setup your Exxpenses account"
+                    content="Setup your Exxpenses account."
                     key="desc"
                 />
             </Head>

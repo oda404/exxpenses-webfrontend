@@ -7,10 +7,10 @@ export default function FourOhFour() {
     return (
         <>
             <Head>
-                <title>404 (Not Found) !!!11 - Exxpenses</title>
+                <title>404 (Not Found) !!!11 | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Exxpenses resource not found."
+                    content="Resource not found."
                     key="desc"
                 />
             </Head>

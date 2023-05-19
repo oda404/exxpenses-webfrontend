@@ -82,10 +82,10 @@ export default function Verify({ ssr }: CategoryProps) {
     return (
         <Box>
             <Head>
-                <title>Verify your email - Exxpenses</title>
+                <title>Verify your email | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Email confirmation"
+                    content="Verify your email address"
                     key="desc"
                 />
             </Head>

@@ -88,10 +88,10 @@ export default function Cookies({ ssr }: CookiesProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Cookies - Exxpenses</title>
+                <title>Cookies | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Exxpenses cookies information."
+                    content="Exxpenses cookies policy."
                     key="desc"
                 />
             </Head>

@@ -140,10 +140,10 @@ export default function PasswordRecoverNew({ ssr }: CategoryProps) {
     return (
         <Box position="relative" minHeight="100vh" bgcolor="var(--exxpenses-main-bg-color)">
             <Head>
-                <title>Create a new password - Exxpenses</title>
+                <title>Create a new password | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Create a new password"
+                    content="Create a new password."
                     key="desc"
                 />
             </Head>

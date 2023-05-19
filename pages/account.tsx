@@ -419,10 +419,10 @@ export default function Account({ ssr }: AccountProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Account settings - Exxpenses</title>
+                <title>Account settings | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Settings for your Exxpenses account."
+                    content="Settings for your account."
                     key="desc"
                 />
             </Head>

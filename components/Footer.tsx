@@ -7,7 +7,7 @@ export default function Footer() {
     const isMobileView = useShowMobileView();
 
     return (
-        <Box borderTop="1px solid var(--exxpenses-dark-green)" justifyContent="center" display="flex" marginTop="100px" padding="40px" bgcolor="var(--exxpenses-second-bg-color)">
+        <Box borderTop="1px solid var(--exxpenses-dark-green)" justifyContent="center" display="flex" padding="40px" bgcolor="var(--exxpenses-second-bg-color)">
             <Box justifyContent="space-between" maxWidth="990px" width="990px" display="flex" flexDirection={isMobileView ? "column" : "row"}>
                 <Box maxWidth="430px">
                     <BigLogo />

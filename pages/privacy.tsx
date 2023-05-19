@@ -86,10 +86,10 @@ export default function Privacy({ ssr }: PrivacyProps) {
     return (
         <Box bgcolor="var(--exxpenses-main-bg-color)" position="relative" minWidth="100%" minHeight="100vh">
             <Head>
-                <title>Privacy policy - Exxpenses</title>
+                <title>Privacy policy | Exxpenses</title>
                 <meta
                     name="description"
-                    content="Exxpenses privacy policy ."
+                    content="Exxpenses privacy policy."
                     key="desc"
                 />
             </Head>
