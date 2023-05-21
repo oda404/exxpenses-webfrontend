@@ -34,9 +34,17 @@ interface StatisticsTabProps {
     categories: Category[];
     expensesMultipleCategories: MultiCategoryExpenses;
     last_month_categories: MultiCategoryExpenses;
+    showing_since: Date;
+    showing_until: Date;
+    compare_since: Date;
+    compare_until: Date;
+    custom_period: boolean;
 }
 
-export default function FullViewStatisticsTab({ user, categories, expensesMultipleCategories, last_month_categories }: StatisticsTabProps) {
+export default function FullViewStatisticsTab({
+    user, categories, expensesMultipleCategories, last_month_categories, showing_since,
+    showing_until, compare_since, compare_until, custom_period
+}: StatisticsTabProps) {
 
     let working_expenses = get_working_expenses(expensesMultipleCategories, categories, user);
     let total = expensesToTotal(working_expenses, user.preferred_currency as string);
@@ -58,6 +66,11 @@ export default function FullViewStatisticsTab({ user, categories, expensesMultip
                         categoryTotals={categories_totals}
                         lm_total={lm_total}
                         lm_working_expenses={lm_working_expenses}
+                        showing_since={showing_since}
+                        showing_until={showing_until}
+                        compare_since={compare_since}
+                        compare_until={compare_until}
+                        custom_period={custom_period}
                     />
                 </CardBox>
                 <Box marginY="5px" />

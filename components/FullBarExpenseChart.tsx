@@ -3,8 +3,12 @@ import { ResponsiveContainer, Tooltip, Area, AreaChart, YAxis, XAxis } from "rec
 import { DailyExpenses } from "../utils/expensesToDaily";
 import { useEffect, useState } from "react";
 import last_month_today from "../utils/lastMonthToday";
+import dayjs from "dayjs";
 
-function name_to_lm_date(name: string) {
+function name_to_date(name?: string) {
+
+    if (name === undefined)
+        return undefined;
 
     let start = name.indexOf('(');
 
@@ -21,8 +25,7 @@ function name_to_lm_date(name: string) {
     else
         year = name.substring(idx + 1, end);
 
-    const date = new Date(Number(year), Number(month) - 1, Number(day));
-    return last_month_today(date);
+    return new Date(Number(year), Number(month) - 1, Number(day));
 }
 
 interface FullBarExpenseChartProps {
@@ -31,6 +34,9 @@ interface FullBarExpenseChartProps {
     currency: string;
     since: Date;
     until: Date;
+
+    compare_since?: Date;
+    compare_until?: Date;
 }
 
 function CustomTooltip({ active, payload }: any) {
@@ -44,56 +50,71 @@ function CustomTooltip({ active, payload }: any) {
 }
 
 interface PayloadData {
-    name: string;
+    name?: string;
+    compare_name?: string;
     pv: number;
     count: number;
     uv?: number;
     uv_count?: number;
 }
 
-export default function FullBarExpenseChart({ dailyTotals, currency, since, until, lm_daily_totals }: FullBarExpenseChartProps) {
+export default function FullBarExpenseChart({ dailyTotals, currency, since, until, lm_daily_totals, compare_since, compare_until }: FullBarExpenseChartProps) {
 
     let plotData: any[] = [];
-    for (let d = new Date(since); d <= new Date(until); d.setDate(d.getDate() + 1)) {
+    for (let d = dayjs(since); d <= dayjs(until); d = d.add(1, "day")) {
         if (lm_daily_totals) {
             plotData.push({
-                name: `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`,
+                name: `${d.date()}.${d.month() + 1}.${d.year()}`,
                 count: 0,
                 pv: 0,
-                uv: 0
             })
         }
         else {
             plotData.push({
-                name: `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`,
+                name: `${d.date()}.${d.month() + 1}.${d.year()}`,
                 count: 0,
                 pv: 0
             })
         }
     }
 
-    let maxval_digcnt = 0;
+    let tmp_idx = 0;
+    for (let d = dayjs(compare_since); d <= dayjs(compare_until); d = d.add(1, "day")) {
+        if (tmp_idx >= plotData.length) {
+            plotData.push({
+                compare_name: `${d.date()}.${d.month() + 1}.${d.year()}`,
+                uv_count: 0,
+                uv: 0
+            });
+        }
+        else {
+            plotData[tmp_idx].uv = 0;
+            plotData[tmp_idx].uv_count = 0;
+            plotData[tmp_idx].compare_name = `${d.date()}.${d.month() + 1}.${d.year()}`;
+        }
+
+        ++tmp_idx;
+    }
+
     dailyTotals.forEach((e, idx) => {
-        const d = new Date(e.date);
-        if (d < since || d > until)
+        const d = dayjs(e.date);
+        if (d < dayjs(since) || d > dayjs(until))
             return;
 
-        let date_string = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
+        let date_string = `${d.date()}.${d.month() + 1}.${d.year()}`;
         let i = plotData.findIndex(pd => pd.name === date_string);
+        if (i === -1)
+            return;
         plotData[i].pv = e.expense.price
         plotData[i].count = e.expense_count;
-
-        let len = Math.round(e.expense.price).toString().length;
-        if (len > maxval_digcnt)
-            maxval_digcnt = len;
     })
 
     lm_daily_totals?.forEach((e) => {
 
-        let new_date = new Date(e.date);
-        let new_str_date = `${new_date.getDate()}.${new_date.getMonth() + 2}.${new_date.getFullYear()}`;
+        let d = dayjs(e.date);
+        let new_str_date = `${d.date()}.${d.month() + 1}.${d.year()}`;
 
-        let idx = plotData.findIndex(d => d.name == new_str_date);
+        let idx = plotData.findIndex(d => d.compare_name == new_str_date);
         if (idx > -1) {
             plotData[idx].uv = e.expense.price;
             plotData[idx].uv_count = e.expense_count;
@@ -101,7 +122,6 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
     });
 
     const last_payload = plotData[plotData.length - 1];
-    last_payload.name = `Today (${last_payload.name})`;
     const [cur_payload, set_cur_payload] = useState<PayloadData>(last_payload);
 
     const cur_payload_changed = (payload: PayloadData) => {
@@ -110,9 +130,10 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
         if (now_date == payload.name)
             payload.name = `Today (${payload.name})`;
 
-        if (cur_payload!.name != payload.name || cur_payload!.count != payload.count || cur_payload!.pv != payload.pv)
+        if (cur_payload!.name != payload.name || cur_payload.compare_name !== payload.compare_name || cur_payload!.count != payload.count || cur_payload!.pv != payload.pv)
             set_cur_payload(payload);
     }
+    cur_payload_changed(cur_payload);
 
     for (let i = 0; i < plotData.length; ++i)
         plotData[i].cb = cur_payload_changed;
@@ -122,7 +143,7 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
         line_legend = (
             <Box>
                 <Box alignItems="center" display="flex">
-                    <Box marginRight="8px" fontSize="14px" marginTop="2px">This month</Box>
+                    <Box marginRight="8px" fontSize="12px" marginTop="2px">This month</Box>
                     <Box
                         width="8px"
                         height="8px"
@@ -131,7 +152,7 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
                     />
                 </Box>
                 <Box alignItems="center" display="flex">
-                    <Box marginRight="8px" fontSize="14px" marginTop="2px">Last month</Box>
+                    <Box marginRight="8px" fontSize="12px" marginTop="2px">Last month</Box>
                     <Box
                         width="8px"
                         height="8px"
@@ -145,34 +166,49 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
 
     let name_content: any;
     if (lm_daily_totals) {
-        let lm_date = name_to_lm_date(cur_payload!.name);
-        let lm_date_str = `${lm_date.getDate()}.${lm_date.getMonth() + 1}.${lm_date.getFullYear()}`;
 
-        const now = new Date();
-        if (lm_date.getDate() == now.getDate())
-            lm_date_str = `Last month, today (${lm_date_str})`;
+        let idx_showing = plotData.findIndex(d => d.name === cur_payload.name && cur_payload.name !== undefined);
+        let idx_compare = plotData.findIndex(d => d.compare_name === cur_payload.compare_name && cur_payload.compare_name !== undefined);
+
+        let now = dayjs();
+        let now_str = `${now.date()}.${now.month() + 1}.${now.year()}`
+        let last_month_now = dayjs(now).subtract(1, "month");
+        let last_month_now_str = `${last_month_now.date()}.${last_month_now.month() + 1}.${last_month_now.year()}`
+
+        let now_date = name_to_date(cur_payload!.name);
+        let lm_date = name_to_date(cur_payload!.compare_name);
+
+        let compare_date_str = cur_payload!.compare_name;
+        if (compare_date_str === now_str)
+            compare_date_str = `Today`;
+        else if (compare_date_str === last_month_now_str)
+            compare_date_str = `Last month, today`;
+
+        let showing_date_str = cur_payload!.name;
+        if (showing_date_str?.includes("Today"))
+            showing_date_str = "Today";
 
         name_content = (
             <>
                 <Box fontSize="14px" display="flex" fontWeight="bold">
                     <Box>
-                        {currency} {cur_payload!.pv}
+                        {showing_date_str === undefined ? "-" : `${currency} ${cur_payload!.pv}`}
                     </Box>
-                    <Box fontWeight="initial">
-                        &nbsp; {cur_payload!.name}
+                    <Box fontSize="12px" marginTop="4px" fontWeight="initial">
+                        &nbsp; {showing_date_str}
                     </Box>
-                    <Box fontWeight="initial" display={cur_payload!.count > 0 ? "initial" : "none"}>
+                    <Box fontSize="12px" marginTop="4px" fontWeight="initial" display={cur_payload!.count > 0 ? "initial" : "none"}>
                         &nbsp; {cur_payload!.count} expense(s)
                     </Box>
                 </Box>
                 <Box fontSize="14px" display="flex" fontWeight="bold">
                     <Box>
-                        {currency} {cur_payload!.uv}
+                        {compare_date_str === undefined ? "-" : `${currency} ${cur_payload!.uv}`}
                     </Box>
-                    <Box fontWeight="initial">
-                        &nbsp; {lm_date_str}
+                    <Box fontSize="12px" marginTop="4px" fontWeight="initial">
+                        &nbsp; {compare_date_str}
                     </Box>
-                    <Box fontWeight="initial" display={(cur_payload!.uv_count !== undefined && cur_payload!.uv_count > 0) ? "initial" : "none"}>
+                    <Box marginTop="4px" fontSize="12px" fontWeight="initial" display={(cur_payload!.uv_count !== undefined && cur_payload!.uv_count > 0) ? "initial" : "none"}>
                         &nbsp; {cur_payload!.uv_count} expense(s)
                     </Box>
                 </Box>
@@ -180,22 +216,52 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
         )
     }
     else {
+
+        let cur_date = cur_payload!.name;
+        if (cur_date?.includes("Today"))
+            cur_date = "Today";
+
         name_content = (
             <>
-                <Box display="flex" fontWeight="bold">
+                <Box fontWeight="bold">
                     <Box>
                         {currency} {cur_payload!.pv}
                     </Box>
-                    <Box fontWeight="initial" display={cur_payload!.count > 0 ? "initial" : "none"}>
-                        &nbsp; {cur_payload!.count} expenses
-                    </Box>
                 </Box>
-                <Box>
-                    {cur_payload!.name}
+                <Box display="flex">
+                    <Box fontSize="12px">
+                        {cur_date}
+                    </Box>
+                    <Box fontSize="12px" fontWeight="initial" display={cur_payload!.count > 0 ? "initial" : "none"}>
+                        &nbsp; {cur_payload!.count} expense(s)
+                    </Box>
                 </Box>
             </>
         );
     }
+
+    let max = 0;
+    for (let i = 0; i < plotData.length; ++i) {
+        if (plotData[i].pv > max)
+            max = plotData[i].pv;
+
+        if (plotData[i].uv > max)
+            max = plotData[i].uv;
+    }
+
+    let width = 13;
+    if (max == 0)
+        width = 0;
+    else if (max > 0 && max < 10)
+        width = 13;
+    else if (max >= 10 && max < 100)
+        width = 20;
+    else if (max >= 100 && max < 1000)
+        width = 28;
+    else if (max >= 1000 && max < 10000)
+        width = 34;
+    else if (max >= 10000 && max < 100000)
+        width = 40;
 
     return (
         <Box position="relative" bgcolor="var(--exxpenses-dark-highlight)" borderRadius="6px" padding="10px">
@@ -212,12 +278,12 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
                     data={plotData}
                     margin={{
                         top: 70,
-                        bottom: 20,
+                        bottom: 30,
                     }}
                     onMouseLeave={() => cur_payload_changed(last_payload)}
                 >
                     <XAxis height={1} tick={false} axisLine={{ strokeDasharray: 10 }} />
-                    <YAxis tickMargin={0} fontSize="14px" orientation="right" width={maxval_digcnt * 14.5} tickLine={false} axisLine={false} />
+                    <YAxis tickMargin={0} fontSize="12px" orientation="right" width={width} tickLine={false} axisLine={false} />
                     <Tooltip content={<CustomTooltip />} cursorStyle={{ background: "black" }} />
                     <Area strokeWidth={2} type="monotone" dataKey="uv" stroke="#0088FE" fillOpacity={1} fill="url(#colorUv)" />
                     <Area strokeWidth={2} type="monotone" dataKey="pv" stroke="var(--exxpenses-dark-green)" fillOpacity={1} fill="url(#colorPv)" />

@@ -90,7 +90,6 @@ function AddNewCategoryButton({ default_currency }: MobileViewDashboardButtonsPr
                             const { data } = await categoryAdd({ variables: { addData: { name: name, default_currency: currency } } });
                             if (data.categoryAdd.error !== null) {
                                 if (data.categoryAdd.error.field === null) {
-                                    console.log(data.categoryAdd.error.name);
                                     actions.setFieldError("generic", data.categoryAdd.error.name);
                                 }
                                 else {

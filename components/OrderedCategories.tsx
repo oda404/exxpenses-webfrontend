@@ -34,10 +34,10 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                 <Table padding="normal" size="small">
                     <TableHead >
                         <TableRow>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }}>Category</TableCell>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Last month</TableCell>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">This month</TableCell>
-                            <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">% of total</TableCell>
+                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }}>Category</TableCell>
+                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Last month</TableCell>
+                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">This month</TableCell>
+                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">% of total</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -63,16 +63,16 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                             return (
                                 <TableRow key={idx}>
                                     <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} component="th" scope="row">
-                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.category}</b></Link>
+                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.category}</b></Link>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
-                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{lm_total_content}</b></Link>
+                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{lm_total_content}</b></Link>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
-                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.currency} {c.price}</b></Link>
+                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.currency} {c.price}</b></Link>
                                     </TableCell>
                                     <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
-                                        <Link display="block" sx={{ "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{perc_string}</b></Link>
+                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{perc_string}</b></Link>
                                     </TableCell>
                                 </TableRow>
                             );

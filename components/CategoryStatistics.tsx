@@ -1,4 +1,4 @@
-import { Divider, Box } from "@mui/material";
+import { Divider, Box, Button } from "@mui/material";
 import Decimal from "decimal.js";
 import dynamic from "next/dynamic";
 import { Category, Expense } from "../generated/graphql";
@@ -7,6 +7,8 @@ import daysBetweenDates from "../utils/daysBetweenDates";
 import { DailyExpenses } from "../utils/expensesToDaily";
 import expensesToTotal, { TotalExpense } from "../utils/expensesToTotal";
 import last_month_today from "../utils/lastMonthToday";
+import { useState } from "react";
+import daily_totals_to_cumulative from "../utils/dailyTotalsToCumulative";
 
 /* What in the living fuck ?!:)dwdA!@W! */
 const FullBarExpenseChart = dynamic(
@@ -40,7 +42,7 @@ export default function CategoryStatistics({ lastMonthExpenses, category, totalE
     let since = new Date(now.getFullYear(), now.getMonth(), 1);
     let until = new Date(now);
 
-    let daycount = Math.ceil((now.getTime() - since.getTime()) / (1000 * 3600 * 24));
+    let [cumulative, setCumulative] = useState(true);
 
     let mostExpensiveDay: DailyExpenses | undefined = undefined;
     for (let i = 0; i < dailyTotals.length; ++i) {
@@ -74,6 +76,22 @@ export default function CategoryStatistics({ lastMonthExpenses, category, totalE
     let signToday = lastMonthTotalUntilToday.price > totalExpenses.price ? "-" : "+";
     let diffPriceToday = Math.abs(lastMonthTotalUntilToday.price - totalExpenses.price);
 
+    // cumulative bullshit
+    let daily_totals_copy: DailyExpenses[] = [];
+    for (let i = 0; i < dailyTotals.length; ++i) {
+        daily_totals_copy.push({
+            date: dailyTotals[i].date,
+            expense_count: dailyTotals[i].expense_count,
+            expense: {
+                price: dailyTotals[i].expense.price,
+                currency: dailyTotals[i].expense.currency
+            }
+        });
+    }
+
+    if (cumulative)
+        daily_totals_copy = daily_totals_to_cumulative(daily_totals_copy, until);
+
     return (
         <Box sx={{ height: "100%" }}>
             <Box fontSize="18px">
@@ -82,7 +100,46 @@ export default function CategoryStatistics({ lastMonthExpenses, category, totalE
             <Box marginBottom="15px" fontSize=".875rem">
                 {since.getDate()}.{since.getMonth() + 1}.{since.getFullYear()} - {now.getDate()}.{now.getMonth() + 1}.{now.getFullYear()} (This month)
             </Box>
-            <FullBarExpenseChart currency={category.default_currency} dailyTotals={dailyTotals} since={since} until={until} />
+            <Box position="relative">
+                <FullBarExpenseChart currency={category.default_currency} dailyTotals={daily_totals_copy} since={since} until={until} />
+
+                <Box display="flex" bottom="10px" left="10px" position="absolute" fontSize="12px">
+                    <Box bgcolor="var(--exxpenses-main-bg-color)" borderRadius="25px">
+                        <Button
+                            sx={{
+                                color: "var(--exxpenses-main-color)",
+                                borderRadius: "25px",
+                                paddingX: "10px",
+                                background: cumulative ? "var(--exxpenses-dark-green)" : "none",
+                                textTransform: "none",
+                                fontSize: "12px",
+                                "&:hover": {
+                                    background: cumulative ? "var(--exxpenses-dark-green)" : "none"
+                                }
+                            }}
+                            onClick={() => { if (!cumulative) setCumulative(true); }}
+                        >
+                            Cumulative
+                        </Button>
+                        <Button
+                            sx={{
+                                color: "var(--exxpenses-main-color)",
+                                borderRadius: "25px",
+                                paddingX: "10px",
+                                background: cumulative ? "none" : "var(--exxpenses-dark-green)",
+                                textTransform: "none",
+                                fontSize: "12px",
+                                "&:hover": {
+                                    background: cumulative ? "none" : "var(--exxpenses-dark-green)"
+                                }
+                            }}
+                            onClick={() => { if (cumulative) setCumulative(false); }}
+                        >
+                            Per-day
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
             <Box>
                 <FullViewStatistic title="Total spent" content={`${totalExpenses.currency} ${totalExpenses.price}`} />
                 <FullViewStatistic title="Most expensive day" content={
@@ -90,9 +147,9 @@ export default function CategoryStatistics({ lastMonthExpenses, category, totalE
                         `${mostExpensiveDay.expense.currency} ${mostExpensiveDay.expense.price} on ${new Date(mostExpensiveDay.date).toDateString()}` :
                         `N/A`}
                 />
-                <FullViewStatistic title={`Average per day (${daycount} days)`} content={`${category.default_currency} ${averageString}`} />
-                <FullViewStatistic title="Compared to last month (whole)" content={`${sign}${diffPerc}% (${sign}${totalExpenses.currency} ${diffPrice})`} />
+                <FullViewStatistic title={`Average per day`} content={`${category.default_currency} ${averageString}`} />
                 <FullViewStatistic title="Compared to last month (today)" content={`${signToday}${diffPercToday}% (${sign}${totalExpenses.currency} ${diffPriceToday})`} />
+                <FullViewStatistic title="Compared to last month (whole)" content={`${sign}${diffPerc}% (${sign}${totalExpenses.currency} ${diffPrice})`} />
             </Box>
         </Box>
     )

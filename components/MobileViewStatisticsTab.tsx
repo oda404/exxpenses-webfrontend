@@ -30,9 +30,15 @@ interface StatisticsTabProps {
     categories: Category[];
     expensesMultipleCategories: MultiCategoryExpenses;
     last_month_categories: MultiCategoryExpenses;
+    showing_since: Date;
+    showing_until: Date;
+    compare_since: Date;
+    compare_until: Date;
+    custom_period: boolean;
 }
 
-export default function MobileViewStatisticsTab({ user, categories, expensesMultipleCategories, last_month_categories }: StatisticsTabProps) {
+export default function MobileViewStatisticsTab({ user, categories, expensesMultipleCategories, last_month_categories, showing_since,
+    showing_until, compare_since, compare_until, custom_period }: StatisticsTabProps) {
 
     let working_expenses = get_working_expenses(expensesMultipleCategories, categories, user);
     let total = expensesToTotal(working_expenses, user.preferred_currency as string);
@@ -55,6 +61,11 @@ export default function MobileViewStatisticsTab({ user, categories, expensesMult
                     categoryTotals={categories_totals}
                     lm_total={lm_total}
                     lm_working_expenses={lm_working_expenses}
+                    showing_since={new Date(showing_since)}
+                    showing_until={new Date(showing_until)}
+                    compare_since={new Date(compare_since)}
+                    compare_until={new Date(compare_until)}
+                    custom_period={custom_period}
                 />
             </CardBox>
             <Box marginY='10px' />

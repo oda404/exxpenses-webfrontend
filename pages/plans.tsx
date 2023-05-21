@@ -91,12 +91,12 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
                 </Box>
                 <Button
                     className="fullButton"
-                    // disabled={active}
-                    disabled={true}
+                    disabled={active}
+                    // disabled={true}
                     sx={{
                         width: "100% !important",
-                        // background: active ? "var(--exxpenses-main-button-hover-bg-color) !important" : "var(--exxpenses-dark-green) !important",
-                        background: "var(--exxpenses-main-button-hover-bg-color) !important",
+                        background: active ? "var(--exxpenses-main-button-hover-bg-color) !important" : "var(--exxpenses-dark-green) !important",
+                        // background: "var(--exxpenses-main-button-hover-bg-color) !important",
                         color: "white !important"
                     }}
                     onClick={() => {
@@ -104,8 +104,8 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
                             window.location.assign("/register");
                     }}
                 >
-                    {/* {active ? "Current plan" : "Get"} */}
-                    {active ? "Current plan" : "Unavailable"}
+                    {active ? "Current plan" : "Get"}
+                    {/* {active ? "Current plan" : "Unavailable"} */}
                 </Button>
             </Box>
             <Box height="100%" padding="8px" bgcolor="var(--exxpenses-dark-highlight)">
@@ -123,18 +123,18 @@ function PlansContent({ user }: { user?: User; }) {
 
     return (
         <Box sx={{ minHeight: "100vh", width: "990px" }}>
-            <Box color="var(--exxpenses-warning-color)" textAlign="center" fontWeight="900">
+            {/* <Box color="var(--exxpenses-warning-color)" textAlign="center" fontWeight="900">
                 The only account plan available at the moment is the Free plan. Thank you for understanding!
-            </Box>
-            <Box fontFamily="'Work Sans', sans-serif" textAlign="center" fontWeight="900" fontSize="40px">Choose the right plan four your needs.</Box>
-            <Box justifyContent="center">
+            </Box> */}
+            <Box fontFamily="'Work Sans', sans-serif" textAlign="center" fontWeight="900" fontSize="40px">Choose the right plan for your needs.</Box>
+            {/* <Box justifyContent="center">
                 <Box fontSize="18px" textAlign="center" marginTop="10px"><b>How often do you want to pay?</b></Box>
                 <Box justifyContent="center" display="flex">
                     <Button className="emptyButton">Monthly</Button>
                     <Box marginX="10px" />
                     <Button className="emptyButton">Yearly</Button>
                 </Box>
-            </Box >
+            </Box > */}
             <Box marginTop={isMobileView ? "10px" : "50px"} display="flex" flexDirection={isMobileView ? "column" : "row"}>
                 <PlanBox
                     name="Free"
@@ -160,12 +160,12 @@ function PlansContent({ user }: { user?: User; }) {
                         { title: "", description: "", prev: true },
                         { title: "Unlimited Categories", description: "Create an unlimited number of categories." },
                         { title: "Unlimited Expenses", description: "Track an unlimited number of monthly expenses for each category." },
-                        { title: "Currency conversions", description: "Manually convert the currencies of categories and expenses. This can either be done for a category's expenses when changing that category's currency, or for categories (and their expenses) when changing the account's currency." },
+                        // { title: "Currency conversions", description: "Manually convert the currencies of categories and expenses. This can either be done for a category's expenses when changing that category's currency, or for categories (and their expenses) when changing the account's currency." },
                         { title: "Custom statistic periods", description: "Look at the expenses of any custom time period, and compare them with any other custom time period." },
                         { title: "No ads", description: "Remove advertisements" }
                     ]}
                 />
-                <Box marginX={!isMobileView ? "10px" : "0"} marginY={isMobileView ? "10px" : "0"} />
+                {/* <Box marginX={!isMobileView ? "10px" : "0"} marginY={isMobileView ? "10px" : "0"} />
                 <PlanBox
                     name="Pro"
                     description="The professional plan for the entrepreneur"
@@ -177,9 +177,9 @@ function PlansContent({ user }: { user?: User; }) {
                         { title: "Automatic currency conversions", description: "Expenses keep their original currency but, when counted towards the total, they will be accurately converted to the top-level currency." },
                         { title: "Incomes", description: "Track and get statistics on your incomes in combination with your expenses." }
                     ]}
-                />
+                /> */}
             </Box>
-            <Box padding="20px">
+            <Box fontSize="14px" padding="20px">
                 <b>* All curency conversions are done using the expenses&#39; dates as the historical points.</b>
             </Box>
         </Box >
