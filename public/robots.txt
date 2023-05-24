@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /dashboard
+Disallow: /account
+Disallow: /password-recover
+Disallow: /setup
+Disallow: /statistics
+Disallow: /category/
+Disallow: /password-recover/
+Disallow: /verify/
