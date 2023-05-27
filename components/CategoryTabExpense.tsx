@@ -30,20 +30,20 @@ export default function CategoryTabExpense({ category_name, category_currency, e
     let leadingIcon: any;
     if (true && currency !== category_currency) { // free account
         leadingIcon = (
-            <Link href="/plans">
-                <Tooltip title="This expense is not counted towards the total. Click to learn more.">
-                    <HelpIcon
-                        sx={{
-                            width: "22px",
-                            height: "22px",
-                            fill: "var(--exxpenses-warning-color)",
-                            '&:hover': {
-                                cursor: "pointer"
-                            }
-                        }}
-                    />
-                </Tooltip>
-            </Link>
+            // <Link href="/plans">
+            <Tooltip title="This expense is not counted towards the total. This is a feature that is going to be implemented in the future. Thank you for understanding!">
+                <HelpIcon
+                    sx={{
+                        width: "22px",
+                        height: "22px",
+                        fill: "var(--exxpenses-warning-color)",
+                        '&:hover': {
+                            cursor: "pointer"
+                        }
+                    }}
+                />
+            </Tooltip>
+            // </Link>
         )
     }
     else {

@@ -146,6 +146,7 @@ export type Mutation = {
   userRegister: UserResponse;
   userSendVerificationEmail: Scalars['Boolean'];
   userSetPassword: Scalars['Boolean'];
+  userUnsubscribe: Scalars['Boolean'];
   userUpdatePreferredCurrency: Scalars['Boolean'];
   userVerifyEmail: Scalars['Boolean'];
 };
@@ -232,6 +233,7 @@ export type Query = {
   expensesTotalCostGetMultiple: ExpensesCostResponseMultiple;
   /** Get the currently logged in user. */
   userGet: UserResponse;
+  userGetSubscriptionInfo?: Maybe<UserSubscriptionInfo>;
   userIsPasswordResetTokenValid: Scalars['Boolean'];
 };
 
@@ -300,6 +302,14 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   error?: Maybe<GenericFieldError>;
   user?: Maybe<User>;
+};
+
+export type UserSubscriptionInfo = {
+  __typename?: 'UserSubscriptionInfo';
+  cancel_at_end: Scalars['Boolean'];
+  price: Scalars['Float'];
+  since: Scalars['DateTime'];
+  until: Scalars['DateTime'];
 };
 
 export type CategoryAddMutationVariables = Exact<{
@@ -399,6 +409,11 @@ export type UserSetPasswordMutationVariables = Exact<{
 
 export type UserSetPasswordMutation = { __typename?: 'Mutation', userSetPassword: boolean };
 
+export type UserUnsubscribeMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserUnsubscribeMutation = { __typename?: 'Mutation', userUnsubscribe: boolean };
+
 export type UserUpdatePreferredCurrencyMutationVariables = Exact<{
   preferred_currency: Scalars['String'];
 }>;
@@ -450,6 +465,11 @@ export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string, firstname: string, email: string, preferred_currency?: string | null, verified_email: boolean, plan: number } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
+
+export type UserGetSubscriptionInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserGetSubscriptionInfoQuery = { __typename?: 'Query', userGetSubscriptionInfo?: { __typename?: 'UserSubscriptionInfo', since: any, until: any, price: number, cancel_at_end: boolean } | null };
 
 export type UserIsPasswordResetTokenValidQueryVariables = Exact<{
   token: Scalars['String'];
@@ -937,6 +957,36 @@ export function useUserSetPasswordMutation(baseOptions?: Apollo.MutationHookOpti
 export type UserSetPasswordMutationHookResult = ReturnType<typeof useUserSetPasswordMutation>;
 export type UserSetPasswordMutationResult = Apollo.MutationResult<UserSetPasswordMutation>;
 export type UserSetPasswordMutationOptions = Apollo.BaseMutationOptions<UserSetPasswordMutation, UserSetPasswordMutationVariables>;
+export const UserUnsubscribeDocument = gql`
+    mutation UserUnsubscribe {
+  userUnsubscribe
+}
+    `;
+export type UserUnsubscribeMutationFn = Apollo.MutationFunction<UserUnsubscribeMutation, UserUnsubscribeMutationVariables>;
+
+/**
+ * __useUserUnsubscribeMutation__
+ *
+ * To run a mutation, you first call `useUserUnsubscribeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUserUnsubscribeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [userUnsubscribeMutation, { data, loading, error }] = useUserUnsubscribeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserUnsubscribeMutation(baseOptions?: Apollo.MutationHookOptions<UserUnsubscribeMutation, UserUnsubscribeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UserUnsubscribeMutation, UserUnsubscribeMutationVariables>(UserUnsubscribeDocument, options);
+      }
+export type UserUnsubscribeMutationHookResult = ReturnType<typeof useUserUnsubscribeMutation>;
+export type UserUnsubscribeMutationResult = Apollo.MutationResult<UserUnsubscribeMutation>;
+export type UserUnsubscribeMutationOptions = Apollo.BaseMutationOptions<UserUnsubscribeMutation, UserUnsubscribeMutationVariables>;
 export const UserUpdatePreferredCurrencyDocument = gql`
     mutation UserUpdatePreferredCurrency($preferred_currency: String!) {
   userUpdatePreferredCurrency(preferred_currency: $preferred_currency)
@@ -1259,6 +1309,43 @@ export function useUserGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Us
 export type UserGetQueryHookResult = ReturnType<typeof useUserGetQuery>;
 export type UserGetLazyQueryHookResult = ReturnType<typeof useUserGetLazyQuery>;
 export type UserGetQueryResult = Apollo.QueryResult<UserGetQuery, UserGetQueryVariables>;
+export const UserGetSubscriptionInfoDocument = gql`
+    query UserGetSubscriptionInfo {
+  userGetSubscriptionInfo {
+    since
+    until
+    price
+    cancel_at_end
+  }
+}
+    `;
+
+/**
+ * __useUserGetSubscriptionInfoQuery__
+ *
+ * To run a query within a React component, call `useUserGetSubscriptionInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserGetSubscriptionInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserGetSubscriptionInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserGetSubscriptionInfoQuery(baseOptions?: Apollo.QueryHookOptions<UserGetSubscriptionInfoQuery, UserGetSubscriptionInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserGetSubscriptionInfoQuery, UserGetSubscriptionInfoQueryVariables>(UserGetSubscriptionInfoDocument, options);
+      }
+export function useUserGetSubscriptionInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserGetSubscriptionInfoQuery, UserGetSubscriptionInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserGetSubscriptionInfoQuery, UserGetSubscriptionInfoQueryVariables>(UserGetSubscriptionInfoDocument, options);
+        }
+export type UserGetSubscriptionInfoQueryHookResult = ReturnType<typeof useUserGetSubscriptionInfoQuery>;
+export type UserGetSubscriptionInfoLazyQueryHookResult = ReturnType<typeof useUserGetSubscriptionInfoLazyQuery>;
+export type UserGetSubscriptionInfoQueryResult = Apollo.QueryResult<UserGetSubscriptionInfoQuery, UserGetSubscriptionInfoQueryVariables>;
 export const UserIsPasswordResetTokenValidDocument = gql`
     query UserIsPasswordResetTokenValid($token: String!) {
   userIsPasswordResetTokenValid(token: $token)

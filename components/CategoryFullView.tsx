@@ -25,16 +25,20 @@ interface CategoryFullViewProps {
     expenses: Expense[];
     lastMonthExpenses: Expense[];
     category: Category;
+    showing_since: Date;
+    showing_until: Date;
+    compare_since: Date;
+    compare_until: Date;
+    custom_period: boolean;
 }
 
-export default function FullViewCategory({ lastMonthExpenses, user, category, expenses }: CategoryFullViewProps) {
+export default function FullViewCategory({
+    lastMonthExpenses, user, category, expenses, showing_since, showing_until, compare_since, compare_until, custom_period
+}: CategoryFullViewProps) {
 
     const [categoryEdit] = useMutation(CategoryEditDocument);
 
     const [newCategoryOpen, setNewCategoryOpen] = useState(false);
-
-    let now = new Date();
-    let since = new Date(now.getFullYear(), now.getMonth(), 1);
 
     let totalExpenses = expensesToTotal(expenses, category.default_currency);
 
@@ -126,7 +130,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                                         setFieldValue("currency", category.default_currency);
                                     }}
                                 >
-                                    <ReplayIcon />
+                                    <ReplayIcon sx={{ width: "20px", height: "20px" }} />
                                 </Button>
                                 <Button
                                     sx={{
@@ -135,12 +139,12 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                                     type="submit"
                                     disabled={isSubmitting}
                                 >
-                                    <CheckRoundedIcon sx={{}} />
+                                    <CheckRoundedIcon sx={{ width: "20px", height: "20px" }} />
                                 </Button>
                             </Box>
-                            <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
-                                Changing the currency of a category will not change the curencies of existing expenses for that category, when using a free plan.
-                                Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
+                            <Box fontSize="12px" color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "block" : "none"}>
+                                Changing the currency of a category will not change the curencies of existing expenses for that category. This is a feature that is going to be implemented in the future. Thank you for understanding!
+                                {/* Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>. */}
                             </Box>
                         </Form>
                     )}
@@ -181,7 +185,6 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
         )
     }
 
-    let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
     return (
         <Box minHeight="100vh">
             <Modal
@@ -212,7 +215,18 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                     <Box marginY="10px" />
 
                     <CardBox>
-                        <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                        <CategoryStatistics
+                            user={user}
+                            total={totalExpenses}
+                            category={category}
+                            showing_expenses={expenses}
+                            compare_expenses={lastMonthExpenses}
+                            showing_since={showing_since}
+                            showing_until={showing_until}
+                            compare_since={compare_since}
+                            compare_until={compare_until}
+                            custom_period={custom_period}
+                        />
                     </CardBox>
 
                     <Box marginY="10px" />
@@ -221,7 +235,7 @@ export default function FullViewCategory({ lastMonthExpenses, user, category, ex
                         <Box fontSize="18px">
                             Expenses
                         </Box>
-                        <FullViewCategoryExpensesTab category={category} expenses={expenses} since={since} until={now} />
+                        <FullViewCategoryExpensesTab category={category} expenses={expenses} since={showing_since} until={showing_until} />
                     </CardBox>
                     <Box marginY="10px" />
 

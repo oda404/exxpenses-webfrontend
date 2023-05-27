@@ -7,9 +7,10 @@ interface OrderedCategoriesProps {
     categoryTotals: CategoryTotal[];
     lm_category_totals: CategoryTotal[];
     total_price: number;
+    custom_period: boolean;
 }
 
-export default function OrderedCategories({ total_price, categoryTotals, expensesMultipleCategories, lm_category_totals }: OrderedCategoriesProps) {
+export default function OrderedCategories({ total_price, categoryTotals, expensesMultipleCategories, lm_category_totals, custom_period }: OrderedCategoriesProps) {
 
     let content: any;
     if (categoryTotals.length === 0) {
@@ -35,8 +36,8 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                     <TableHead >
                         <TableRow>
                             <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }}>Category</TableCell>
-                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">Last month</TableCell>
-                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">This month</TableCell>
+                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">{custom_period ? "Comparison per." : "Last month"}</TableCell>
+                            <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">{custom_period ? "Showing per." : "This month"}</TableCell>
                             <TableCell sx={{ fontSize: "12px", borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">% of total</TableCell>
                         </TableRow>
                     </TableHead>
@@ -62,17 +63,56 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
 
                             return (
                                 <TableRow key={idx}>
-                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} component="th" scope="row">
-                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.category}</b></Link>
+                                    <TableCell
+                                        onClick={() => { window.location.assign(`/category/${c.category}`) }}
+                                        sx={{
+                                            borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)", "&:hover": {
+                                                cursor: "pointer"
+                                            }
+                                        }}
+                                        component="th"
+                                        scope="row"
+                                    >
+                                        <Box sx={{ fontSize: "12px" }}><b>{c.category}</b></Box>
                                     </TableCell>
-                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
-                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{lm_total_content}</b></Link>
+                                    <TableCell
+                                        onClick={() => { window.location.assign(`/category/${c.category}`) }}
+                                        sx={{
+                                            borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)", "&:hover": {
+                                                cursor: "pointer"
+                                            }
+                                        }}
+                                        component="th"
+                                        scope="row"
+                                        align="right"
+                                    >
+                                        <Box sx={{ fontSize: "12px" }}><b>{lm_total_content}</b></Box>
                                     </TableCell>
-                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
-                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{c.currency} {c.price}</b></Link>
+                                    <TableCell
+                                        onClick={() => { window.location.assign(`/category/${c.category}`) }}
+                                        sx={{
+                                            borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)", "&:hover": {
+                                                cursor: "pointer"
+                                            }
+                                        }}
+                                        component="th"
+                                        scope="row"
+                                        align="right"
+                                    >
+                                        <Box sx={{ fontSize: "12px" }}><b>{c.currency} {c.price}</b></Box>
                                     </TableCell>
-                                    <TableCell sx={{ borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)" }} align="right">
-                                        <Link display="block" sx={{ fontSize: "12px", "&:hover": { textDecoration: "none" }, textDecoration: "none" }} href={`/category/${c.category}`}><b>{perc_string}</b></Link>
+                                    <TableCell
+                                        onClick={() => { window.location.assign(`/category/${c.category}`) }}
+                                        sx={{
+                                            borderBottom: "1px solid var(--exxpenses-main-border-color)", color: "var(--exxpenses-main-color)", "&:hover": {
+                                                cursor: "pointer"
+                                            }
+                                        }}
+                                        component="th"
+                                        scope="row"
+                                        align="right"
+                                    >
+                                        <Box sx={{ fontSize: "12px" }}><b>{perc_string}</b></Box>
                                     </TableCell>
                                 </TableRow>
                             );
@@ -86,8 +126,8 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
     let notice: any = null;
     if (categoryTotals.length < expensesMultipleCategories.categories.length) {
         notice = (
-            <Box alignItems="center" display="flex" marginTop="20px">
-                <Link
+            <Box fontSize="12px" color="var(--exxpenses-warning-color)" alignItems="center" display="flex" marginTop="20px" >
+                {/* <Link
                     fontSize="14px"
                     sx={{
                         color: "var(--exxpenses-warning-color)",
@@ -97,10 +137,10 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
                         }
                     }}
                     href="/plans"
-                >
-                    Some categories are missing. Click to learn more.
-                </Link>
-            </Box>
+                > */}
+                Some categories are missing, due to them having different currencies.This is a feature that is going to be implemented in the future.Thank you for understanding!
+                {/* </Link> */}
+            </Box >
         )
     }
 

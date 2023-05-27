@@ -1,0 +1,11 @@
+
+query UserGetSubscriptionInfo
+{
+    userGetSubscriptionInfo
+    {
+        since
+        until
+        price
+        cancel_at_end
+    }
+}

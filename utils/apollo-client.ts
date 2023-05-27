@@ -21,9 +21,9 @@ const afterLink = new ApolloLink((op: Operation, forward: NextLink) => {
     });
 })
 
-const DEV_API_URI = "http://localhost:8888";
-const PROD_CONTAINER_API_URI = "http://api:8888";
-const PROD_API_URI = "https://api.exxpenses.com";
+const DEV_API_URI = "http://localhost:8888/gql";
+const PROD_CONTAINER_API_URI = "http://api:8888/gql";
+const PROD_API_URI = "https://api.exxpenses.com/gql";
 
 export const cache = new InMemoryCache();
 

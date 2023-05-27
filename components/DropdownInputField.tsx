@@ -1,6 +1,6 @@
 import { Box, FormControl, InputBase, MenuItem, Select, styled } from "@mui/material";
 import styles from "../styles/InputField.module.css";
-import { useState } from "react";
+// import { useState } from "react";
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     '& .MuiInputBase-input': {
@@ -29,7 +29,11 @@ export interface DropdownInputFieldProps {
 
 export default function DropdownInputField({ hide_label, oninput, bg, field, params, initial_value, elements, is_error }: DropdownInputFieldProps) {
 
-    const [labelShown, setLabelShown] = useState(true);
+    // const [labelShown, setLabelShown] = useState(true);
+    const labelShown = false;
+    const setLabelShown = (b: boolean) => {
+
+    }
 
     let shown = field.value !== "" ? false : labelShown;
     if (oninput !== undefined)

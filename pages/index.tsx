@@ -63,7 +63,7 @@ function IndexContent() {
               Record Expenses
             </Box>
             <Box width="100%">
-              Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category!
+              Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category.
             </Box>
           </Box>
         </Box>
@@ -77,7 +77,7 @@ function IndexContent() {
               Analyze Spending Patterns
             </Box>
             <Box width="100%">
-              Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more!
+              Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more.
             </Box>
           </Box>
         </Box>
@@ -119,7 +119,7 @@ function IndexContent() {
           </Box>
           <NumberCircle n={2} />
           <Box width="100%">
-            Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category!
+            Whenever you make a purchase, log it in Exxpenses. Just enter the amount, and the appropriate category.
           </Box>
         </Box>
 
@@ -131,7 +131,7 @@ function IndexContent() {
           </Box>
           <NumberCircle n={3} />
           <Box width="100%">
-            Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more!
+            Exxpenses provides insightful analytics to help you understand your spending habits. Dive into graphs, charts, and more.
           </Box>
         </Box>
 
@@ -154,7 +154,7 @@ function IndexContent() {
   if (isMobileView) {
     mobcont = (
       <Box marginBottom="20px" width="100%" position="relative" display="flex" flexDirection="column" alignItems="center">
-        <Image style={{ zIndex: "4" }} src="/pix5.png" width={246} height={456} alt="Phone" />
+        <Image priority={true} style={{ zIndex: "4" }} src="/pix5.png" width={246} height={456} alt="Phone" />
         <Box borderRadius="10px" zIndex="0" top="228px" position="absolute" bgcolor="var(--exxpenses-second-bg-color)" width="100%" height="505px" />
         <Box zIndex="4">
           <Box >
@@ -162,7 +162,7 @@ function IndexContent() {
               Made for everyone
             </Box>
             <Box fontSize="14px">
-              Built by normal people for normal people.
+              Built by normal people for normal people
             </Box>
           </Box>
           <Box marginY="20px" />
@@ -171,7 +171,7 @@ function IndexContent() {
               Mobile Compatible
             </Box>
             <Box fontSize="14px">
-              Track your expenses anywhere you are!
+              Track your expenses anywhere you are
             </Box>
           </Box>
           <Box marginY="20px" />
@@ -180,7 +180,7 @@ function IndexContent() {
               Multi-currency
             </Box>
             <Box fontSize="14px">
-              Track multi-currency expenses at any time.
+              Track multi-currency expenses at any time
             </Box>
           </Box>
           <Box marginY="20px" />
@@ -189,7 +189,7 @@ function IndexContent() {
               Instant feedback
             </Box>
             <Box fontSize="14px">
-              Get immediate statistics on every expense.
+              Get immediate statistics on every expense
             </Box>
           </Box>
         </Box>
@@ -205,7 +205,7 @@ function IndexContent() {
               Made for everyone
             </Box>
             <Box textAlign="right" fontSize="14px">
-              Built by normal people for normal people.
+              Built by normal people for normal people
             </Box>
           </Box>
           <Box marginY="20px" />
@@ -214,18 +214,18 @@ function IndexContent() {
               Mobile Compatible
             </Box>
             <Box textAlign="right" fontSize="14px">
-              Track your expenses anywhere you are!
+              Track your expenses anywhere you are
             </Box>
           </Box>
         </Box>
-        <Image style={{ zIndex: "4" }} src="/pix5.png" width={246} height={456} alt="Phone" />
+        <Image priority={true} style={{ zIndex: "4" }} src="/pix5.png" width={246} height={456} alt="Phone" />
         <Box marginTop="155px" zIndex="4" paddingRight="20px" display="flex" flexDirection="column">
           <Box>
             <Box fontWeight="bold" fontSize="16px" color="var(--exxpenses-light-green)">
               Multi-currency
             </Box>
             <Box fontSize="14px">
-              Track multi-currency expenses at any time.
+              Track multi-currency expenses at any time
             </Box>
           </Box>
           <Box marginY="20px" />
@@ -234,7 +234,7 @@ function IndexContent() {
               Instant feedback
             </Box>
             <Box fontSize="14px">
-              Get immediate statistics on every expense.
+              Get immediate statistics on every expense
             </Box>
           </Box>
         </Box>

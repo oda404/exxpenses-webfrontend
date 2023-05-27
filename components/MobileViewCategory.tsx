@@ -1,16 +1,13 @@
 import { useMutation } from "@apollo/client";
-import { Button, IconButton, Typography, Box, Link, Modal } from "@mui/material";
+import { Button, IconButton, Box, Link, Modal } from "@mui/material";
 import { Formik, Form, Field, FieldProps, ErrorMessage } from "formik";
 import { useState } from "react";
-import { User, Expense, CategoryEditDocument, Category, ExpenseAddDocument } from "../generated/graphql";
+import { User, Expense, CategoryEditDocument, Category } from "../generated/graphql";
 import expensesToTotal from "../utils/expensesToTotal";
 import InputField from "./InputField";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import styles from "../styles/Category.module.css"
 import tabHeaderButtonStyles from "../styles/TabHeaderButton.module.css";
-import { useRouter } from "next/router";
-import expensesToDailyTotals from "../utils/expensesToDaily";
 import CategoryStatistics from "./CategoryStatistics";
 import Topbar from "./Topbar";
 import FullViewCategoryExpensesTab from "./CategoryExpenses";
@@ -27,9 +24,14 @@ interface CategoryViewsProps {
     expenses: Expense[];
     lastMonthExpenses: Expense[];
     category: Category;
+    showing_since: Date;
+    showing_until: Date;
+    compare_since: Date;
+    compare_until: Date;
+    custom_period: boolean;
 }
 
-export default function MobileViewCategory({ lastMonthExpenses, expenses, category, user }: CategoryViewsProps) {
+export default function MobileViewCategory({ lastMonthExpenses, expenses, category, user, showing_since, showing_until, compare_since, compare_until, custom_period }: CategoryViewsProps) {
 
     const [categoryEdit] = useMutation(CategoryEditDocument);
 
@@ -38,9 +40,7 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
 
     /* If unpaid, we only count the expenses with the default currency towards the total */
     let totalExpenses = expensesToTotal(expenses, category.default_currency);
-    let dailyTotals = expensesToDailyTotals(expenses, category.default_currency);
 
-    const [showNewExpenseAdd, setSShowNewExpenseAdd] = useState(false);
     const [editCategory, setEditCategory] = useState(false);
 
     const [dirtyCurrency, setDirtyCurrency] = useState(false);
@@ -141,9 +141,9 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                                     <CheckRoundedIcon sx={{}} />
                                 </Button>
                             </Box>
-                            <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
-                                Changing the currency of a category will not change the curencies of existing expenses for that category.
-                                Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
+                            <Box fontSize="12px" color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "block" : "none"}>
+                                Changing the currency of a category will not change the curencies of existing expenses for that category. This is a feature that is going to be implemented in the future. Thank you for understanding!
+                                {/* Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>. */}
                             </Box>
                         </Form>
                     )}
@@ -246,25 +246,6 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                     >
                         Statistics
                     </Button>
-                    {/* <Button
-                        className="fullButton"
-                        sx={{
-                            background: "var(--exxpenses-second-bg-color)",
-
-                            "&:hover": {
-                                textDecoration: "none !important"
-                            },
-                            padding: "0px !important",
-                            textDecoration: "none !important",
-                            width: "100% !important",
-                            margin: "0 !important",
-                            borderRadius: "10px !important",
-                            height: "32px !important",
-                        }}
-                        onClick={() => setSShowNewExpenseAdd(!showNewExpenseAdd)}
-                    >
-                        {showNewExpenseAdd ? "Close" : "+ New expense"}
-                    </Button> */}
                 </Box>
                 <NewsTab user={user} banner_mode />
                 <Box
@@ -287,7 +268,18 @@ export default function MobileViewCategory({ lastMonthExpenses, expenses, catego
                     height="fit-content"
                     marginTop="10px"
                 >
-                    <CategoryStatistics lastMonthExpenses={lastMonthExpenses} category={category} dailyTotals={dailyTotals} totalExpenses={totalExpenses} />
+                    <CategoryStatistics
+                        user={user}
+                        total={totalExpenses}
+                        category={category}
+                        showing_expenses={expenses}
+                        compare_expenses={lastMonthExpenses}
+                        showing_since={showing_since}
+                        showing_until={showing_until}
+                        compare_since={compare_since}
+                        compare_until={compare_until}
+                        custom_period={custom_period}
+                    />
                 </Box>
 
                 <Box

@@ -1,6 +1,6 @@
 import { InferGetServerSidePropsType } from "next";
 import userGet from "../gql/ssr/userGet";
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Modal } from "@mui/material";
 import Topbar from "../components/Topbar";
 import Head from "next/head";
 import Footer from "../components/Footer";
@@ -9,6 +9,49 @@ import { User } from "../generated/graphql";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from "react";
 import useShowMobileView from "../utils/useShowMobileView";
+import get_stripe, { stripe_premium_price_id } from "../utils/stripe";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { stripe_get_client_secret } from "../utils/stripe";
+
+function CheckoutForm() {
+
+    const stripe = useStripe();
+    const elements = useElements();
+    const [is_processing, set_is_processing] = useState(false);
+    const [error_msg, set_error_msg] = useState<string | undefined>(undefined);
+
+    const handle_buy = async () => {
+        if (!stripe || !elements)
+            return;
+
+        set_is_processing(true);
+        set_error_msg(undefined);
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: `${window.location.origin}/payment-status`,
+            },
+        });
+
+        if (error)
+            set_error_msg(error.message);
+
+        set_is_processing(false);
+    }
+
+    return (
+        <Box maxWidth="400px">
+            <PaymentElement />
+            <Button onClick={handle_buy} disabled={is_processing} id="submit" className="fullButton" sx={{ marginTop: "10px", width: "100% !important" }}>
+                {is_processing ? <CircularProgress style={{ width: "18px", height: "18px" }} /> : "Pay"}
+            </Button>
+            {error_msg && (<Box marginTop="4px" fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                {error_msg}
+            </Box>)}
+        </Box>
+    )
+}
 
 type PlansProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -61,9 +104,12 @@ interface PlanBoxProps {
     active: boolean;
     hot?: boolean;
     descriptions: { title: string; description: string; prev?: boolean }[];
+    handle_plan_purchase: (id: string) => void;
+    price_id?: string;
+    unavailable: boolean;
 }
 
-function PlanBox({ name, description, price, active, hot, descriptions, is_signed_in }: PlanBoxProps) {
+function PlanBox({ name, description, price, active, hot, descriptions, is_signed_in, handle_plan_purchase, price_id, unavailable }: PlanBoxProps) {
 
     const isMobileView = useShowMobileView();
 
@@ -75,58 +121,99 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
         hot = false;
 
     return (
-        <CardBox sx={{ borderTopWidth: "30px", marginTop: hot ? hotMargin : "0" }} height="auto" padding="0 !important" border={hot ? "3px solid var(--exxpenses-light-green)" : "none"} width="100%">
-            <Box display={hot ? "block" : "none"} fontFamily="'Work Sans', sans-serif" textAlign="center" sx={{ top: "-28px" }} position="relative">MOST POPULAR</Box>
-            <Box padding="14px" flexDirection="column" alignItems="center" display="flex">
-                <Box fontFamily="'Work Sans', sans-serif" fontSize="20px">
-                    {name}
+        <>
+            <CardBox sx={{ borderTopWidth: "30px", marginTop: hot ? hotMargin : "0" }} height="auto" padding="0 !important" border={hot ? "3px solid var(--exxpenses-light-green)" : "none"} width="100%">
+                <Box display={hot ? "block" : "none"} fontFamily="'Work Sans', sans-serif" textAlign="center" sx={{ top: "-28px" }} position="relative">MOST POPULAR</Box>
+                <Box padding="14px" flexDirection="column" alignItems="center" display="flex">
+                    <Box fontFamily="'Work Sans', sans-serif" fontSize="20px">
+                        {name}
+                    </Box>
+                    <Box width="80%" fontSize="14px" textAlign="center">
+                        {description}
+                    </Box>
+                    <Box justifyContent="center" display="flex">
+                        <Box marginRight="2px" marginTop="10px">$</Box>
+                        <Box fontSize="32px">{price > -1 ? price : "-"}</Box>
+                        <Box marginLeft="4px" marginTop="14px">/month</Box>
+                    </Box>
+                    {!unavailable &&
+                        (<Button
+                            className="fullButton"
+                            disabled={active}
+                            // disabled={true}
+                            sx={{
+                                width: "100% !important",
+                                background: active ? "var(--exxpenses-main-button-hover-bg-color) !important" : "var(--exxpenses-dark-green) !important",
+                                // background: "var(--exxpenses-main-button-hover-bg-color) !important",
+                                color: "white !important"
+                            }}
+                            onClick={async () => {
+                                if (!is_signed_in)
+                                    window.location.assign("/register");
+                                else
+                                    handle_plan_purchase(price_id!);
+
+                            }}
+                        >
+                            {active ? "Current plan" : "Get"}
+                        </Button>)
+                    }
                 </Box>
-                <Box width="80%" fontSize="14px" textAlign="center">
-                    {description}
+                <Box height="100%" padding="8px" bgcolor="var(--exxpenses-dark-highlight)">
+                    {descriptions.map((d, idx) => (
+                        <PlanBoxDescription key={idx} title={d.title} description={d.description} prev={d.prev} />
+                    ))}
                 </Box>
-                <Box justifyContent="center" display="flex">
-                    <Box marginRight="2px" marginTop="10px">$</Box>
-                    <Box fontSize="32px">{price > -1 ? price : "-"}</Box>
-                    <Box marginLeft="4px" marginTop="14px">/month</Box>
-                </Box>
-                <Button
-                    className="fullButton"
-                    disabled={active}
-                    // disabled={true}
-                    sx={{
-                        width: "100% !important",
-                        background: active ? "var(--exxpenses-main-button-hover-bg-color) !important" : "var(--exxpenses-dark-green) !important",
-                        // background: "var(--exxpenses-main-button-hover-bg-color) !important",
-                        color: "white !important"
-                    }}
-                    onClick={() => {
-                        if (!is_signed_in)
-                            window.location.assign("/register");
-                    }}
-                >
-                    {active ? "Current plan" : "Get"}
-                    {/* {active ? "Current plan" : "Unavailable"} */}
-                </Button>
-            </Box>
-            <Box height="100%" padding="8px" bgcolor="var(--exxpenses-dark-highlight)">
-                {descriptions.map((d, idx) => (
-                    <PlanBoxDescription key={idx} title={d.title} description={d.description} prev={d.prev} />
-                ))}
-            </Box>
-        </CardBox>
+            </CardBox>
+        </>
     )
 }
 
 function PlansContent({ user }: { user?: User; }) {
 
     const isMobileView = useShowMobileView();
+    const stripe = get_stripe();
+    const [show_checkout, set_show_checkout] = useState(false);
+    const [stripe_client_secret, set_stripe_client_secret] = useState<string | undefined>(undefined);
+
+    const handle_plan_purchase = async (id: string) => {
+        if (user === undefined || user.email === undefined)
+            return;
+
+        set_show_checkout(true);
+        let client_secret = await stripe_get_client_secret(user.email, id);
+        if (client_secret === undefined) {
+            set_show_checkout(false)
+            return;
+        }
+
+        set_stripe_client_secret(client_secret);
+    }
 
     return (
         <Box sx={{ minHeight: "100vh", width: "990px" }}>
+            <Modal
+                open={show_checkout}
+                onClose={() => { set_show_checkout(false) }}
+                sx={{ display: "flex", paddingTop: "25vh", justifyContent: "center", backdropFilter: "blur(5px)" }}
+            >
+                <Box>
+                    <CardBox>
+                        {stripe_client_secret !== undefined && stripe !== undefined && (
+                            <Elements options={{ clientSecret: stripe_client_secret, appearance: { theme: "night" } }} stripe={stripe}>
+                                <CheckoutForm />
+                            </Elements>)
+                        }
+                        <Box justifyContent="center" alignItems="center" width="200px" height="300px" display={stripe_client_secret === undefined || stripe === undefined ? "flex" : "none"}>
+                            <CircularProgress />
+                        </Box>
+                    </CardBox>
+                </Box>
+            </Modal >
             {/* <Box color="var(--exxpenses-warning-color)" textAlign="center" fontWeight="900">
                 The only account plan available at the moment is the Free plan. Thank you for understanding!
             </Box> */}
-            <Box fontFamily="'Work Sans', sans-serif" textAlign="center" fontWeight="900" fontSize="40px">Choose the right plan for your needs.</Box>
+            < Box fontFamily="'Work Sans', sans-serif" textAlign="center" fontWeight="900" fontSize="40px" > Choose the right plan for your needs.</Box >
             {/* <Box justifyContent="center">
                 <Box fontSize="18px" textAlign="center" marginTop="10px"><b>How often do you want to pay?</b></Box>
                 <Box justifyContent="center" display="flex">
@@ -135,7 +222,7 @@ function PlansContent({ user }: { user?: User; }) {
                     <Button className="emptyButton">Yearly</Button>
                 </Box>
             </Box > */}
-            <Box marginTop={isMobileView ? "10px" : "50px"} display="flex" flexDirection={isMobileView ? "column" : "row"}>
+            < Box marginTop={isMobileView ? "10px" : "50px"} display="flex" flexDirection={isMobileView ? "column" : "row"} >
                 <PlanBox
                     name="Free"
                     description="The basic plan for tracking your monthly expenses"
@@ -147,12 +234,14 @@ function PlansContent({ user }: { user?: User; }) {
                         { title: "20 monthly expenses", description: "Track up to 20 monthly expenses for each category." },
                         { title: "Monthly comparisons", description: "Compare this month's expenses with last month's." }
                     ]}
+                    handle_plan_purchase={handle_plan_purchase}
+                    unavailable={!!(user?.plan && user?.plan > 0)}
                 />
                 <Box marginX={!isMobileView ? "10px" : "0"} marginY={isMobileView ? "10px" : "0"} />
                 <PlanBox
                     name="Premium"
                     description="The advanced plan for the power user"
-                    price={-1}
+                    price={4.99}
                     active={user?.plan === 1}
                     hot={true}
                     is_signed_in={!!user}
@@ -164,6 +253,9 @@ function PlansContent({ user }: { user?: User; }) {
                         { title: "Custom statistic periods", description: "Look at the expenses of any custom time period, and compare them with any other custom time period." },
                         { title: "No ads", description: "Remove advertisements" }
                     ]}
+                    handle_plan_purchase={handle_plan_purchase}
+                    unavailable={!!(user?.plan && user?.plan > 1)}
+                    price_id={stripe_premium_price_id}
                 />
                 {/* <Box marginX={!isMobileView ? "10px" : "0"} marginY={isMobileView ? "10px" : "0"} />
                 <PlanBox
@@ -178,9 +270,9 @@ function PlansContent({ user }: { user?: User; }) {
                         { title: "Incomes", description: "Track and get statistics on your incomes in combination with your expenses." }
                     ]}
                 /> */}
-            </Box>
+            </Box >
             <Box fontSize="14px" padding="20px">
-                <b>* All curency conversions are done using the expenses&#39; dates as the historical points.</b>
+                {/* <b>* All curency conversions are done using the expenses&#39; dates as the historical points.</b> */}
             </Box>
         </Box >
     )

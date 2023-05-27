@@ -158,15 +158,19 @@ export default function AddNewExpenseCard({ close, category }: AddNewExpenseCard
                         </Stack>
                         <Field name="date">
                             {() => (
-                                <Box fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="14px">
+                                <Box marginTop="4px" fontWeight="bold" color="var(--exxpenses-main-error-color)" fontSize="12px">
                                     <ErrorMessage name="generic" />
+                                    {errors.generic && (<Box>
+                                        Learn more <Link href="/plans">here</Link>.
+                                    </Box>)}
                                 </Box>
                             )}
                         </Field>
 
-                        <Box color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "initial" : "none"}>
-                            Expenses with different currencies will not be counted towards the total when using a free plan.
-                            Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
+                        <Box fontSize="12px" color="var(--exxpenses-warning-color)" display={dirtyCurrency ? "block" : "none"}>
+                            Expenses with different currencies will not be counted towards the total. This is a feature that is going to be implemented in the future. Thank you for understanding!
+                            {/* Expenses with different currencies will not be counted towards the total when using a free plan. */}
+                            {/* Learn more <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>. */}
                         </Box>
                         <Button
                             type="submit"

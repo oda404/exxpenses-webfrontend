@@ -3,7 +3,6 @@ import { Dayjs } from 'dayjs';
 import { useSlotProps } from '@mui/base/utils';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -17,10 +16,7 @@ import {
     DateRangeValidationError,
     UseDateRangeFieldProps,
     MultiInputFieldSlotTextFieldProps,
-    BaseSingleInputFieldProps,
-    DateValidationError,
     RangeFieldSection,
-    FieldSection,
 } from '@mui/x-date-pickers-pro';
 
 interface BrowserFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -180,9 +176,7 @@ function BrowserDateRangePicker(props: DateRangePickerProps<Dayjs>) {
 export default function DateRangePickerCustom(props: DateRangePickerProps<Dayjs>) {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DateRangePicker']}>
-                <BrowserDateRangePicker {...props} />
-            </DemoContainer>
+            <BrowserDateRangePicker {...props} />
         </LocalizationProvider>
     );
 }

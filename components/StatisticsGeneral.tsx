@@ -126,7 +126,7 @@ export default function StatisticsThisMonth({
     let sign = lm_total.price > total.price ? "-" : "+";
     let diff_price = new Decimal(lm_total.price).sub(new Decimal(total.price)).abs().toNumber();
 
-    let lm_total_today = expensesToTotal(lm_working_expenses, user.preferred_currency as string, last_month_today(new Date(showing_since)));
+    let lm_total_today = expensesToTotal(lm_working_expenses, user.preferred_currency as string, last_month_today(new Date()));
 
     let diff_perc_today = String(total.price);
     if (lm_total_today.price > 0)
@@ -162,10 +162,11 @@ export default function StatisticsThisMonth({
                             </IconButton>
                         </Box>
                     </Box>
-                    <Box marginTop="-5px" marginBottom="15px" fontSize="12px">
+                    <Box marginTop="2px" marginBottom="15px" fontSize="12px">
                         <DateRangePickerCustom
                             onAccept={on_showing_period_accept}
                             defaultValue={[dayjs(showing_since), dayjs(showing_until)]}
+                            disabled={user.plan === 0}
                         />
                     </Box>
                 </Box>
@@ -185,8 +186,8 @@ export default function StatisticsThisMonth({
                             </IconButton>
                         </Box>
                     </Box>
-                    <Box marginTop="-5px" textAlign="right" marginBottom="15px" fontSize="12px">
-                        <DateRangePickerCustom onAccept={on_compare_period_accept} defaultValue={[dayjs(compare_since), dayjs(compare_until)]} />
+                    <Box marginTop="2px" textAlign="right" marginBottom="15px" fontSize="12px">
+                        <DateRangePickerCustom disabled={user.plan === 0} onAccept={on_compare_period_accept} defaultValue={[dayjs(compare_since), dayjs(compare_until)]} />
                     </Box>
                 </Box>
             </Box>
@@ -199,6 +200,7 @@ export default function StatisticsThisMonth({
                     until={new Date(showing_until)}
                     compare_since={show_last_month ? compare_since : undefined}
                     compare_until={show_last_month ? compare_until : undefined}
+                    custom_period={custom_period}
                 />
                 <Box display="flex" bottom="10px" left="10px" position="absolute" fontSize="12px">
                     <Box bgcolor="var(--exxpenses-main-bg-color)" borderRadius="25px">
@@ -262,7 +264,7 @@ export default function StatisticsThisMonth({
                 <Statistic title="Most expensive category" content={most_expensive_cat_content} />
                 <Statistic title="Most expensive day" content={most_expensive_day_content} />
                 {custom_period ? null : <Statistic title="Compared to last month (today)" content={`${sign_today}${diff_perc_today}% (${sign_today}${total.currency} ${diff_price_today})`} />}
-                <Statistic title={custom_period ? "Compared to comparison period" : "Compared to last month (whole)"} content={`${sign}${diff_perc}% (${sign}${total.currency} ${diff_price})`} />
+                <Statistic title={custom_period ? "Compared to comparison per." : "Compared to last month (whole)"} content={`${sign}${diff_perc}% (${sign}${total.currency} ${diff_price})`} />
             </Box>
         </Box >
     )

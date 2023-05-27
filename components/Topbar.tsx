@@ -147,7 +147,7 @@ export default function Topbar({ user }: TopbarProps) {
             <Box alignItems="center" justifyContent="space-between" display="flex" maxWidth="990px" width="990px">
                 <Box>
                     <Link href="/">
-                        <Image src="/exxpenses.svg" alt="Exxpenses" width={130} height={32} />
+                        <Image priority={true} src="/exxpenses.svg" alt="Exxpenses" width={130} height={32} />
                     </Link>
                 </Box>
                 {content}

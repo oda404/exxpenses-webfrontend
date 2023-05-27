@@ -15,10 +15,10 @@ export default function Footer() {
                         Exxpenses is creating a platform that helps users track, manage, and get more insight on their day-to-day expenses and incomes.
                     </Box>
                     <Box marginTop="10px">
-                        Information found on Exxpenses is NOT financial advice, and should not be treated as such.
+                        Information found on Exxpenses is not financial advice, and should not be treated as such.
                     </Box>
                     <Box marginTop="10px">
-                        For any questions regarding Exxpenses you can contact us at: <b>exxpenses.team@gmail.com</b>
+                        For any questions or possible problems regarding Exxpenses you can contact us at: <b>exxpenses.team@gmail.com</b>
                     </Box>
                     <Box marginTop="40px">
                         &copy; Exxpenses - 2023
@@ -45,10 +45,10 @@ export default function Footer() {
                         <Link href="/disclaimer" sx={{ color: "white" }}>
                             Disclaimer
                         </Link>
-                        {/* <Link href="/plans" sx={{ color: "white" }}>
+                        <Box marginY="10px" />
+                        <Link href="/plans" sx={{ color: "white" }}>
                             Pricing plans
-                        </Link> */}
-                        {/* <Box marginY="10px" /> */}
+                        </Link>
                     </Box>
                     {/* <Box marginLeft="40px">
                         <Box fontSize="14px">

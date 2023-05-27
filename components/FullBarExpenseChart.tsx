@@ -37,6 +37,8 @@ interface FullBarExpenseChartProps {
 
     compare_since?: Date;
     compare_until?: Date;
+
+    custom_period?: boolean;
 }
 
 function CustomTooltip({ active, payload }: any) {
@@ -58,7 +60,7 @@ interface PayloadData {
     uv_count?: number;
 }
 
-export default function FullBarExpenseChart({ dailyTotals, currency, since, until, lm_daily_totals, compare_since, compare_until }: FullBarExpenseChartProps) {
+export default function FullBarExpenseChart({ dailyTotals, currency, since, until, lm_daily_totals, compare_since, compare_until, custom_period }: FullBarExpenseChartProps) {
 
     let plotData: any[] = [];
     for (let d = dayjs(since); d <= dayjs(until); d = d.add(1, "day")) {
@@ -143,7 +145,7 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
         line_legend = (
             <Box>
                 <Box alignItems="center" display="flex">
-                    <Box marginRight="8px" fontSize="12px" marginTop="2px">This month</Box>
+                    <Box marginLeft="auto" marginRight="8px" fontSize="12px" marginTop="2px">{custom_period ? "Showing per." : "This month"}</Box>
                     <Box
                         width="8px"
                         height="8px"
@@ -152,7 +154,7 @@ export default function FullBarExpenseChart({ dailyTotals, currency, since, unti
                     />
                 </Box>
                 <Box alignItems="center" display="flex">
-                    <Box marginRight="8px" fontSize="12px" marginTop="2px">Last month</Box>
+                    <Box marginLeft="auto" marginRight="8px" fontSize="12px" marginTop="2px">{custom_period ? "Comparison per." : "Last month"}</Box>
                     <Box
                         width="8px"
                         height="8px"

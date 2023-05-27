@@ -5,7 +5,7 @@ import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Topbar from "../components/Topbar";
 import Footer from "../components/Footer";
-import { User, UserChangePasswordDocument, UserDeleteAccountDocument, UserUpdatePreferredCurrencyDocument } from "../generated/graphql";
+import { User, UserChangePasswordDocument, UserDeleteAccountDocument, UserSubscriptionInfo, UserUnsubscribeDocument, UserUpdatePreferredCurrencyDocument } from "../generated/graphql";
 import NewsTab from "../components/NewsTab";
 import styles from "../styles/Navbar.module.css"
 import { useState } from "react";
@@ -18,6 +18,9 @@ import { currencies } from "../utils/currency";
 import { useMutation } from "@apollo/client";
 import useShowMobileView from "../utils/useShowMobileView";
 import InputField from "../components/InputField";
+import userGetSubscriptionInfo from "../gql/ssr/userGetSubscriptionInfo";
+import dayjs from "dayjs";
+import Decimal from "decimal.js";
 
 interface DrawerLinkProps {
     icon: any;
@@ -66,7 +69,7 @@ function Sidenav({ active_tab }: SidenavProps) {
     return (
         <Box borderRadius="8px" width="170px" height="fit-content">
             <Stack spacing={1}>
-                <DrawerLink active={active_tab === "account"} name="Account" href="/dashboard" icon={<SettingsIcon sx={{ width: "20px", height: "20px" }} />} />
+                <DrawerLink active={active_tab === "account"} name="Account" href="/account" icon={<SettingsIcon sx={{ width: "20px", height: "20px" }} />} />
             </Stack>
         </Box>
     )
@@ -165,23 +168,52 @@ function AccountDangerZoneTab() {
     )
 }
 
-function AccountTab({ user }: { user: User }) {
+function AccountTab({ user, plan_info }: { user: User, plan_info: UserSubscriptionInfo | null }) {
 
     const [showPassword, setShowPassword] = useState(false);
+    const [show_unsubscribe, set_show_unsubscribe] = useState(false);
     const [updatePreferredCurrency] = useMutation(UserUpdatePreferredCurrencyDocument);
     const [userChangePassword] = useMutation(UserChangePasswordDocument);
+    const [userUnsubscribe] = useMutation(UserUnsubscribeDocument);
     const [dirtyCurrency, setDirtyCurrency] = useState(false);
     let currency_input_changed = (e: string) => {
         setDirtyCurrency(e !== user.preferred_currency);
     }
     let currency_change_notice: any = null;
-    if (dirtyCurrency && user.plan === 0)
+    if (dirtyCurrency /* && user.plan === 0 */)
         currency_change_notice = (
-            <Box color="var(--exxpenses-warning-color)">
-                Changing the account currency will not change your categories&#39; currencies. Learn more &nbsp;
-                <Link sx={{ color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>.
+            <Box fontSize="12px" marginTop="5px" color="var(--exxpenses-warning-color)">
+                Changing the account currency will not change your categories&#39; currencies. This is a feature that is going to be implemented in the future. Thank you for understanding!
+                {/* <Link sx={{ textDecoration: "underline !important", color: "var(--exxpenses-warning-color)" }} href="/plans">here</Link>. */}
             </Box>
         )
+
+    let plan_str: string;
+    if (user.plan === 0)
+        plan_str = "Free plan";
+    else if (user.plan === 1)
+        plan_str = "Premium plan";
+    else if (user.plan === 2)
+        plan_str = "Pro plan";
+    else
+        plan_str = "undefined";
+
+    let subscription_info: any;
+    if (plan_info !== null) {
+        let next_date = dayjs(plan_info.until);
+        if (plan_info.cancel_at_end) {
+            subscription_info = `Your subscription will end on ${next_date.date()}.${next_date.month() + 1}.${next_date.year()}.`
+        }
+        else {
+            next_date = next_date.add(1, "day");
+            subscription_info = `Next billing date is on ${next_date.date()}.${next_date.month() + 1}.${next_date.year()} ($${new Decimal(plan_info.price).div(100).toNumber()}).`
+        }
+    }
+    else {
+        subscription_info = (
+            <Button href="/plans" className="emptyButton" sx={{ height: "30px !important", width: "fit-content !important" }}>Upgrade</Button>
+        )
+    }
 
     return (
         <CardBox>
@@ -195,21 +227,60 @@ function AccountTab({ user }: { user: User }) {
                     <Box marginLeft="5px" width="100%" height="1px" bgcolor="var(--exxpenses-main-button-hover-bg-color)" />
                 </Box>
                 <Box padding="5px">
-                    <Box >
+                    <Box>
                         <Box>Firstname</Box>
-                        <Box display="flex">
+                        <Box fontSize="14px" display="flex">
                             <b>{user.firstname}</b>
                         </Box>
                     </Box>
 
                     <Box marginTop="10px">
                         <Box>Firstname</Box>
-                        <Box display="flex">
+                        <Box fontSize="14px" display="flex">
                             <b>{user.lastname}</b>
                         </Box>
                     </Box>
                 </Box>
             </Box>
+
+            <Box marginTop="10px">
+                <Box display="flex" alignItems="center" fontSize="18px">
+                    <Box whiteSpace="nowrap"><b>Plan information</b></Box>
+                    <Box marginLeft="5px" width="100%" height="1px" bgcolor="var(--exxpenses-main-button-hover-bg-color)" />
+                </Box>
+                <Box padding="5px">
+                    <Box >
+                        <Box>Current plan:</Box>
+                        <Box fontSize="14px" display="flex" alignItems="center" flexDirection="row">
+                            <Box><b>{plan_str}</b></Box>
+                            <Box marginLeft="10px">{subscription_info}</Box>
+                        </Box>
+                        {user.plan > 0 && !show_unsubscribe && !plan_info?.cancel_at_end && (
+                            <Button
+                                sx={{
+                                    color: "var(--exxpenses-main-error-text-color) !important",
+                                    height: "30px !important",
+                                    marginTop: "5px",
+                                    fontSize: "14px !important"
+                                }}
+                                className="emptyButton"
+                                onClick={async () => {
+                                    await userUnsubscribe();
+                                    window.location.reload();
+                                }}
+                            >
+                                I want to cancel my subscription
+                            </Button>
+                        )}
+                        {user.plan > 0 && !show_unsubscribe && plan_info?.cancel_at_end && (
+                            <Box fontSize="14px" color="var(--exxpenses-warning-color)">
+                                Your subscription has been canceled.
+                            </Box>
+                        )}
+                    </Box>
+                </Box>
+            </Box>
+
             <Box marginTop="10px">
                 <Box display="flex" alignItems="center" fontSize="18px">
                     <Box whiteSpace="nowrap"><b>Account details</b></Box>
@@ -275,9 +346,9 @@ function AccountTab({ user }: { user: User }) {
 
                     <Box marginTop="10px">
                         <Box>Email</Box>
-                        <Box display="flex">
+                        <Box fontSize="14px" display="flex">
                             <b>{user.email}</b>
-                            <Box marginLeft="10px">
+                            <Box fontSize="14px" marginLeft="10px">
                                 {user.verified_email ? "(Verified)" : "(Not verified)"}
                             </Box>
                         </Box>
@@ -362,7 +433,7 @@ function AccountTab({ user }: { user: User }) {
 
 type AccountProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-function AccountContent({ user }: { user: User }) {
+function AccountContent({ user, plan_info }: { user: User, plan_info: UserSubscriptionInfo | null }) {
 
     const [active_tab, set_active_tab] = useState("account");
     const isMobileView = useShowMobileView();
@@ -371,7 +442,7 @@ function AccountContent({ user }: { user: User }) {
     if (active_tab === "account")
         content = (
             <>
-                <AccountTab user={user} />
+                <AccountTab plan_info={plan_info} user={user} />
                 <AccountDangerZoneTab />
             </>
         )
@@ -430,7 +501,7 @@ export default function Account({ ssr }: AccountProps) {
             <Box>
                 <Topbar user={ssr.userGet.user as User} />
                 <Box marginX="auto" maxWidth="990px" justifyContent="center" display="flex">
-                    <AccountContent user={ssr.userGet.user as User} />
+                    <AccountContent user={ssr.userGet.user as User} plan_info={ssr.planInfo} />
                 </Box>
                 <Footer />
             </Box>
@@ -450,10 +521,15 @@ export async function getServerSideProps({ req }: any) {
         }
     }
 
+    let planInfo: UserSubscriptionInfo | null = null;
+    if (userData.user.plan > 0)
+        planInfo = await userGetSubscriptionInfo(req) as (UserSubscriptionInfo | null);
+
     return {
         props: {
             ssr: {
                 userGet: userData,
+                planInfo: planInfo
             }
         }
     }
