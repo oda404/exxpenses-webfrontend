@@ -16,15 +16,19 @@ export default function OrderedCategories({ total_price, categoryTotals, expense
     if (categoryTotals.length === 0) {
         // should not happen
         content = (
-            <Box fontSize=".875rem" paddingY="10px" paddingX="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
+            <Box fontSize="12px" paddingY="10px" paddingX="4px" borderBottom="1px solid var(--exxpenses-main-border-color)" justifyContent="space-between" display="flex" marginBottom="12px" width="100%">
                 <Box>
-                    <b>---</b>
+                    Category
                 </Box>
                 <Box>
-                    <b>---</b>
+                    {custom_period ? "Comparison per." : "Last month"}
+
                 </Box>
                 <Box>
-                    <b>---</b>
+                    {custom_period ? "Showing per." : "This month"}
+                </Box>
+                <Box>
+                    % of total
                 </Box>
             </Box>
         )

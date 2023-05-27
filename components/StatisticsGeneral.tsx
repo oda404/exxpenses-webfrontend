@@ -98,7 +98,7 @@ export default function StatisticsThisMonth({
     }
 
     let most_expensive_cat_content = `${mostExpensiveCategory?.category} - ${mostExpensiveCategory?.currency} ${mostExpensiveCategory?.price}`;
-    if (mostExpensiveCategory.price == 0)
+    if (mostExpensiveCategory === undefined || mostExpensiveCategory.price == 0)
         most_expensive_cat_content = "N/A";
 
 
