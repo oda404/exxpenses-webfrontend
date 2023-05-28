@@ -1,0 +1,8 @@
+query UserGetPremiumSubscriptionPricing
+{
+    userGetPremiumSubscriptionPricing
+    {
+        price
+        discount_perc
+    }
+}

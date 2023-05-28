@@ -233,6 +233,7 @@ export type Query = {
   expensesTotalCostGetMultiple: ExpensesCostResponseMultiple;
   /** Get the currently logged in user. */
   userGet: UserResponse;
+  userGetPremiumSubscriptionPricing?: Maybe<UserSubscriptionPricing>;
   userGetSubscriptionInfo?: Maybe<UserSubscriptionInfo>;
   userIsPasswordResetTokenValid: Scalars['Boolean'];
 };
@@ -310,6 +311,12 @@ export type UserSubscriptionInfo = {
   price: Scalars['Float'];
   since: Scalars['DateTime'];
   until: Scalars['DateTime'];
+};
+
+export type UserSubscriptionPricing = {
+  __typename?: 'UserSubscriptionPricing';
+  discount_perc: Scalars['Float'];
+  price: Scalars['Float'];
 };
 
 export type CategoryAddMutationVariables = Exact<{
@@ -465,6 +472,11 @@ export type UserGetQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type UserGetQuery = { __typename?: 'Query', userGet: { __typename?: 'UserResponse', user?: { __typename?: 'User', lastname: string, firstname: string, email: string, preferred_currency?: string | null, verified_email: boolean, plan: number } | null, error?: { __typename?: 'GenericFieldError', name: string } | null } };
+
+export type UserGetPremiumSubscriptionPricingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserGetPremiumSubscriptionPricingQuery = { __typename?: 'Query', userGetPremiumSubscriptionPricing?: { __typename?: 'UserSubscriptionPricing', price: number, discount_perc: number } | null };
 
 export type UserGetSubscriptionInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1309,6 +1321,41 @@ export function useUserGetLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Us
 export type UserGetQueryHookResult = ReturnType<typeof useUserGetQuery>;
 export type UserGetLazyQueryHookResult = ReturnType<typeof useUserGetLazyQuery>;
 export type UserGetQueryResult = Apollo.QueryResult<UserGetQuery, UserGetQueryVariables>;
+export const UserGetPremiumSubscriptionPricingDocument = gql`
+    query UserGetPremiumSubscriptionPricing {
+  userGetPremiumSubscriptionPricing {
+    price
+    discount_perc
+  }
+}
+    `;
+
+/**
+ * __useUserGetPremiumSubscriptionPricingQuery__
+ *
+ * To run a query within a React component, call `useUserGetPremiumSubscriptionPricingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserGetPremiumSubscriptionPricingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserGetPremiumSubscriptionPricingQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserGetPremiumSubscriptionPricingQuery(baseOptions?: Apollo.QueryHookOptions<UserGetPremiumSubscriptionPricingQuery, UserGetPremiumSubscriptionPricingQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserGetPremiumSubscriptionPricingQuery, UserGetPremiumSubscriptionPricingQueryVariables>(UserGetPremiumSubscriptionPricingDocument, options);
+      }
+export function useUserGetPremiumSubscriptionPricingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserGetPremiumSubscriptionPricingQuery, UserGetPremiumSubscriptionPricingQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserGetPremiumSubscriptionPricingQuery, UserGetPremiumSubscriptionPricingQueryVariables>(UserGetPremiumSubscriptionPricingDocument, options);
+        }
+export type UserGetPremiumSubscriptionPricingQueryHookResult = ReturnType<typeof useUserGetPremiumSubscriptionPricingQuery>;
+export type UserGetPremiumSubscriptionPricingLazyQueryHookResult = ReturnType<typeof useUserGetPremiumSubscriptionPricingLazyQuery>;
+export type UserGetPremiumSubscriptionPricingQueryResult = Apollo.QueryResult<UserGetPremiumSubscriptionPricingQuery, UserGetPremiumSubscriptionPricingQueryVariables>;
 export const UserGetSubscriptionInfoDocument = gql`
     query UserGetSubscriptionInfo {
   userGetSubscriptionInfo {

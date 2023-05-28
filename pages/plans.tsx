@@ -5,13 +5,15 @@ import Topbar from "../components/Topbar";
 import Head from "next/head";
 import Footer from "../components/Footer";
 import CardBox from "../components/CardBox";
-import { User } from "../generated/graphql";
+import { User, UserSubscriptionPricing } from "../generated/graphql";
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from "react";
 import useShowMobileView from "../utils/useShowMobileView";
 import get_stripe, { stripe_premium_price_id } from "../utils/stripe";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { stripe_get_client_secret } from "../utils/stripe";
+import user_get_premium_subscription_pricing from "../gql/ssr/userGetSubscriptionPremiumPricing";
+import Decimal from "decimal.js";
 
 function CheckoutForm() {
 
@@ -169,7 +171,7 @@ function PlanBox({ name, description, price, active, hot, descriptions, is_signe
     )
 }
 
-function PlansContent({ user }: { user?: User; }) {
+function PlansContent({ user, premium_pricing }: { user?: User; premium_pricing?: UserSubscriptionPricing | null }) {
 
     const isMobileView = useShowMobileView();
     const stripe = get_stripe();
@@ -189,6 +191,12 @@ function PlansContent({ user }: { user?: User; }) {
 
         set_stripe_client_secret(client_secret);
     }
+
+    let premium_price;
+    if (!premium_pricing)
+        premium_price = -1;
+    else
+        premium_price = new Decimal(premium_pricing.price).div(100).toNumber();
 
     return (
         <Box sx={{ minHeight: "100vh", width: "990px" }}>
@@ -222,7 +230,7 @@ function PlansContent({ user }: { user?: User; }) {
                     <Button className="emptyButton">Yearly</Button>
                 </Box>
             </Box > */}
-            < Box marginTop={isMobileView ? "10px" : "50px"} display="flex" flexDirection={isMobileView ? "column" : "row"} >
+            <Box marginTop={isMobileView ? "10px" : "50px"} display="flex" flexDirection={isMobileView ? "column" : "row"} >
                 <PlanBox
                     name="Free"
                     description="The basic plan for tracking your monthly expenses"
@@ -241,7 +249,7 @@ function PlansContent({ user }: { user?: User; }) {
                 <PlanBox
                     name="Premium"
                     description="The advanced plan for the power user"
-                    price={4.99}
+                    price={premium_price}
                     active={user?.plan === 1}
                     hot={true}
                     is_signed_in={!!user}
@@ -295,7 +303,7 @@ export default function Plans({ ssr }: PlansProps) {
             <Box>
                 <Topbar user={ssr.userGet.user ? ssr.userGet.user as User : undefined} />
                 <Box padding="10px" paddingY="40px" marginX="auto" maxWidth="990px" justifyContent="center" display="flex">
-                    <PlansContent user={ssr.userGet.user ? ssr.userGet.user as User : undefined} />
+                    <PlansContent premium_pricing={ssr.premium_pricing_data} user={ssr.userGet.user ? ssr.userGet.user as User : undefined} />
                 </Box>
                 <Footer />
             </Box>
@@ -305,10 +313,13 @@ export default function Plans({ ssr }: PlansProps) {
 
 export async function getServerSideProps({ req }: any) {
     const userData = await userGet(req);
+    const premium_pricing_data = await user_get_premium_subscription_pricing(req);
+
     return {
         props: {
             ssr: {
                 userGet: userData,
+                premium_pricing_data: premium_pricing_data
             }
         }
     }

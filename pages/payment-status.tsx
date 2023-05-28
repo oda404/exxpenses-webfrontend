@@ -52,9 +52,8 @@ function PaymentStatusContent({ status, cs, id }: { status: string, cs: string, 
                 <Box fontWeight="bold" color="var(--exxpenses-lighter-green)" fontSize="22px">
                     Payment Successful!
                 </Box>
-                <Box fontSize="18px">
-                </Box>
-                <Box marginTop="10px" fontSize="12px">
+                <Box>Your subscription may take a minute to active.</Box>
+                <Box marginTop="4px" fontSize="12px">
                     Payment id: {id}
                 </Box>
                 {payment_res && (<Box marginTop="10px" width="100%">
